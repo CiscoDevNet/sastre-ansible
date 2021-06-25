@@ -29,9 +29,15 @@ NO_ROLLOVER = "no_rollover"
 VERBOSE = "verbose"
 TIMEOUT = "timeout"
 PID= "pid"
+DRYRUN="dryrun"
+TAG="tag"
+ATTACH="attach"
+FORCE="force"
 # Default tag value
 DEFAULT_TAG = "all"
 DEFAULT_LOG_LEVEL="DEBUG"
+DEFAULT_PID = "0"
+
 
 # Default logging configuration - JSON formatted
 # Reason for setting level at chardet.charsetprober is to prevent unwanted debug messages from requests module
@@ -106,7 +112,8 @@ def updatevManageArgs(argsSpec):
         user=dict(type="str", required=True,fallback=(env_fallback, ['VMANAGE_USER'])),
         password=dict(type="str", required=True,no_log=True,fallback=(env_fallback, ['VMANAGE_PASSWORD'])),
         timeout=dict(type="int", default=REST_TIMEOUT),
-        pid=dict(type="str",default="0",fallback=(env_fallback, ['CX_PID'])),
+        pid=dict(type="str",default=DEFAULT_PID,fallback=(env_fallback, ['CX_PID'])),
+        verbose=dict(type="str",default=DEFAULT_LOG_LEVEL,choices=logging_levels),
     )
     argsSpec.update(args)
     
