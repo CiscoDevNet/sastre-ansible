@@ -34,8 +34,7 @@ options:
       all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
       policy_customapp. Special tag "all" selects all items.
     required: false
-    type: list
-    elements: str
+    type: str
     default: "all"
     choices:
     - "template_feature"
