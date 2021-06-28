@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: restore
+module: cisco.sdwan.restore
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Restore configuration items from a local backup to vManage SD-WAN.
 description: This restore module connects to vManage SD-WAN using HTTP REST to 
@@ -10,7 +10,8 @@ description: This restore module connects to vManage SD-WAN using HTTP REST to
              connection and filter details to restore all or specific configurtion data.
              A log file is created under a "logs" directory. This "logs" directory
              is relative to directory where Ansible runs.
-notes: Tested against 20.4.1.1
+notes: 
+- Tested against 20.4.1.1
 options: 
   workdir:
     description: 
@@ -30,7 +31,7 @@ options:
   tag:
     description:
     - Tag for selecting items to be restored. Items that are dependencies of the 
-      specified tag are automatically included. Available tags: template_feature, policy_profile, policy_definition,
+      specified tag are automatically included. Available tags are template_feature, policy_profile, policy_definition,
       all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
       policy_customapp. Special tag "all" selects all items.
     required: false
@@ -71,7 +72,7 @@ options:
   verbose:
     description:
     - Defines to control log level for the logs generated under "logs/sastre.log" when Ansible script is run.
-      Supported log levels : NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL
+      Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL
     required: false
     type: str
     default: "DEBUG"
@@ -95,9 +96,9 @@ options:
     default: 8443
   user:
    description: 
-    - username or can also be defined via VMANAGE_USER environment variable.
-    required: true
-    type: str
+   - username or can also be defined via VMANAGE_USER environment variable.
+   required: true
+   type: str
   password:
     description: 
     - password or can also be defined via VMANAGE_PASSWORD environment variable.
@@ -119,70 +120,64 @@ options:
 """
 
 EXAMPLES = """
-    - name: Restore vManage configuration
-      cisco.sdwan.restore:
-        workdir: "/home/user/backups"
-        regex: ".*"
-        tag: "template_device"
-        dryrun: False
-        attach: False
-        force: False
-        address: "198.18.1.10"
-        port: 8443
-        user: "admin"
-        password: "admin"
-        verbose: "INFO"
-        pid: "2"
-        timeout: 300
-
-    - name: Restore vManage configuration
-      cisco.sdwan.restore:
-        workdir: "/home/user/backups"
-        regex: ".*"
-        tag: "all"
-        dryrun: False
-        attach: False
-        force: False
-        address: "198.18.1.10"
-        port: 8443
-        user: "admin"
-        password: "admin"
-        verbose: "INFO"
-        pid: "2"
-        timeout: 300
-    
-    - name: Restore vManage configuration with some vManage config arguments saved in environment variabbles
-      cisco.sdwan.restore:
-        workdir: "/home/user/backups"
-        regex: ".*"
-        tag: "all"
-        dryrun: False
-        attach: False
-        force: False
-        verbose: "INFO"
-        timeout: 300
-        
-    - name: Backup vManage configuration with all defaults
-      cisco.sdwan.restore:
-        address: "198.18.1.10"
-        user: "admin"
-        password: "admin"
+- name: Restore vManage configuration
+  cisco.sdwan.restore:
+    workdir: "/home/user/backups"
+    regex: ".*"
+    tag: "template_device"
+    dryrun: False
+    attach: False
+    force: False
+    address: "198.18.1.10"
+    port: 8443
+    user: "admin"
+    password: "admin"
+    verbose: "INFO"
+    pid: "2"
+    timeout: 300
+- name: Restore vManage configuration
+  cisco.sdwan.restore:
+    workdir: "/home/user/backups"
+    regex: ".*"
+    tag: "all"
+    dryrun: False
+    attach: False
+    force: False
+    address: "198.18.1.10"
+    port: 8443
+    user: "admin"
+    password: "admin"
+    verbose: "INFO"
+    pid: "2"
+    timeout: 300
+- name: Restore vManage configuration with some vManage config arguments saved in environment variabbles
+  cisco.sdwan.restore:
+    workdir: "/home/user/backups"
+    regex: ".*"
+    tag: "all"
+    dryrun: False
+    attach: False
+    force: False
+    verbose: "INFO"
+    timeout: 300
+- name: Backup vManage configuration with all defaults
+  cisco.sdwan.restore:
+    address: "198.18.1.10"
+    user: "admin"
+    password: "admin"
 """
 
 RETURN = """
-    -  "msg": {
-        "changed": false,
-        "failed": false,
-        "stdout": "Successfully restored files from local backup_198.18.1.10_20210625 to vManage address 198.18.1.10",
-        "stdout_lines": [
-            "Successfully restored files from local backup_198.18.1.10_20210625 folder to vManage address 198.18.1.10"
-        ]
-    }
-        
-    -  {
-        "changed": false,
-        "msg": "Failed to restore , check the logs for more detaills..."
-       }
+stdout:
+  description: Status of restore
+  returned: always apart from low level errors
+  type: str
+  sample: "Successfully restored files from local backup_198.18.1.10_20210625 to vManage address 198.18.1.10"
+stdout_lines:
+  description: The value of stdout split into a list
+  returned: always apart from low level errors
+  type: list
+  sample:  [ "Successfully restored files from local backup_198.18.1.10_20210625 to vManage address 198.18.1.10"]
 """
 
 from ansible.module_utils.basic import AnsibleModule

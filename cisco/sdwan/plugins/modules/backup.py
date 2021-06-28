@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: backup
+module: cisco.sdwan.backup
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Save SD-WAN vManage configuration items to local backup
 description: This backup module connects to vManage SD-WAN using HTTP REST and 
@@ -10,7 +10,8 @@ description: This backup module connects to vManage SD-WAN using HTTP REST and
              connection and filter details to backup all or specific configurtion data.
              A log file is created under a "logs" directory. This "logs" directory
              is relative to directory where Ansible runs.
-notes: Tested against 20.4.1.1
+notes: 
+- Tested against 20.4.1.1
 options: 
   workdir:
     description: 
@@ -38,7 +39,7 @@ options:
   tags:
     description:
     - Defines one or more tags for selecting items to be backed up. Multiple tags should be
-      configured as list. Available tags: template_feature, policy_profile, policy_definition,
+      configured as list. Available tags are template_feature, policy_profile, policy_definition,
       all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
       policy_customapp. Special tag "all" selects all items, including WAN edge certificates and 
       device configurations.
@@ -61,7 +62,7 @@ options:
   verbose:
     description:
     - Defines to control log level for the logs generated under "logs/sastre.log" when Ansible script is run.
-      Supported log levels : NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL
+      Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL
     required: false
     type: str
     default: "DEBUG"
@@ -85,9 +86,9 @@ options:
     default: 8443
   user:
    description: 
-    - username or can also be defined via VMANAGE_USER environment variable.
-    required: true
-    type: str
+   - username or can also be defined via VMANAGE_USER environment variable.
+   required: true
+   type: str
   password:
     description: 
     - password or can also be defined via VMANAGE_PASSWORD environment variable.
@@ -109,66 +110,60 @@ options:
 """
 
 EXAMPLES = """
-    - name: Backup vManage configuration
-      cisco.sdwan.backup:
-        workdir: "/home/user/backups"
-        regex: ".*"
-        tags:
-           - "template_device"
-           - "template_feature"
-        no_rollover: False
-        address: "198.18.1.10"
-        port: 8443
-        user: "admin"
-        password: "admin"
-        verbose: "INFO"
-        pid: "2"
-        timeout: 300
-
-    - name: Backup vManage configuration
-      cisco.sdwan.backup:
-        workdir: "/home/user/backups"
-        regex: ".*"
-        tags: "all"
-        no_rollover: False
-        address: "198.18.1.10"
-        port: 8443
-        user: "admin"
-        password: "admin"
-        verbose: "INFO"
-        pid: "2"
-        timeout: 300
-    
-    - name: Backup vManage configuration with some vManage config arguments saved in environment variabbles
-      cisco.sdwan.backup:
-        workdir: "/home/user/backups"
-        regex: ".*"
-        tags: "all"
-        no_rollover: False
-        verbose: "INFO"
-        timeout: 300
-        
-    - name: Backup vManage configuration with all defaults
-      cisco.sdwan.backup:
-        address: "198.18.1.10"
-        user: "admin"
-        password: "admin"
+- name: "Backup vManage configuration"
+  cisco.sdwan.backup: 
+    address: "198.18.1.10"
+    no_rollover: false
+    password: admin
+    pid: "2"
+    port: 8443
+    regex: .*
+    tags: 
+      - template_device
+      - template_feature
+    timeout: 300
+    user: admin
+    verbose: INFO
+    workdir: /home/user/backups
+- name: "Backup vManage configuration"
+  cisco.sdwan.backup: 
+    address: "198.18.1.10"
+    no_rollover: false
+    password: admin
+    pid: "2"
+    port: 8443
+    regex: .*
+    tags: all
+    timeout: 300
+    user: admin
+    verbose: INFO
+    workdir: /home/user/backups
+- name: "Backup vManage configuration with some vManage config arguments saved in environment variabbles"
+  cisco.sdwan.backup: 
+    no_rollover: false
+    regex: .*
+    tags: all
+    timeout: 300
+    verbose: INFO
+    workdir: /home/user/backups
+- name: "Backup vManage configuration with all defaults"
+  cisco.sdwan.backup: 
+    address: "198.18.1.10"
+    password: admin
+    user: admin
 """
 
 RETURN = """
-    -  "msg": {
-            "changed": false,
-            "failed": false,
-            "stdout": "Successfully backed up files at /home/user/backups",
-            "stdout_lines": [
-                "Successfully backed up files at /home/user/backups"
-            ]
-        }
-        
-    -  {
-        "changed": false,
-        "msg": "Failed to take backup , check the logs for more detaills..."
-       }
+stdout:
+  description: Status of backup
+  returned: always apart from low level errors
+  type: str
+  sample: 'Successfully backed up files at backup_198.18.1.10_20210628'
+stdout_lines:
+  description: The value of stdout split into a list
+  returned: always apart from low level errors
+  type: list
+  sample: ['Successfully backed up files at backup_198.18.1.10_20210628']
 """
 
 from ansible.module_utils.basic import AnsibleModule
