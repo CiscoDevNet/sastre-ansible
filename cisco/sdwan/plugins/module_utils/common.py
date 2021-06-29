@@ -8,6 +8,19 @@ from cisco_sdwan.__version__ import __version__ as version
 from cisco_sdwan.base.models_base import (
     SASTRE_ROOT_DIR,
 )
+from cisco_sdwan.tasks.utils import (
+    regex_type
+)
+from cisco_sdwan.tasks.common import (
+    TaskArgs,
+)
+from cisco_sdwan.base.rest_api import (
+    Rest,
+    LoginFailedException,
+)
+from cisco_sdwan.base.models_base import (
+    ModelException,
+)
 
 # vManage REST API defaults
 VMANAGE_PORT = '8443'
@@ -29,9 +42,16 @@ NO_ROLLOVER = "no_rollover"
 VERBOSE = "verbose"
 TIMEOUT = "timeout"
 PID= "pid"
+DRYRUN="dryrun"
+TAG="tag"
+ATTACH="attach"
+DETACH="detach"
+FORCE="force"
 # Default tag value
 DEFAULT_TAG = "all"
 DEFAULT_LOG_LEVEL="DEBUG"
+DEFAULT_PID = "0"
+
 
 # Default logging configuration - JSON formatted
 # Reason for setting level at chardet.charsetprober is to prevent unwanted debug messages from requests module
@@ -106,7 +126,8 @@ def updatevManageArgs(argsSpec):
         user=dict(type="str", required=True,fallback=(env_fallback, ['VMANAGE_USER'])),
         password=dict(type="str", required=True,no_log=True,fallback=(env_fallback, ['VMANAGE_PASSWORD'])),
         timeout=dict(type="int", default=REST_TIMEOUT),
-        pid=dict(type="str",default="0",fallback=(env_fallback, ['CX_PID'])),
+        pid=dict(type="str",default=DEFAULT_PID,fallback=(env_fallback, ['CX_PID'])),
+        verbose=dict(type="str",default=DEFAULT_LOG_LEVEL,choices=logging_levels),
     )
     argsSpec.update(args)
     
@@ -137,3 +158,23 @@ def submit_aide_stats(pid, estimated_savings):
         logging.getLogger(__name__).debug('AIDE package not installed')
     except Exception as ex:
         logging.getLogger(__name__).debug(f'Exception found while submitting AIDE statistics: {ex}')
+        
+def validateRegEx(regex,module):
+    if regex is not None:
+        try:  
+          regex = regex_type(regex)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{regex} is not a valid regular expression.') 
+          
+def processTask(task,module,**taskArgs):
+    try:
+        base_url = BASE_URL.format(address=module.params[ADDRESS], port=module.params[PORT])
+        with Rest(base_url, module.params[USER], module.params[PASSWORD], timeout=module.params[TIMEOUT]) as api:
+            taskArgs = TaskArgs(**taskArgs)
+            task.runner(taskArgs, api)
+        task.log_info('Task completed %s', task.outcome('successfully', 'with caveats: {tally}'))
+    except (LoginFailedException, ConnectionError, FileNotFoundError, ModelException) as ex:
+        task.log_critical(ex)
+    kwargs={'pid': module.params[PID], 'savings': task.savings}
+    submit_usage_stats(**kwargs)

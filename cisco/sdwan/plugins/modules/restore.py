@@ -1,13 +1,13 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: cisco.sdwan.backup
+module: cisco.sdwan.restore
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
-short_description: Save SD-WAN vManage configuration items to local backup
-description: This backup module connects to vManage SD-WAN using HTTP REST and 
-             returned HTTP responses are stored to default or configured argument
+short_description: Restore configuration items from a local backup to vManage SD-WAN.
+description: This restore module connects to vManage SD-WAN using HTTP REST to 
+             updated configuration data stored in local default backup or configured argument
              local backup folder. This module contains multiple arguments with 
-             connection and filter details to backup all or specific configurtion data.
+             connection and filter details to restore all or specific configurtion data.
              A log file is created under a "logs" directory. This "logs" directory
              is relative to directory where Ansible runs.
 notes: 
@@ -23,29 +23,19 @@ options:
     required: false
     type: str
     default: "backup_<address>_<yyyymmdd>"
-  no_rollover:
-    description:
-    - By default, if workdir already exists (before a new backup is saved) the old workdir is 
-      renamed using a rolling naming scheme. "True" disables the automatic rollover. "False"
-      enables the automatic rollover
-    required: false
-    type: bool
-    default: False
   regex:
     description:
-    - Regular expression matching item names to be backed up, within selected tags
+    - Regular expression matching item names to be restored, within selected tags
     required: false
     type: str
-  tags:
+  tag:
     description:
-    - Defines one or more tags for selecting items to be backed up. Multiple tags should be
-      configured as list. Available tags are template_feature, policy_profile, policy_definition,
+    - Tag for selecting items to be restored. Items that are dependencies of the 
+      specified tag are automatically included. Available tags are template_feature, policy_profile, policy_definition,
       all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
-      policy_customapp. Special tag "all" selects all items, including WAN edge certificates and 
-      device configurations.
+      policy_customapp. Special tag "all" selects all items.
     required: true
-    type: list
-    elements: str
+    type: str
     choices:
     - "template_feature"
     - "policy_profile"
@@ -58,6 +48,26 @@ options:
     - "template_device"
     - "policy_security"
     - "policy_customapp"
+  dryrun:
+    description:
+    - Regular expression matching item names to be restored
+    required: false
+    type: bool
+    default: False
+  attach:
+    description:
+    - Attach devices to templates and activate vSmart policy after restoring items
+    required: false
+    type: bool
+    default: False
+  force:
+    description:
+    - Target vManage items with the same name as the corresponding item in workdir
+      are updated with the contents from workdir. Without this option, those items
+      are skipped and not overwritten.
+    required: false
+    type: bool
+    default: False
   verbose:
     description:
     - Defines to control log level for the logs generated under "logs/sastre.log" when Ansible script is run.
@@ -109,77 +119,79 @@ options:
 """
 
 EXAMPLES = """
-- name: "Backup vManage configuration"
-  cisco.sdwan.backup: 
+- name: Restore vManage configuration
+  cisco.sdwan.restore:
+    workdir: "/home/user/backups"
+    regex: ".*"
+    tag: "template_device"
+    dryrun: False
+    attach: False
+    force: False
     address: "198.18.1.10"
-    no_rollover: false
-    password: admin
-    pid: "2"
     port: 8443
-    regex: ".*"
-    tags: 
-      - template_device
-      - template_feature
-    timeout: 300
-    user: admin
-    verbose: INFO
-    workdir: /home/user/backups
-- name: "Backup vManage configuration"
-  cisco.sdwan.backup: 
-    address: "198.18.1.10"
-    no_rollover: false
-    password: admin
+    user: "admin"
+    password: "admin"
+    verbose: "INFO"
     pid: "2"
-    port: 8443
-    regex: ".*"
-    tags: "all"
     timeout: 300
-    user: admin
-    verbose: INFO
-    workdir: /home/user/backups
-- name: "Backup vManage configuration with some vManage config arguments saved in environment variabbles"
-  cisco.sdwan.backup: 
-    no_rollover: false
+- name: Restore vManage configuration
+  cisco.sdwan.restore:
+    workdir: "/home/user/backups"
     regex: ".*"
-    tags: "all"
-    timeout: 300
-    verbose: INFO
-    workdir: /home/user/backups
-- name: "Backup vManage configuration with all defaults"
-  cisco.sdwan.backup: 
+    tag: "all"
+    dryrun: False
+    attach: False
+    force: False
     address: "198.18.1.10"
-    password: admin
-    user: admin
-    tags: "all"
+    port: 8443
+    user: "admin"
+    password: "admin"
+    verbose: "INFO"
+    pid: "2"
+    timeout: 300
+- name: Restore vManage configuration with some vManage config arguments saved in environment variabbles
+  cisco.sdwan.restore:
+    workdir: "/home/user/backups"
+    regex: ".*"
+    tag: "all"
+    dryrun: False
+    attach: False
+    force: False
+    verbose: "INFO"
+    timeout: 300
+- name: Backup vManage configuration with all defaults
+  cisco.sdwan.restore:
+    address: "198.18.1.10"
+    user: "admin"
+    password: "admin"
+    tag: "all"
 """
 
 RETURN = """
 stdout:
-  description: Status of backup
+  description: Status of restore
   returned: always apart from low level errors
   type: str
-  sample: 'Successfully backed up files at backup_198.18.1.10_20210628'
+  sample: "Successfully restored files from local backup_198.18.1.10_20210625 to vManage address 198.18.1.10"
 stdout_lines:
   description: The value of stdout split into a list
   returned: always apart from low level errors
   type: list
-  sample: ['Successfully backed up files at backup_198.18.1.10_20210628']
+  sample:  [ "Successfully restored files from local backup_198.18.1.10_20210625 to vManage address 198.18.1.10"]
 """
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.basic import env_fallback
 import logging
-from cisco_sdwan.tasks.implementation._backup import (
-    TaskBackup,
+from cisco_sdwan.tasks.implementation._restore import (
+    TaskRestore,
 )
 from cisco_sdwan.tasks.utils import (
-    default_workdir, 
+    default_workdir,existing_file_type,TagOptions
 )
-from cisco_sdwan.tasks.utils import (
-    TagOptions,
-)
-from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    ADDRESS,WORKDIR,REGEX,TAGS,NO_ROLLOVER,VERBOSE,
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
+    ADDRESS,WORKDIR,REGEX,VERBOSE,
+    DRYRUN,TAG,ATTACH,FORCE,
     setLogLevel,updatevManageArgs,validateRegEx,processTask,
 )
 
@@ -191,38 +203,48 @@ def main():
     
     argument_spec = dict(
         workdir=dict(type="str"),
-        no_rollover=dict(type="bool", default=False),
         regex=dict(type="str"),
-        tags=dict(type="list", elements="str", required=True,choices=tagList),
+        dryrun=dict(type="bool", default=False),
+        attach=dict(type="bool", default=False),
+        force=dict(type="bool", default=False),
+        tag=dict(type="str", required=True, choices=tagList),
     )
     updatevManageArgs(argument_spec)
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
     )
-    
     setLogLevel(module.params[VERBOSE])
     log = logging.getLogger(__name__)
-    log.debug("Task Backup started.")
-    
+    log.debug("Task Restore started.")
+        
     result = {"changed": False }
    
     vManage_ip=module.params[ADDRESS]
     workdir = module.params[WORKDIR]
-    regex = module.params[REGEX]
     if workdir is None:
         workdir = default_workdir(vManage_ip)
-    validateRegEx(regex,module)
-    
-    taskBackup = TaskBackup()
-    backupArgs = {'workdir':workdir,'no_rollover':module.params[NO_ROLLOVER],'regex':regex,'tags':module.params[TAGS]}
+        
     try:
-        processTask(taskBackup,module,**backupArgs)
+        existing_file_type(workdir)
     except Exception as ex:
-        module.fail_json(msg=f"Failed to take backup , check the logs for more detaills... {ex}")
-  
-    log.debug("Task Backup completed successfully.")
+        log.critical(ex)
+        module.fail_json(msg=f"Work directory {workdir} not found.")
+        
+    regex = module.params[REGEX]
+    validateRegEx(regex,module)
+    dryrun = module.params[DRYRUN]
+    
+    taskRestore = TaskRestore()
+    restoreArgs = {'workdir':workdir,'regex':regex,'dryrun':dryrun,'attach':module.params[ATTACH],'force':module.params[FORCE],'tag':module.params[TAG]}
+    try:
+        processTask(taskRestore,module,**restoreArgs)
+    except Exception as ex:
+        module.fail_json(msg=f"Failed to restore , check the logs for more detaills... {ex}")
+    
+    log.debug("Task Restore completed successfully.")
+    result["changed"] = False if dryrun else True
     result.update(
-        {"stdout": f"Successfully backed up files at {workdir}"}
+        {"stdout": "{}Successfully restored files from local {} folder to vManage address {}".format("DRY-RUN mode: " if dryrun else "",workdir,vManage_ip) }
     )
     module.exit_json(**result)
 
