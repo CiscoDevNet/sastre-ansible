@@ -43,10 +43,9 @@ options:
       all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
       policy_customapp. Special tag "all" selects all items, including WAN edge certificates and 
       device configurations.
-    required: false
+    required: true
     type: list
     elements: str
-    default: "all"
     choices:
     - "template_feature"
     - "policy_profile"
@@ -117,7 +116,7 @@ EXAMPLES = """
     password: admin
     pid: "2"
     port: 8443
-    regex: .*
+    regex: ".*"
     tags: 
       - template_device
       - template_feature
@@ -132,8 +131,8 @@ EXAMPLES = """
     password: admin
     pid: "2"
     port: 8443
-    regex: .*
-    tags: all
+    regex: ".*"
+    tags: "all"
     timeout: 300
     user: admin
     verbose: INFO
@@ -141,8 +140,8 @@ EXAMPLES = """
 - name: "Backup vManage configuration with some vManage config arguments saved in environment variabbles"
   cisco.sdwan.backup: 
     no_rollover: false
-    regex: .*
-    tags: all
+    regex: ".*"
+    tags: "all"
     timeout: 300
     verbose: INFO
     workdir: /home/user/backups
@@ -151,6 +150,7 @@ EXAMPLES = """
     address: "198.18.1.10"
     password: admin
     user: admin
+    tags: "all"
 """
 
 RETURN = """
@@ -169,30 +169,18 @@ stdout_lines:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.basic import env_fallback
 import logging
-from cisco_sdwan.tasks.common import (
-    TaskArgs,
-)
-from cisco_sdwan.base.rest_api import (
-    Rest,
-    LoginFailedException,
-)
-from cisco_sdwan.base.models_base import (
-    ModelException,
-)
 from cisco_sdwan.tasks.implementation._backup import (
     TaskBackup,
 )
 from cisco_sdwan.tasks.utils import (
     default_workdir, 
-    regex_type,
 )
 from cisco_sdwan.tasks.utils import (
     TagOptions,
 )
 from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    ADDRESS,PORT,USER,PASSWORD,WORKDIR,REGEX,TAGS,NO_ROLLOVER,VERBOSE,TIMEOUT,PID,
-    DEFAULT_TAG,
-    setLogLevel,BASE_URL,updatevManageArgs,submit_usage_stats,
+    ADDRESS,WORKDIR,REGEX,TAGS,NO_ROLLOVER,VERBOSE,
+    setLogLevel,updatevManageArgs,validateRegEx,processTask,
 )
 
 
@@ -205,7 +193,7 @@ def main():
         workdir=dict(type="str"),
         no_rollover=dict(type="bool", default=False),
         regex=dict(type="str"),
-        tags=dict(type="list", elements="str", default=[DEFAULT_TAG],choices=tagList),
+        tags=dict(type="list", elements="str", required=True,choices=tagList),
     )
     updatevManageArgs(argument_spec)
     module = AnsibleModule(
@@ -223,23 +211,15 @@ def main():
     regex = module.params[REGEX]
     if workdir is None:
         workdir = default_workdir(vManage_ip)
-    if regex is not None:
-        regex = regex_type(regex)
+    validateRegEx(regex,module)
     
+    taskBackup = TaskBackup()
+    backupArgs = {'workdir':workdir,'no_rollover':module.params[NO_ROLLOVER],'regex':regex,'tags':module.params[TAGS]}
     try:
-        base_url = BASE_URL.format(address=vManage_ip, port=module.params[PORT])
-        taskBackup = TaskBackup()
-        backupArgs = {'workdir':workdir,'no_rollover':module.params[NO_ROLLOVER],'regex':regex,'tags':module.params[TAGS]}
-        with Rest(base_url, module.params[USER], module.params[PASSWORD], timeout=module.params[TIMEOUT]) as api:
-            taskArgs = TaskArgs(**backupArgs)
-            taskBackup.runner(taskArgs, api)
-        taskBackup.log_info('Task completed %s', taskBackup.outcome('successfully', 'with caveats: {tally}'))
-    except (LoginFailedException, ConnectionError, FileNotFoundError, ModelException) as ex:
-        log.critical(ex)
+        processTask(taskBackup,module,**backupArgs)
+    except Exception as ex:
         module.fail_json(msg=f"Failed to take backup , check the logs for more detaills... {ex}")
-        
-    kwargs={'pid': module.params[PID], 'savings': taskBackup.savings}
-    submit_usage_stats(**kwargs)
+  
     log.debug("Task Backup completed successfully.")
     result.update(
         {"stdout": f"Successfully backed up files at {workdir}"}

@@ -34,9 +34,8 @@ options:
       specified tag are automatically included. Available tags are template_feature, policy_profile, policy_definition,
       all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
       policy_customapp. Special tag "all" selects all items.
-    required: false
+    required: true
     type: str
-    default: "all"
     choices:
     - "template_feature"
     - "policy_profile"
@@ -165,6 +164,7 @@ EXAMPLES = """
     address: "198.18.1.10"
     user: "admin"
     password: "admin"
+    tag: "all"
 """
 
 RETURN = """
@@ -183,26 +183,16 @@ stdout_lines:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.basic import env_fallback
 import logging
-from cisco_sdwan.tasks.common import (
-    TaskArgs,
-)
-from cisco_sdwan.base.rest_api import (
-    Rest,
-    LoginFailedException,
-)
-from cisco_sdwan.base.models_base import (
-    ModelException,
-)
 from cisco_sdwan.tasks.implementation._restore import (
     TaskRestore,
 )
 from cisco_sdwan.tasks.utils import (
-    default_workdir, regex_type,existing_file_type,TagOptions
+    default_workdir,existing_file_type,TagOptions
 )
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    ADDRESS,PORT,USER,PASSWORD,WORKDIR,REGEX,VERBOSE,TIMEOUT,PID,
-    DRYRUN,TAG,ATTACH,FORCE,DEFAULT_TAG,
-    setLogLevel,BASE_URL,updatevManageArgs,submit_usage_stats,
+    ADDRESS,WORKDIR,REGEX,VERBOSE,
+    DRYRUN,TAG,ATTACH,FORCE,
+    setLogLevel,updatevManageArgs,validateRegEx,processTask,
 )
 
 
@@ -217,7 +207,7 @@ def main():
         dryrun=dict(type="bool", default=False),
         attach=dict(type="bool", default=False),
         force=dict(type="bool", default=False),
-        tag=dict(type="str", default=DEFAULT_TAG, choices=tagList),
+        tag=dict(type="str", required=True, choices=tagList),
     )
     updatevManageArgs(argument_spec)
     module = AnsibleModule(
@@ -241,28 +231,16 @@ def main():
         module.fail_json(msg=f"Work directory {workdir} not found.")
         
     regex = module.params[REGEX]
-    if regex is not None:
-        regex = regex_type(regex)
-        
+    validateRegEx(regex,module)
     dryrun = module.params[DRYRUN]
-    tag = module.params[TAG]
-    attach = module.params[ATTACH]
-    force= module.params[FORCE]
     
+    taskRestore = TaskRestore()
+    restoreArgs = {'workdir':workdir,'regex':regex,'dryrun':dryrun,'attach':module.params[ATTACH],'force':module.params[FORCE],'tag':module.params[TAG]}
     try:
-        base_url = BASE_URL.format(address=vManage_ip, port=module.params[PORT])
-        taskRestore = TaskRestore()
-        restoreArgs = {'workdir':workdir,'regex':regex,'dryrun':dryrun,'attach':attach,'force':force,'tag':tag}
-        with Rest(base_url, module.params[USER], module.params[PASSWORD], timeout=module.params[TIMEOUT]) as api:
-            taskArgs = TaskArgs(**restoreArgs)
-            taskRestore.runner(taskArgs, api)
-        taskRestore.log_info('Task completed %s', taskRestore.outcome('successfully', 'with caveats: {tally}'))
-    except (LoginFailedException, ConnectionError, FileNotFoundError, ModelException) as ex:
-        log.critical(ex)
+        processTask(taskRestore,module,**restoreArgs)
+    except Exception as ex:
         module.fail_json(msg=f"Failed to restore , check the logs for more detaills... {ex}")
-
-    kwargs={'pid': module.params[PID], 'savings': taskRestore.savings}
-    submit_usage_stats(**kwargs)
+    
     log.debug("Task Restore completed successfully.")
     result["changed"] = False if dryrun else True
     result.update(
