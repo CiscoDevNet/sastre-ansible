@@ -4,7 +4,7 @@ DOCUMENTATION = """
 module: cisco.sdwan.backup
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Save SD-WAN vManage configuration items to local backup
-description: This backup module connects to vManage SD-WAN using HTTP REST and 
+description: This backup module connects to SD-WAN vManage using HTTP REST and 
              returned HTTP responses are stored to default or configured argument
              local backup folder. This module contains multiple arguments with 
              connection and filter details to backup all or specific configurtion data.
@@ -112,44 +112,44 @@ EXAMPLES = """
 - name: "Backup vManage configuration"
   cisco.sdwan.backup: 
     address: "198.18.1.10"
-    no_rollover: false
-    password: admin
-    pid: "2"
     port: 8443
+    user: admin
+    password: admin
+    timeout: 300
+    pid: "2"
+    verbose: INFO
+    workdir: /home/user/backups
+    no_rollover: false
     regex: ".*"
     tags: 
       - template_device
       - template_feature
-    timeout: 300
-    user: admin
-    verbose: INFO
-    workdir: /home/user/backups
-- name: "Backup vManage configuration"
+- name: "Backup all vManage configuration"
   cisco.sdwan.backup: 
     address: "198.18.1.10"
-    no_rollover: false
-    password: admin
-    pid: "2"
     port: 8443
-    regex: ".*"
-    tags: "all"
-    timeout: 300
     user: admin
+    password: admin
+    timeout: 300
+    pid: "2"
     verbose: INFO
     workdir: /home/user/backups
-- name: "Backup vManage configuration with some vManage config arguments saved in environment variabbles"
-  cisco.sdwan.backup: 
     no_rollover: false
     regex: ".*"
     tags: "all"
+- name: "Backup vManage configuration with some vManage config arguments saved in environment variables"
+  cisco.sdwan.backup: 
     timeout: 300
     verbose: INFO
     workdir: /home/user/backups
+    no_rollover: false
+    regex: ".*"
+    tags: "all"
 - name: "Backup vManage configuration with all defaults"
   cisco.sdwan.backup: 
     address: "198.18.1.10"
-    password: admin
     user: admin
+    password: admin
     tags: "all"
 """
 
@@ -175,48 +175,41 @@ from cisco_sdwan.tasks.implementation._backup import (
 from cisco_sdwan.tasks.utils import (
     default_workdir, 
 )
-from cisco_sdwan.tasks.utils import (
-    TagOptions,
-)
 from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,WORKDIR,REGEX,TAGS,NO_ROLLOVER,VERBOSE,
-    setLogLevel,updatevManageArgs,validateRegEx,processTask,
+    set_log_level,update_vManage_args,validate_regex,process_task,tag_list,
+    get_workdir,
 )
 
 
 def main():
     """main entry point for module execution
     """
-    tagList = list(TagOptions.tag_options)
-    
     argument_spec = dict(
         workdir=dict(type="str"),
         no_rollover=dict(type="bool", default=False),
         regex=dict(type="str"),
-        tags=dict(type="list", elements="str", required=True,choices=tagList),
+        tags=dict(type="list", elements="str", required=True,choices=tag_list),
     )
-    updatevManageArgs(argument_spec)
+    update_vManage_args(argument_spec)
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
     )
     
-    setLogLevel(module.params[VERBOSE])
+    set_log_level(module.params[VERBOSE])
     log = logging.getLogger(__name__)
     log.debug("Task Backup started.")
     
     result = {"changed": False }
    
-    vManage_ip=module.params[ADDRESS]
-    workdir = module.params[WORKDIR]
+    workdir = get_workdir(module.params[WORKDIR],module.params[ADDRESS])
     regex = module.params[REGEX]
-    if workdir is None:
-        workdir = default_workdir(vManage_ip)
-    validateRegEx(regex,module)
+    validate_regex(regex,module)
     
     taskBackup = TaskBackup()
     backupArgs = {'workdir':workdir,'no_rollover':module.params[NO_ROLLOVER],'regex':regex,'tags':module.params[TAGS]}
     try:
-        processTask(taskBackup,module,**backupArgs)
+        process_task(taskBackup,module,**backupArgs)
     except Exception as ex:
         module.fail_json(msg=f"Failed to take backup , check the logs for more detaills... {ex}")
   

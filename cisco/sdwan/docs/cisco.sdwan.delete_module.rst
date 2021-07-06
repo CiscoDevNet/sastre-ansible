@@ -1,12 +1,12 @@
-:source: backup.py
+:source: delete.py
 
 :orphan:
 
-.. _cisco.sdwan.backup_module:
+.. _cisco.sdwan.delete_module:
 
 
-cisco.sdwan.backup - Save SD-WAN vManage configuration items to local backup
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+cisco.sdwan.delete - Delete configuration items on SD-WAN vManage.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ cisco.sdwan.backup - Save SD-WAN vManage configuration items to local backup
 
 Synopsis
 --------
-- This backup module connects to SD-WAN vManage using HTTP REST and returned HTTP responses are stored to default or configured argument local backup folder. This module contains multiple arguments with connection and filter details to backup all or specific configurtion data. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
+- This delete module connects to SD-WAN vManage using HTTP REST to delete configuration items. This module contains multiple arguments with connection and filter details to delete all or specific configurtion data. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
 
 
 
@@ -44,7 +44,7 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>no_rollover</b>
+                    <b>detach</b>
                     <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
                                                                                                                                                                                                                     <ul><b>Choices:</b>
@@ -53,7 +53,21 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>By default, if workdir already exists (before a new backup is saved) the old workdir is renamed using a rolling naming scheme. &quot;True&quot; disables the automatic rollover. &quot;False&quot; enables the automatic rollover</div>
+                                                                        <div>USE WITH CAUTION! Detach devices from templates and deactivate vSmart policy before deleting items. This allows deleting items that are associated with attached templates and active policies.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>dryrun</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                                                        <div>dry-run mode. Items matched for removal are listed but not deleted.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -95,13 +109,13 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression matching item names to be backed up, within selected tags</div>
+                                                                        <div>Regular expression matching item names to be deleted, within selected tags</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>tags</b>
-                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <b>tag</b>
+                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                             <ul><b>Choices:</b>
                                                                                                                                                                 <li>template_feature</li>
@@ -118,7 +132,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Defines one or more tags for selecting items to be backed up. Multiple tags should be configured as list. Available tags are template_feature, policy_profile, policy_definition, all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security, policy_customapp. Special tag &quot;all&quot; selects all items, including WAN edge certificates and device configurations.</div>
+                                                                        <div>Tag for selecting items to be deleted. Available tags are template_feature, policy_profile, policy_definition, all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security, policy_customapp. Special tag &quot;all&quot; selects all items.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -160,17 +174,6 @@ Parameters
                                                                         <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
                                                                                 </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>workdir</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">backup_&lt;address&gt;_&lt;yyyymmdd&gt;</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>Defines the location (in the local machine) where vManage data files are located. By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;. The workdir argument can be used to specify a different location. workdir is under a &#x27;data&#x27; directory. This &#x27;data&#x27; directory is relative to the directory where Ansible script is run.</div>
-                                                                                </td>
-            </tr>
                         </table>
     <br/>
 
@@ -188,8 +191,8 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: "Backup vManage configuration"
-      cisco.sdwan.backup: 
+    - name: "Delete vManage configuration"
+      cisco.sdwan.delete: 
         address: "198.18.1.10"
         port: 8443
         user: admin
@@ -197,39 +200,24 @@ Examples
         timeout: 300
         pid: "2"
         verbose: INFO
-        workdir: /home/user/backups
-        no_rollover: false
         regex: ".*"
-        tags: 
-          - template_device
-          - template_feature
-    - name: "Backup all vManage configuration"
-      cisco.sdwan.backup: 
-        address: "198.18.1.10"
-        port: 8443
-        user: admin
-        password: admin
-        timeout: 300
-        pid: "2"
-        verbose: INFO
-        workdir: /home/user/backups
-        no_rollover: false
-        regex: ".*"
-        tags: "all"
-    - name: "Backup vManage configuration with some vManage config arguments saved in environment variables"
-      cisco.sdwan.backup: 
+        dryrun: True
+        detach: False
+        tag: "template_device"
+    - name: "Delete vManage configuration with some vManage config arguments saved in environment variables"
+      cisco.sdwan.delete: 
         timeout: 300
         verbose: INFO
-        workdir: /home/user/backups
-        no_rollover: false
         regex: ".*"
-        tags: "all"
-    - name: "Backup vManage configuration with all defaults"
-      cisco.sdwan.backup: 
+        dryrun: True
+        detach: False
+        tag: "all"
+    - name: "Delete vManage configuration with all defaults"
+      cisco.sdwan.delete: 
         address: "198.18.1.10"
         user: admin
         password: admin
-        tags: "all"
+        tag: "template_device"
 
 
 
@@ -248,4 +236,4 @@ Author
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/backup.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/delete.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
