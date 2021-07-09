@@ -228,13 +228,13 @@ def main():
         module.fail_json(msg=f"Work directory {workdir} not found.")
         
     regex = module.params[REGEX]
-    validate_regex(regex,module)
+    validate_regex(REGEX,regex,module)
     dryrun = module.params[DRYRUN]
     
-    taskRestore = TaskRestore()
-    restoreArgs = {'workdir':workdir,'regex':regex,'dryrun':dryrun,'attach':module.params[ATTACH],'force':module.params[FORCE],'tag':module.params[TAG]}
+    task_restore = TaskRestore()
+    restore_args = {'workdir':workdir,'regex':regex,'dryrun':dryrun,'attach':module.params[ATTACH],'force':module.params[FORCE],'tag':module.params[TAG]}
     try:
-        process_task(taskRestore,module,**restoreArgs)
+        process_task(task_restore,module,**restore_args)
     except Exception as ex:
         module.fail_json(msg=f"Failed to restore , check the logs for more detaills... {ex}")
     

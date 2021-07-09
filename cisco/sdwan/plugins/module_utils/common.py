@@ -3,13 +3,14 @@ import logging.config
 import logging.handlers
 from pathlib import Path
 import json
+from functools import partial
 from ansible.module_utils.basic import env_fallback
 from cisco_sdwan.__version__ import __version__ as version
 from cisco_sdwan.base.models_base import (
     SASTRE_ROOT_DIR,
 )
 from cisco_sdwan.tasks.utils import (
-    regex_type,TagOptions,default_workdir,
+    regex_type,TagOptions,default_workdir,site_id_type,ipv4_type,int_type,
 )
 from cisco_sdwan.tasks.common import (
     TaskArgs,
@@ -24,7 +25,6 @@ from cisco_sdwan.base.models_base import (
 from cisco_sdwan.cmd import (
     submit_aide_stats,LOGGING_CONFIG,
     VMANAGE_PORT,REST_TIMEOUT,BASE_URL,AIDE_TIMEOUT
-
 )
 
 # Ansible YML argument keys
@@ -38,15 +38,24 @@ TAGS = "tags"
 NO_ROLLOVER = "no_rollover"
 VERBOSE = "verbose"
 TIMEOUT = "timeout"
-PID= "pid"
-DRYRUN="dryrun"
-TAG="tag"
-ATTACH="attach"
-DETACH="detach"
-FORCE="force"
+PID = "pid"
+DRYRUN = "dryrun"
+TAG = "tag"
+ATTACH = "attach"
+DETACH = "detach"
+FORCE = "force"
+TEMPLATES = "templates"
+DEVICES = "devices"
+SITE = "site"
+SYSTEM_IP = "system_ip"
+BATCH = "batch"
+DEVICE_TYPE = "device_type"
+REACHABLE = "reachable"
 # Default tag value
 DEFAULT_LOG_LEVEL="DEBUG"
 DEFAULT_PID = "0"
+
+attach_detach_device_types = ['edge','vsmart']
 
 logging_levels = [
     'NOTSET',
@@ -101,22 +110,59 @@ def submit_usage_stats(**kwargs):
     if aide_thread.is_alive():
         logging.getLogger(__name__).warning('AIDE statistics collection timeout')
     
-def validate_regex(regex,module):
+def validate_regex(regex_arg,regex,module):
     if regex is not None:
         try:  
-          regex = regex_type(regex)
+          regex_type(regex)
         except Exception as ex:
           logging.getLogger(__name__).critical(ex)
-          module.fail_json(msg=f'{regex} is not a valid regular expression.') 
+          module.fail_json(msg=f'{regex_arg}: {regex} is not a valid regular expression.') 
           
-def process_task(task,module,**taskArgs):
+def process_task(task,module,**task_args):
     try:
         base_url = BASE_URL.format(address=module.params[ADDRESS], port=module.params[PORT])
         with Rest(base_url, module.params[USER], module.params[PASSWORD], timeout=module.params[TIMEOUT]) as api:
-            taskArgs = TaskArgs(**taskArgs)
-            task.runner(taskArgs, api)
+            task_args = TaskArgs(**task_args)
+            task.runner(task_args, api)
         task.log_info('Task completed %s', task.outcome('successfully', 'with caveats: {tally}'))
     except (LoginFailedException, ConnectionError, FileNotFoundError, ModelException) as ex:
         task.log_critical(ex)
     kwargs={'pid': module.params[PID], 'savings': task.savings}
     submit_usage_stats(**kwargs)
+
+def validate_site(site_arg,site,module):
+    if site is not None:
+        try:  
+          site_id_type(site)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{site_arg}: {site} is not a valid site-id.') 
+          
+def validate_ipv4(ipv4_arg,ipv4_str,module):
+    if ipv4_str is not None:
+        try:  
+          ipv4_type(ipv4_str)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{ipv4_arg}: {ipv4_str} is not a valid IPv4 address.') 
+          
+def validate_batch(batch_arg,batch,module):
+    if batch is not None:
+        try:  
+          partial_batch = partial(int_type, 1, 9999)
+          partial_batch(batch)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{batch_arg}: Invalid value: {batch}. Must be an integer between 1 and 9999 inclusive.')
+          
+def attach_detach_validations(module):
+    templates = module.params[TEMPLATES]
+    validate_regex(TEMPLATES,templates,module)
+    devices = module.params[DEVICES]
+    validate_regex(DEVICES,devices,module)
+    site= module.params[SITE]
+    validate_site(SITE,site,module)
+    system_ip= module.params[SYSTEM_IP]
+    validate_ipv4(SYSTEM_IP,system_ip,module)
+    batch = module.params[BATCH]
+    validate_batch(BATCH,batch,module)

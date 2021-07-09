@@ -204,12 +204,12 @@ def main():
    
     workdir = get_workdir(module.params[WORKDIR],module.params[ADDRESS])
     regex = module.params[REGEX]
-    validate_regex(regex,module)
+    validate_regex(REGEX,regex,module)
     
-    taskBackup = TaskBackup()
+    task_backup = TaskBackup()
     backupArgs = {'workdir':workdir,'no_rollover':module.params[NO_ROLLOVER],'regex':regex,'tags':module.params[TAGS]}
     try:
-        process_task(taskBackup,module,**backupArgs)
+        process_task(task_backup,module,**backupArgs)
     except Exception as ex:
         module.fail_json(msg=f"Failed to take backup , check the logs for more detaills... {ex}")
   

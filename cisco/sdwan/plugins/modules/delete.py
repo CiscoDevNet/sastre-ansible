@@ -176,13 +176,13 @@ def main():
    
     vManage_ip=module.params[ADDRESS]
     regex = module.params[REGEX]
-    validate_regex(regex,module)
+    validate_regex(REGEX,regex,module)
     dryrun = module.params[DRYRUN]
     
-    taskDelete = TaskDelete()
-    deleteArgs = {'regex':regex,'dryrun':dryrun,'detach':module.params[DETACH],'tag':module.params[TAG]}
+    task_delete = TaskDelete()
+    delete_args = {'regex':regex,'dryrun':dryrun,'detach':module.params[DETACH],'tag':module.params[TAG]}
     try:
-        process_task(taskDelete,module,**deleteArgs)
+        process_task(task_delete,module,**delete_args)
     except Exception as ex:
         module.fail_json(msg=f"Failed to delete , check the logs for more detaills... {ex}")
         
