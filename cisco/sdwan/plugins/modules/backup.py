@@ -172,9 +172,6 @@ import logging
 from cisco_sdwan.tasks.implementation._backup import (
     TaskBackup,
 )
-from cisco_sdwan.tasks.utils import (
-    default_workdir, 
-)
 from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,WORKDIR,REGEX,TAGS,NO_ROLLOVER,VERBOSE,
     set_log_level,update_vManage_args,validate_regex,process_task,tag_list,

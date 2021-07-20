@@ -187,7 +187,7 @@ from cisco_sdwan.tasks.implementation._restore import (
     TaskRestore,
 )
 from cisco_sdwan.tasks.utils import (
-    default_workdir,existing_file_type
+    existing_file_type
 )
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,WORKDIR,REGEX,VERBOSE,

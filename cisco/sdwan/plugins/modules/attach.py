@@ -4,13 +4,13 @@ DOCUMENTATION = """
 module: cisco.sdwan.attach
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Attach WAN Edges/vSmarts to templates. Allows further customization on top of the functionality available via "restore --attach".
-description: This attacg module connects to SD-WAN vManage using HTTP REST to 
+description: This attach module connects to SD-WAN vManage using HTTP REST to 
              updated configuration data stored in local default backup or configured argument
              local backup folder. This module contains multiple arguments with 
              connection and filter details to attach WAN Edges/vSmarts to templates.
              When multiple filters are defined, the result is an AND of all filters. 
              Dry-run can be used to validate the expected outcome.The number of devices to include 
-             per attach request (to vManage) can be defined with the --batch option.
+             per attach request (to vManage) can be defined with the batch param.
              A log file is created under a "logs" directory. This "logs" directory
              is relative to directory where Ansible runs.
 notes: 
