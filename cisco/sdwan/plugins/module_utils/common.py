@@ -3,13 +3,15 @@ import logging.config
 import logging.handlers
 from pathlib import Path
 import json
+from functools import partial
 from ansible.module_utils.basic import env_fallback
 from cisco_sdwan.__version__ import __version__ as version
 from cisco_sdwan.base.models_base import (
     SASTRE_ROOT_DIR,
 )
 from cisco_sdwan.tasks.utils import (
-    regex_type
+    regex_type,TagOptions,default_workdir,site_id_type,ipv4_type,int_type,
+    filename_type,
 )
 from cisco_sdwan.tasks.common import (
     TaskArgs,
@@ -21,14 +23,11 @@ from cisco_sdwan.base.rest_api import (
 from cisco_sdwan.base.models_base import (
     ModelException,
 )
+from cisco_sdwan.cmd import (
+    submit_aide_stats,LOGGING_CONFIG,
+    VMANAGE_PORT,REST_TIMEOUT,BASE_URL,AIDE_TIMEOUT
+)
 
-# vManage REST API defaults
-VMANAGE_PORT = '8443'
-REST_TIMEOUT = 300
-BASE_URL = 'https://{address}:{port}'
-
-# Maximum amount of time allowed for AIDE statistics collection
-AIDE_TIMEOUT = 3
 
 # Ansible YML argument keys
 ADDRESS = "address"
@@ -41,60 +40,29 @@ TAGS = "tags"
 NO_ROLLOVER = "no_rollover"
 VERBOSE = "verbose"
 TIMEOUT = "timeout"
-PID= "pid"
-DRYRUN="dryrun"
-TAG="tag"
-ATTACH="attach"
-DETACH="detach"
-FORCE="force"
+PID = "pid"
+DRYRUN = "dryrun"
+TAG = "tag"
+ATTACH = "attach"
+DETACH = "detach"
+FORCE = "force"
+TEMPLATES = "templates"
+DEVICES = "devices"
+SITE = "site"
+SYSTEM_IP = "system_ip"
+BATCH = "batch"
+DEVICE_TYPE = "device_type"
+REACHABLE = "reachable"
+CMDS="cmds"
+DETAIL="detail"
+DAYS="days"
+HOURS="hours"
+CSV="csv"
 # Default tag value
-DEFAULT_TAG = "all"
 DEFAULT_LOG_LEVEL="DEBUG"
 DEFAULT_PID = "0"
 
-
-# Default logging configuration - JSON formatted
-# Reason for setting level at chardet.charsetprober is to prevent unwanted debug messages from requests module
-LOGGING_CONFIG = '''
-{
-    "version": 1,
-    "formatters": {
-        "simple": {
-            "format": "%(levelname)s: %(message)s"
-        },
-        "detailed": {
-            "format": "%(asctime)s: %(name)s: %(levelname)s: %(message)s"
-        }
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "level": "DEBUG",
-            "formatter": "simple"
-        },
-        "file": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": "logs/sastre.log",
-            "backupCount": 3,
-            "maxBytes": 204800,
-            "level": "DEBUG",
-            "formatter": "detailed"
-        }
-    },
-    "root": {
-        "handlers": ["console", "file"],
-        "level": "DEBUG"
-    },
-    "loggers": {
-        "chardet.charsetprober": {
-            "level": "INFO"
-        },
-        "aide.statistics": {
-            "level": "WARN"
-        }
-    }
-}
-'''
+attach_detach_device_types = ['edge','vsmart']
 
 logging_levels = [
     'NOTSET',
@@ -114,12 +82,19 @@ if file_handler is not None:
     file_handler['filename'] = str(Path(SASTRE_ROOT_DIR, file_handler['filename']))
     Path(file_handler['filename']).parent.mkdir(parents=True, exist_ok=True)
 
-def setLogLevel(logLevel):
-    console_handler['level'] = logLevel
-    file_handler['level'] = logLevel
+tag_list = list(TagOptions.tag_options)
+
+def get_workdir(workdir,vManage_ip):
+    if workdir is None:
+        return default_workdir(vManage_ip)
+    return workdir
+        
+def set_log_level(log_level):
+    console_handler['level'] = log_level
+    file_handler['level'] = log_level
     logging.config.dictConfig(logging_config)
 
-def updatevManageArgs(argsSpec):
+def update_vManage_args(args_spec):
     args = dict(
         address=dict(type="str", required=True,fallback=(env_fallback, ['VMANAGE_IP'])),
         port=dict(type="int", default=VMANAGE_PORT,fallback=(env_fallback, ['VMANAGE_PORT'])),
@@ -129,7 +104,7 @@ def updatevManageArgs(argsSpec):
         pid=dict(type="str",default=DEFAULT_PID,fallback=(env_fallback, ['CX_PID'])),
         verbose=dict(type="str",default=DEFAULT_LOG_LEVEL,choices=logging_levels),
     )
-    argsSpec.update(args)
+    args_spec.update(args)
     
 def submit_usage_stats(**kwargs):
     # Submit usage statistics to AIDE (https://wwwin-github.cisco.com/AIDE/aide-python-tools)
@@ -142,39 +117,87 @@ def submit_usage_stats(**kwargs):
     if aide_thread.is_alive():
         logging.getLogger(__name__).warning('AIDE statistics collection timeout')
     
-def submit_aide_stats(pid, estimated_savings):
-    try:
-        from aide import submit_statistics
-        submit_statistics(
-            tool_id='46810',
-            pid=pid,
-            metadata={
-                "potential_savings": estimated_savings,
-                "report_savings": True,
-                "sastre_version": version
-            }
-        )
-    except ModuleNotFoundError:
-        logging.getLogger(__name__).debug('AIDE package not installed')
-    except Exception as ex:
-        logging.getLogger(__name__).debug(f'Exception found while submitting AIDE statistics: {ex}')
-        
-def validateRegEx(regex,module):
+def validate_regex(regex_arg,regex,module):
     if regex is not None:
         try:  
-          regex = regex_type(regex)
+          regex_type(regex)
         except Exception as ex:
           logging.getLogger(__name__).critical(ex)
-          module.fail_json(msg=f'{regex} is not a valid regular expression.') 
+          module.fail_json(msg=f'{regex_arg}: {regex} is not a valid regular expression.') 
           
-def processTask(task,module,**taskArgs):
+def process_task(task,module,**task_args):
+    is_api_required = task.is_api_required(task_args)
     try:
-        base_url = BASE_URL.format(address=module.params[ADDRESS], port=module.params[PORT])
-        with Rest(base_url, module.params[USER], module.params[PASSWORD], timeout=module.params[TIMEOUT]) as api:
-            taskArgs = TaskArgs(**taskArgs)
-            task.runner(taskArgs, api)
+        if is_api_required:
+            base_url = BASE_URL.format(address=module.params[ADDRESS], port=module.params[PORT])
+            with Rest(base_url, module.params[USER], module.params[PASSWORD], timeout=module.params[TIMEOUT]) as api:
+                task_args = TaskArgs(**task_args)
+                task_output = None
+                try:
+                    task_output = task_args.task_output
+                except AttributeError as exc:       
+                    task.log_debug(exc)
+
+                task.runner(task_args, api, task_output)
+        else:
+            task.runner(task_args)
+                
         task.log_info('Task completed %s', task.outcome('successfully', 'with caveats: {tally}'))
     except (LoginFailedException, ConnectionError, FileNotFoundError, ModelException) as ex:
         task.log_critical(ex)
     kwargs={'pid': module.params[PID], 'savings': task.savings}
     submit_usage_stats(**kwargs)
+
+def validate_site(site_arg,site,module):
+    if site is not None:
+        try:  
+          site_id_type(site)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{site_arg}: {site} is not a valid site-id.') 
+          
+def validate_ipv4(ipv4_arg,ipv4_str,module):
+    if ipv4_str is not None:
+        try:  
+          ipv4_type(ipv4_str)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{ipv4_arg}: {ipv4_str} is not a valid IPv4 address.') 
+          
+def validate_batch(batch_arg,batch,module):
+    if batch is not None:
+        try:  
+          partial_batch = partial(int_type, 1, 9999)
+          partial_batch(batch)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{batch_arg}: Invalid value: {batch}. Must be an integer between 1 and 9999 inclusive.')
+          
+def attach_detach_validations(module):
+    templates = module.params[TEMPLATES]
+    validate_regex(TEMPLATES,templates,module)
+    devices = module.params[DEVICES]
+    validate_regex(DEVICES,devices,module)
+    site= module.params[SITE]
+    validate_site(SITE,site,module)
+    system_ip= module.params[SYSTEM_IP]
+    validate_ipv4(SYSTEM_IP,system_ip,module)
+    batch = module.params[BATCH]
+    validate_batch(BATCH,batch,module)
+    
+def validate_filename(filename_arg,filename,module):
+    if filename is not None:
+        try:
+            filename_type(filename)
+        except Exception as ex:
+            logging.getLogger(__name__).critical(ex)
+            module.fail_json(msg=f'{filename_arg}: Invalid name {filename}. Only alphanumeric characters, "-", "_", and "." are allowed.')
+
+def validate_time(time_arg,time,module):
+    if time is not None:
+        try:  
+          time_func = partial(int_type, 0, 9999)
+          time_func(time)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{time_arg}: Invalid value: {time}. Must be an integer between 0 and 9999 inclusive.')

@@ -15,7 +15,8 @@ This collection has been tested against following Ansible versions: **==2.10.9**
 Name | Description
 --- | ---
 [cisco.sdwan.backup](https://github.com/ansible-collections/cisco.sdwan/blob/main/docs/cisco.ios.backup.rst)|Save SD-WAN vManage configuration items to local backup
-[cisco.sdwan.restore](https://github.com/ansible-collections/cisco.sdwan/blob/main/docs/cisco.ios.restore.rst)|Restore configuration items from a local backup to vManage SD-WAN.
+[cisco.sdwan.restore](https://github.com/ansible-collections/cisco.sdwan/blob/main/docs/cisco.ios.restore.rst)|Restore configuration items from a local backup to SD-WAN vManage.
+[cisco.sdwan.delete](https://github.com/ansible-collections/cisco.sdwan/blob/main/docs/cisco.ios.delete.rst)|Delete configuration items on SD-WAN vManage.
 
 <!--end collection content-->
 ## Installing this collection

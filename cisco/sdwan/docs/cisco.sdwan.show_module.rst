@@ -1,12 +1,12 @@
-:source: backup.py
+:source: show.py
 
 :orphan:
 
-.. _cisco.sdwan.backup_module:
+.. _cisco.sdwan.show_module:
 
 
-cisco.sdwan.backup - Save SD-WAN vManage configuration items to local backup
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+cisco.sdwan.show - Run vManage real-time, state or statistics commands; collecting data from one or more devices.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ cisco.sdwan.backup - Save SD-WAN vManage configuration items to local backup
 
 Synopsis
 --------
-- This backup module connects to SD-WAN vManage using HTTP REST and returned HTTP responses are stored to default or configured argument local backup folder. This module contains multiple arguments with connection and filter details to backup all or specific configurtion data. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
+- This show module connects to SD-WAN vManage using HTTP REST to retrieve different data.This module contains multiple arguments with connection and filter details to retrieve devices,realtime,state, statistics data.The retrieved data will be displayed to console in table format or can be exported as csv files under the specified directory defined in csv param.When multiple filters are defined, the result is an AND of all filters. A log file is created under a "logs" directory. This "logs" directoryis relative to directory where Ansible runs.
 
 
 
@@ -44,7 +44,38 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>no_rollover</b>
+                    <b>cmds</b>
+                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>group of, or specific command to execute. Applicable to only realtime,state,statistics options For realtime , Group options are all, app-route, bfd, control, dpi, interface, omp, software, system, tunnel. Command options are app-route sla-class, app-route stats, bfd sessions, control connections, control local-properties, dpi summary, interface info, omp adv-routes, omp peers, omp summary, software info, system status, tunnel stats. For state , Group options are all, bfd, control, interface, omp, system. Command options are bfd sessions, control connections, control local-properties, interface cedge, interface vedge, omp peers, system info. For statistics , Group options are all, app-route, interface, system. Command options are app-route stats, interface info, system status.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>csv</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export results as csv files under the specified directory</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>days</b>
+                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
+                                    </td>
+                                                                <td>
+                                                                        <div>Query statistics from &lt;days&gt; ago (default is now). Applicable to only statistics option</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>detail</b>
                     <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
                                                                                                                                                                                                                     <ul><b>Choices:</b>
@@ -53,7 +84,18 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>By default, if workdir already exists (before a new backup is saved) the old workdir is renamed using a rolling naming scheme. &quot;True&quot; disables the automatic rollover. &quot;False&quot; enables the automatic rollover</div>
+                                                                        <div>Detailed output. Applicable to only realtime,state,statistics options</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>hours</b>
+                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
+                                    </td>
+                                                                <td>
+                                                                        <div>Query statistics from &lt;hours&gt; ago (default is now). Applicable to only statistics option</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -90,35 +132,46 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <b>reachable</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                                                        <div>Display only reachable devices</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <b>regex</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression matching item names to be backed up, within selected tags</div>
+                                                                        <div>Regular expression matching device name, type or model to display</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>tags</b>
-                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <b>site</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>template_feature</li>
-                                                                                                                                                                                                <li>policy_profile</li>
-                                                                                                                                                                                                <li>policy_definition</li>
-                                                                                                                                                                                                <li>all</li>
-                                                                                                                                                                                                <li>policy_list</li>
-                                                                                                                                                                                                <li>policy_vedge</li>
-                                                                                                                                                                                                <li>policy_voice</li>
-                                                                                                                                                                                                <li>policy_vsmart</li>
-                                                                                                                                                                                                <li>template_device</li>
-                                                                                                                                                                                                <li>policy_security</li>
-                                                                                                                                                                                                <li>policy_customapp</li>
-                                                                                    </ul>
-                                                                            </td>
+                                                                                                                                                            </td>
                                                                 <td>
-                                                                        <div>Defines one or more tags for selecting items to be backed up. Multiple tags should be configured as list. Available tags are template_feature, policy_profile, policy_definition, all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security, policy_customapp. Special tag &quot;all&quot; selects all items, including WAN edge certificates and device configurations.</div>
+                                                                        <div>Select devices with site ID.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>system_ip</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Select device with system IP.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -160,17 +213,6 @@ Parameters
                                                                         <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
                                                                                 </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>workdir</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">backup_&lt;address&gt;_&lt;yyyymmdd&gt;</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>Defines the location (in the local machine) where vManage data files are located. By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;. The workdir argument can be used to specify a different location. workdir is under a &#x27;data&#x27; directory. This &#x27;data&#x27; directory is relative to the directory where Ansible script is run.</div>
-                                                                                </td>
-            </tr>
                         </table>
     <br/>
 
@@ -188,48 +230,77 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: "Backup vManage configuration"
-      cisco.sdwan.backup: 
-        address: "198.18.1.10"
+    - name: Show Devices data
+      cisco.sdwan.show:
+        devices:
+            regex: ".*"
+            reachable: true
+            site: "100"
+            system_ip: 10.1.0.2
+            csv: test
+        address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
         timeout: 300
         pid: "2"
-        verbose: INFO
-        workdir: /home/user/backups
-        no_rollover: false
-        regex: ".*"
-        tags: 
-          - template_device
-          - template_feature
-    - name: "Backup all vManage configuration"
-      cisco.sdwan.backup: 
-        address: "198.18.1.10"
+        verbose: DEBUG
+    - name: Show RealTime data
+      cisco.sdwan.show:
+        realtime:
+            regex: ".*"
+            cmds:
+                - all
+            detail: true
+            reachable: true
+            site: "100"
+            system_ip: 11.0.2.1
+            csv: test123
+        address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
         timeout: 300
         pid: "2"
-        verbose: INFO
-        workdir: /home/user/backups
-        no_rollover: false
-        regex: ".*"
-        tags: "all"
-    - name: "Backup vManage configuration with some vManage config arguments saved in environment variables"
-      cisco.sdwan.backup: 
-        timeout: 300
-        verbose: INFO
-        workdir: /home/user/backups
-        no_rollover: false
-        regex: ".*"
-        tags: "all"
-    - name: "Backup vManage configuration with all defaults"
-      cisco.sdwan.backup: 
-        address: "198.18.1.10"
+        verbose: DEBUG 
+    - name: Show State data
+      cisco.sdwan.show:
+        state:
+            regex: ".*"
+            cmds:
+                - all
+            detail: true
+            reachable: true
+            site: "100"
+            system_ip: 11.0.2.1
+            csv: test123
+        address: 198.18.1.10
+        port: 8443
         user: admin
         password: admin
-        tags: "all"
+        timeout: 300
+        pid: "2"
+        verbose: DEBUG 
+    - name: Show Statistics data
+      cisco.sdwan.show:
+        statistics:
+            regex: ".*"
+            cmds:
+                - all
+            detail: true
+            reachable: true
+            site: "100"
+            system_ip: 11.0.2.1
+            csv: test123
+            days: 0
+            hours: 0
+        address: 198.18.1.10
+        port: 8443
+        user: admin
+        password: admin
+        timeout: 300
+        pid: "2"
+        verbose: DEBUG 
 
 
 
@@ -248,4 +319,4 @@ Author
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/backup.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/show.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

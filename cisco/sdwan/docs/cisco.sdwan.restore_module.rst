@@ -2,11 +2,11 @@
 
 :orphan:
 
-.. _restore_module:
+.. _cisco.sdwan.restore_module:
 
 
-restore - Restore configuration items from a local backup to vManage SD-WAN.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+cisco.sdwan.restore - Restore configuration items from a local backup to SD-WAN vManage.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ restore - Restore configuration items from a local backup to vManage SD-WAN.
 
 Synopsis
 --------
-- This restore module connects to vManage SD-WAN using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder. This module contains multiple arguments with connection and filter details to restore all or specific configurtion data. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
+- This restore module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder. This module contains multiple arguments with connection and filter details to restore all or specific configurtion data. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
 
 
 
@@ -67,7 +67,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression matching item names to be restored</div>
+                                                                        <div>dry-run mode. Items to be restored are listed but not pushed to vManage.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -129,13 +129,13 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>tag</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                             <ul><b>Choices:</b>
                                                                                                                                                                 <li>template_feature</li>
                                                                                                                                                                                                 <li>policy_profile</li>
                                                                                                                                                                                                 <li>policy_definition</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>all</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>all</li>
                                                                                                                                                                                                 <li>policy_list</li>
                                                                                                                                                                                                 <li>policy_vedge</li>
                                                                                                                                                                                                 <li>policy_voice</li>
@@ -218,49 +218,50 @@ Examples
     
     - name: Restore vManage configuration
       cisco.sdwan.restore:
+        address: "198.18.1.10"
+        port: 8443
+        user: "admin"
+        password: "admin"
+        timeout: 300
+        pid: "2"
+        verbose: "INFO"
         workdir: "/home/user/backups"
         regex: ".*"
+        dryrun: False
+        attach: False
+        force: False
         tag: "template_device"
-        dryrun: False
-        attach: False
-        force: False
+    - name: Restore all vManage configuration
+      cisco.sdwan.restore:
         address: "198.18.1.10"
         port: 8443
         user: "admin"
         password: "admin"
-        verbose: "INFO"
-        pid: "2"
         timeout: 300
-    - name: Restore vManage configuration
-      cisco.sdwan.restore:
+        pid: "2"
+        verbose: "INFO"
         workdir: "/home/user/backups"
         regex: ".*"
-        tag: "all"
         dryrun: False
         attach: False
         force: False
-        address: "198.18.1.10"
-        port: 8443
-        user: "admin"
-        password: "admin"
-        verbose: "INFO"
-        pid: "2"
-        timeout: 300
-    - name: Restore vManage configuration with some vManage config arguments saved in environment variabbles
+        tag: "all"
+    - name: Restore vManage configuration with some vManage config arguments saved in environment variables
       cisco.sdwan.restore:
+        timeout: 300
+        verbose: "INFO"
         workdir: "/home/user/backups"
         regex: ".*"
-        tag: "all"
         dryrun: False
         attach: False
         force: False
-        verbose: "INFO"
-        timeout: 300
-    - name: Backup vManage configuration with all defaults
+        tag: "all"
+    - name: Restore vManage configuration with all defaults
       cisco.sdwan.restore:
         address: "198.18.1.10"
         user: "admin"
         password: "admin"
+        tag: "all"
 
 
 
