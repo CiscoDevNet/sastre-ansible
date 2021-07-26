@@ -11,7 +11,7 @@ from cisco_sdwan.base.models_base import (
 )
 from cisco_sdwan.tasks.utils import (
     regex_type,TagOptions,default_workdir,site_id_type,ipv4_type,int_type,
-    filename_type,
+    filename_type,ext_template_type,non_empty_type,existing_file_type,
 )
 from cisco_sdwan.tasks.common import (
     TaskArgs,
@@ -27,7 +27,6 @@ from cisco_sdwan.cmd import (
     submit_aide_stats,LOGGING_CONFIG,
     VMANAGE_PORT,REST_TIMEOUT,BASE_URL,AIDE_TIMEOUT
 )
-
 
 # Ansible YML argument keys
 ADDRESS = "address"
@@ -58,6 +57,8 @@ DETAIL="detail"
 DAYS="days"
 HOURS="hours"
 CSV="csv"
+NAME_REGEX="name_regex"
+STATUS="status"
 # Default tag value
 DEFAULT_LOG_LEVEL="DEBUG"
 DEFAULT_PID = "0"
@@ -126,28 +127,31 @@ def validate_regex(regex_arg,regex,module):
           module.fail_json(msg=f'{regex_arg}: {regex} is not a valid regular expression.') 
           
 def process_task(task,module,**task_args):
+    task_args = TaskArgs(**task_args)
     is_api_required = task.is_api_required(task_args)
+    task_output = None
+    
+    try:
+        task_output = task_args.task_output
+    except AttributeError as exc:       
+        task.log_debug(exc)
+    
     try:
         if is_api_required:
             base_url = BASE_URL.format(address=module.params[ADDRESS], port=module.params[PORT])
             with Rest(base_url, module.params[USER], module.params[PASSWORD], timeout=module.params[TIMEOUT]) as api:
-                task_args = TaskArgs(**task_args)
-                task_output = None
-                try:
-                    task_output = task_args.task_output
-                except AttributeError as exc:       
-                    task.log_debug(exc)
-
                 task.runner(task_args, api, task_output)
         else:
-            task.runner(task_args)
+            task.runner(task_args,task_output=task_output)
                 
         task.log_info('Task completed %s', task.outcome('successfully', 'with caveats: {tally}'))
     except (LoginFailedException, ConnectionError, FileNotFoundError, ModelException) as ex:
         task.log_critical(ex)
-    kwargs={'pid': module.params[PID], 'savings': task.savings}
-    submit_usage_stats(**kwargs)
-
+        raise Exception(ex) from None
+    finally:    
+        kwargs={'pid': module.params[PID], 'savings': task.savings}
+        submit_usage_stats(**kwargs)
+        
 def validate_site(site_arg,site,module):
     if site is not None:
         try:  
@@ -201,3 +205,26 @@ def validate_time(time_arg,time,module):
         except Exception as ex:
           logging.getLogger(__name__).critical(ex)
           module.fail_json(msg=f'{time_arg}: Invalid value: {time}. Must be an integer between 0 and 9999 inclusive.')
+
+def validate_non_empty_type(src_str_arg,src_str,module):
+        try:
+            non_empty_type(src_str)
+        except Exception as ex:
+            logging.getLogger(__name__).critical(ex)
+            module.fail_json(msg=f'{src_str_arg}:Value cannot be empty.')   
+     
+def validate_ext_template_type(name_regex_arg,template_str,module):
+    if template_str is not None:
+        try:
+            ext_template_type(template_str)
+        except Exception as ex:
+            logging.getLogger(__name__).critical(ex)
+            module.fail_json(msg=f'{name_regex_arg}:{ex}')              
+
+def validate_existing_file_type(workdir_arg,workdir,module):
+    if workdir is not None:
+        try:
+            existing_file_type(workdir)
+        except Exception as ex:
+            logging.getLogger(__name__).critical(ex)
+            module.fail_json(msg=f'{workdir_arg}:Work directory "{workdir}" not found.')
