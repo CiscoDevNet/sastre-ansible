@@ -268,18 +268,15 @@ def main():
         sub_task_name = sub_task_list[0] 
         show_common_args = get_show_common_args(module,sub_task_list[0])
         show_args = get_show_devices_args(sub_task_name,show_common_args)
-    
-    if module.params[sub_task_list[1]]:
+    elif module.params[sub_task_list[1]]:
         sub_task_name = sub_task_list[1] 
         show_common_args = get_show_common_args(module,sub_task_list[1])
         show_args = get_show_realtime_args(module,sub_task_name,show_common_args)
-    
-    if module.params[sub_task_list[2]]:
+    elif module.params[sub_task_list[2]]:
         sub_task_name = sub_task_list[2] 
         show_common_args = get_show_common_args(module,sub_task_list[2])
         show_args = get_show_state_args(module,sub_task_name,show_common_args)
-    
-    if module.params[sub_task_list[3]]:
+    elif module.params[sub_task_list[3]]:
         sub_task_name = sub_task_list[3] 
         show_common_args = get_show_common_args(module,sub_task_list[3])
         show_args = get_show_statistics_args(module,sub_task_name,show_common_args)
