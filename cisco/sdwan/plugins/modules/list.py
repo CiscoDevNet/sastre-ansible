@@ -1,9 +1,178 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
+module: cisco.sdwan.list
+author: Satish Kumar Kamavaram (sakamava@cisco.com)
+short_description: List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file.
+description: The list task can be used to show items from a target vManage,
+             or a backup directory. Matching criteria can contain item tag(s) 
+             and regular expression.When multiple filters are defined, the result 
+             is an AND of all filters.A log file is created under a "logs" directory.
+             This "logs" directoryis relative to directory where Ansible runs.
+notes: 
+- Tested against 20.4.1.1
+options: 
+  regex:
+    description:
+    - For configuration option, regular expression selecting items to list. Match on item names or item IDs.
+      For certificate option,  regular expression selecting devices to list. Match on hostname or chassis/uuid. Use "^-$" to match devices without a hostname.
+      For transform option, regular expression selecting items to list, match on original item names
+    required: false
+    type: str
+  workdir:
+    description:
+    - list will read from the specified directory instead of target vManage. Either workdir or vManage address is mandatory
+    required: false
+    type: str
+  csv:
+    description:
+    - Export table as a csv file
+    required: false
+    type: str
+  tags:
+    description:
+    - Defines one or more tags for selecting groups of items. Multiple tags should be
+      configured as list. Available tags are template_feature, policy_profile, policy_definition,
+      all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
+      policy_customapp. Special tag "all" selects all items, including WAN edge certificates and 
+      device configurations.
+      For configuration option, this param is mandatory.
+      For transform option, this param is mandatory.
+    required: false
+    type: list
+    elements: str
+    choices:
+    - "template_feature"
+    - "policy_profile"
+    - "policy_definition"
+    - "all"
+    - "policy_list"
+    - "policy_vedge"
+    - "policy_voice"
+    - "policy_vsmart"
+    - "template_device"
+    - "policy_security"
+    - "policy_customapp"
+  name_regex:
+    description:
+    - name-regex used to transform an existing item name. Variable {name} is
+      replaced with the original template name. Sections of the original template
+      name can be selected using the {name <regex>} format. Where  is a
+      regular expression that must contain at least one capturing group. Capturing
+      groups identify sections of the original name to keep.
+      For transform option, this param is mandatory.
+    required: false
+    type: str
+    default: False
+  verbose:
+    description:
+    - Defines to control log level for the logs generated under "logs/sastre.log" when Ansible script is run.
+      Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL
+    required: false
+    type: str
+    default: "DEBUG"
+    choices:
+    - "NOTSET"
+    - "DEBUG"
+    - "INFO"
+    - "WARNING"
+    - "ERROR"
+    - "CRITICAL"
+  address:
+    description:
+    - vManage IP address or can also be defined via VMANAGE_IP environment variable
+    required: True
+    type: str
+  port:
+    description: 
+    - vManage port number or can also be defined via VMANAGE_PORT environment variable
+    required: false
+    type: int
+    default: 8443
+  user:
+   description: 
+   - username or can also be defined via VMANAGE_USER environment variable.
+   required: true
+   type: str
+  password:
+    description: 
+    - password or can also be defined via VMANAGE_PASSWORD environment variable.
+    required: true
+    type: str
+  timeout:
+    description: 
+    - vManage REST API timeout in seconds
+    required: false
+    type: int
+    default: 300
+  pid:
+    description: 
+    - CX project id or can also be defined via CX_PID environment variable. 
+      This is collected for AIDE reporting purposes only.
+    required: false
+    type: str
+    default: 0
 """
 
 EXAMPLES = """
+- name: List Configuration
+  cisco.sdwan.list:
+    configuration: 
+        tags:
+            - template_feature
+            - policy_vedge
+        regex: ".*"
+        workdir: backup_198.18.1.10_20210720 
+        csv: csvtest.csv
+    address: 198.18.1.10
+    port: 8443
+    user: admin
+    password: admin
+    timeout: 300
+    pid: "2"
+    verbose: DEBUG
+- name: List Certificate
+  cisco.sdwan.list:
+    certificate:
+        regex: ".*"
+        workdir: backup_198.18.1.10_20210720
+        csv: list_cert.csv
+    address: 198.18.1.10
+    port: 8443
+    user: admin
+    password: admin
+    timeout: 300
+    pid: "2"
+    verbose: DEBUG
+- name: List Transform
+  cisco.sdwan.list:
+    transform: 
+        tags:
+            - template_feature
+        name_regex: '{name}'
+        regex: ".*"
+        workdir: backup_198.18.1.10_20210720
+        csv: csvtest.csv
+    address: 198.18.1.10
+    port: 8443
+    user: admin
+    password: admin
+    timeout: 300
+    pid: "2"
+    verbose: DEBUG
+"""
+
+RETURN = """
+stdout:
+  description: Status of list
+  returned: always apart from low level errors
+  type: str
+  sample: 'Task List: configuration completed successfully.vManage address 198.18.1.10'
+stdout_lines:
+  description: The value of stdout split into a list
+  returned: always apart from low level errors
+  type: list
+  sample: show table view data
 """
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.basic import env_fallback
@@ -42,7 +211,6 @@ def main():
     )
 
     update_vManage_args(argument_spec)
-    #Firoz .. what is this?
     argument_spec.update(address=dict(type="str", required=False,fallback=(env_fallback, ['VMANAGE_IP'])))
     
     module = AnsibleModule(

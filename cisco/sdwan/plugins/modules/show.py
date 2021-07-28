@@ -240,7 +240,7 @@ def main():
         )
 
     argument_spec = dict(
-        devices=dict(type="dict",aliases=["dev"],
+        devices=dict(type="dict",aliases=["dev"],apply_defaults=True,
             options = show_base_args),
         realtime=dict(type="dict",aliases=["rt"],
             options = update_realtime_option_args(show_base_args)),
