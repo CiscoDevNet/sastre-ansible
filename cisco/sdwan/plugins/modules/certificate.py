@@ -1,10 +1,130 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-
+module: cisco.sdwan.certificate
+author: Satish Kumar Kamavaram (sakamava@cisco.com)
+short_description: Restore device certificate validity status from a backup or set to a desired value (i.e. valid, invalid or staging).
+description: The certificate task can be used to items from backup directory or to a
+             set of desired value to target vManage. Matching criteria can contain 
+             regular expression.A log file is created under a "logs" directory.
+             This "logs" directoryis relative to directory where Ansible runs.
+notes: 
+- Tested against 20.4.1.1
+options: 
+  regex:
+    description:
+    - Regular expression selecting devices to modify certificate status. Matches on
+      the hostname or chassis/uuid. Use "^-$" to match devices without a hostname.'
+    required: false
+    type: str
+  dryrun:
+    description:
+    - dry-run mode. List modifications that would be performed without pushing changes to vManage.
+    required: false
+    type: bool
+    default: False
+  workdir:
+    description:
+    - restore source from default or specified location
+      For restore option, this param is mandatory.
+    required: false
+    type: str
+  status:
+    description:
+    - WAN edge certificate status
+      For set option, this param is mandatory.
+    required: false
+    type: str
+  verbose:
+    description:
+    - Defines to control log level for the logs generated under "logs/sastre.log" when Ansible script is run.
+      Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL
+    required: false
+    type: str
+    default: "DEBUG"
+    choices:
+    - "NOTSET"
+    - "DEBUG"
+    - "INFO"
+    - "WARNING"
+    - "ERROR"
+    - "CRITICAL"
+  address:
+    description:
+    - vManage IP address or can also be defined via VMANAGE_IP environment variable
+    required: True
+    type: str
+  port:
+    description: 
+    - vManage port number or can also be defined via VMANAGE_PORT environment variable
+    required: false
+    type: int
+    default: 8443
+  user:
+   description: 
+   - username or can also be defined via VMANAGE_USER environment variable.
+   required: true
+   type: str
+  password:
+    description: 
+    - password or can also be defined via VMANAGE_PASSWORD environment variable.
+    required: true
+    type: str
+  timeout:
+    description: 
+    - vManage REST API timeout in seconds
+    required: false
+    type: int
+    default: 300
+  pid:
+    description: 
+    - CX project id or can also be defined via CX_PID environment variable. 
+      This is collected for AIDE reporting purposes only.
+    required: false
+    type: str
+    default: 0
 """
 
 EXAMPLES = """
+- name: Certificate Set
+  cisco.sdwan.certificate:
+    set:
+        status: valid
+        regex: ".*"
+        dryrun: True
+    address: 198.18.1.10
+    port: 8443
+    user: admin
+    password: admin
+    timeout: 300
+    pid: "2"
+    verbose: DEBUG
+- name: Certificate restore
+  cisco.sdwan.certificate:
+    restore:
+        regex: ".*"
+        workdir: backup_198.18.1.10_20210720
+        dryrun: True
+    address: 198.18.1.10
+    port: 8443
+    user: admin
+    password: admin
+    timeout: 300
+    pid: "2"
+    verbose: DEBUG
+"""
+
+RETURN = """
+stdout:
+  description: Status of Certificate
+  returned: always apart from low level errors
+  type: str
+  sample: 'Task Certificate: restore completed successfully.vManage address 198.18.1.10'
+stdout_lines:
+  description: The value of stdout split into a list
+  returned: always apart from low level errors
+  type: list
+  sample: ['Task Certificate: restore completed successfully.vManage address 198.18.1.10']
 """
 from sys import modules
 from ansible.module_utils.basic import AnsibleModule

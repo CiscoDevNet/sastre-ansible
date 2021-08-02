@@ -12,6 +12,7 @@ from cisco_sdwan.base.models_base import (
 from cisco_sdwan.tasks.utils import (
     regex_type,TagOptions,default_workdir,site_id_type,ipv4_type,int_type,
     filename_type,ext_template_type,non_empty_type,existing_file_type,
+    version_type,uuid_type,
 )
 from cisco_sdwan.tasks.common import (
     TaskArgs,
@@ -59,6 +60,14 @@ HOURS="hours"
 CSV="csv"
 NAME_REGEX="name_regex"
 STATUS="status"
+FILE="file"
+SCOPE="scope"
+OUTPUT="output"
+NAME="name"
+FROM_VERSION="from_version"
+TO="to"
+ID="id"
+WITH_REFS="with_refs"
 # Default tag value
 DEFAULT_LOG_LEVEL="DEBUG"
 DEFAULT_PID = "0"
@@ -228,3 +237,18 @@ def validate_existing_file_type(workdir_arg,workdir,module):
         except Exception as ex:
             logging.getLogger(__name__).critical(ex)
             module.fail_json(msg=f'{workdir_arg}:Work directory "{workdir}" not found.')
+
+def validate_version_type(version_arg,version,module):
+        try:
+            version_type(version)
+        except Exception as ex:
+            logging.getLogger(__name__).critical(ex)
+            module.fail_json(msg=f'{version_arg}:{version}" is not a valid version identifier.')
+
+def validate_uuid_type(uuid_arg,uuid,module):
+    if uuid is not None:
+        try:
+            uuid_type(uuid)
+        except Exception as ex:
+            logging.getLogger(__name__).critical(ex)
+            module.fail_json(msg=f'{uuid_arg}:{uuid} is not a valid item ID.') 

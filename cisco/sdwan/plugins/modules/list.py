@@ -21,7 +21,7 @@ options:
     type: str
   workdir:
     description:
-    - list will read from the specified directory instead of target vManage. Either workdir or vManage address is mandatory
+    - list will read from the specified directory instead of target vManage. Either workdir or vManage address/user/password is mandatory
     required: false
     type: str
   csv:
@@ -182,7 +182,7 @@ from cisco_sdwan.tasks.implementation._list import (
     TaskList
 )
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    ADDRESS,REGEX,VERBOSE,
+    ADDRESS,REGEX,VERBOSE,USER,PASSWORD,
     TAGS,CSV,WORKDIR,NAME_REGEX,
     set_log_level,update_vManage_args,process_task,tag_list,
     validate_regex,validate_existing_file_type,validate_filename,
@@ -211,7 +211,9 @@ def main():
     )
 
     update_vManage_args(argument_spec)
-    argument_spec.update(address=dict(type="str", required=False,fallback=(env_fallback, ['VMANAGE_IP'])))
+    argument_spec.update(address=dict(type="str", required=False,fallback=(env_fallback, ['VMANAGE_IP'])),
+                         user=dict(type="str", required=False,fallback=(env_fallback, ['VMANAGE_USER'])),
+                         password=dict(type="str", required=False,no_log=True,fallback=(env_fallback, ['VMANAGE_PASSWORD'])))
     
     module = AnsibleModule(
         argument_spec=argument_spec, mutually_exclusive=[sub_task_list], required_one_of=[sub_task_list], supports_check_mode=True
@@ -320,6 +322,8 @@ def list_validations(sub_task,module):
 
     if workdir is None: 
         validate_non_empty_type(ADDRESS,module.params[ADDRESS],module)
+        validate_non_empty_type(USER,module.params[USER],module)    
+        validate_non_empty_type(PASSWORD,module.params[PASSWORD],module)     
 
     if sub_task == sub_task_list[2]:
         name_regex = module.params[sub_task][NAME_REGEX]
