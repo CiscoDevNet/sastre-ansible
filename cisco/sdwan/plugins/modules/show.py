@@ -226,7 +226,7 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     validate_filename,validate_regex,validate_site,validate_ipv4,
 )
 
-sub_task_list = ['devices','realtime','state','statistics']  
+sub_task_list = ['realtime','state','statistics','devices']  
 
 def main():
     """main entry point for module execution
@@ -257,7 +257,7 @@ def main():
     )
     set_log_level(module.params[VERBOSE])
     log = logging.getLogger(__name__)
-        
+    log.debug(f"Task Show started.")
     result = {"changed": False }
    
     vManage_ip=module.params[ADDRESS]    
@@ -267,19 +267,19 @@ def main():
     if module.params[sub_task_list[0]]:
         sub_task_name = sub_task_list[0] 
         show_common_args = get_show_common_args(module,sub_task_list[0])
-        show_args = get_show_devices_args(sub_task_name,show_common_args)
+        show_args = get_show_realtime_args(module,sub_task_name,show_common_args)
     elif module.params[sub_task_list[1]]:
         sub_task_name = sub_task_list[1] 
         show_common_args = get_show_common_args(module,sub_task_list[1])
-        show_args = get_show_realtime_args(module,sub_task_name,show_common_args)
+        show_args = get_show_state_args(module,sub_task_name,show_common_args)
     elif module.params[sub_task_list[2]]:
         sub_task_name = sub_task_list[2] 
         show_common_args = get_show_common_args(module,sub_task_list[2])
-        show_args = get_show_state_args(module,sub_task_name,show_common_args)
+        show_args = get_show_statistics_args(module,sub_task_name,show_common_args)
     elif module.params[sub_task_list[3]]:
         sub_task_name = sub_task_list[3] 
         show_common_args = get_show_common_args(module,sub_task_list[3])
-        show_args = get_show_statistics_args(module,sub_task_name,show_common_args)
+        show_args = get_show_devices_args(sub_task_name,show_common_args)
             
     show_validations(sub_task_name,module)          
    
@@ -393,28 +393,22 @@ def validate_show_cmds(cmds_arg,values,op_type,module):
           module.fail_json(msg=f'{cmds_arg}: Invalid value(s): {values}:{ex}')  
           
 def show_validations(sub_task,module):
-    regex = module.params[sub_task][REGEX]
-    validate_regex(REGEX,regex,module)
-    site= module.params[sub_task][SITE]
-    validate_site(SITE,site,module)
-    system_ip= module.params[sub_task][SYSTEM_IP]
-    validate_ipv4(SYSTEM_IP,system_ip,module)
-    csv= module.params[sub_task][CSV]
-    validate_filename(CSV,csv,module)
+    validate_regex(REGEX,module.params[sub_task][REGEX],module)
+    validate_site(SITE,module.params[sub_task][SITE],module)
+    validate_ipv4(SYSTEM_IP,module.params[sub_task][SYSTEM_IP],module)
+    validate_filename(CSV,module.params[sub_task][CSV],module)
     
     op_type = None
-    if sub_task == sub_task_list[1]:
+    if sub_task == sub_task_list[0]:
         op_type = OpType.RT
-    elif sub_task == sub_task_list[2]:    
+    elif sub_task == sub_task_list[1]:    
         op_type = OpType.STATE
-    elif sub_task == sub_task_list[3]:
+    elif sub_task == sub_task_list[2]:
         op_type = OpType.STATS
-        days= module.params[sub_task][DAYS]
-        validate_time(DAYS,days,module)
-        hours= module.params[sub_task][HOURS]
-        validate_time(HOURS,hours,module)
+        validate_time(DAYS,module.params[sub_task][DAYS],module)
+        validate_time(HOURS,module.params[sub_task][HOURS],module)
 
-    if sub_task != sub_task_list[0]:
+    if sub_task != sub_task_list[3]:
         validate_show_cmds(CMDS,module.params[sub_task][CMDS],op_type,module)  
 
 if __name__ == "__main__":

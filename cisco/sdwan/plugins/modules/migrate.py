@@ -181,12 +181,8 @@ def main():
         workdir=dict(type="str")
     )
 
-    update_vManage_args(argument_spec)
-    
-    argument_spec.update(address=dict(type="str", required=False,fallback=(env_fallback, ['VMANAGE_IP'])),
-        user=dict(type="str", required=False,fallback=(env_fallback, ['VMANAGE_USER'])),
-        password=dict(type="str", required=False,no_log=True,fallback=(env_fallback, ['VMANAGE_PASSWORD'])))
-    
+    update_vManage_args(argument_spec,False)
+
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
     )
@@ -227,15 +223,10 @@ def get_migrate_args(module):
     return args
 
 def migrate_validations(module):
-    output = module.params[OUTPUT]
-    validate_filename(OUTPUT,output,module)
-    name = module.params[NAME]
-    validate_ext_template_type(NAME,name,module)
-    from_version = module.params[FROM_VERSION]
-    validate_version_type('from',from_version,module)
-    to_version = module.params[TO]
-    validate_version_type(TO,to_version,module)
-
+    validate_filename(OUTPUT,module.params[OUTPUT],module)
+    validate_ext_template_type(NAME,module.params[NAME],module)
+    validate_version_type('from',module.params[FROM_VERSION],module)
+    validate_version_type(TO,module.params[TO],module)
     workdir = module.params[WORKDIR]
     validate_existing_file_type(WORKDIR,workdir,module)
 

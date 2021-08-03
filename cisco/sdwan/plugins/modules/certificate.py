@@ -142,7 +142,7 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     validate_existing_file_type
 )
 
-sub_task_list = ['restore','set']  
+sub_task_list = ['set','restore']  
 
 def main():
     """main entry point for module execution
@@ -165,7 +165,7 @@ def main():
     )
     set_log_level(module.params[VERBOSE])
     log = logging.getLogger(__name__)
-        
+    log.debug(f"Task Certificate started.")
     result = {"changed": False }
    
     vManage_ip = module.params[ADDRESS]    
@@ -175,11 +175,12 @@ def main():
     if module.params[sub_task_list[0]]:
         sub_task_name = sub_task_list[0] 
         cert_common_args = get_cert_common_args(module,sub_task_list[0])
-        cert_args = get_cert_restore_args(module,sub_task_name,cert_common_args)
+        cert_args = get_cert_set_args(module,sub_task_name,cert_common_args)
     elif module.params[sub_task_list[1]]:
         sub_task_name  = sub_task_list[1]              
         cert_common_args = get_cert_common_args(module,sub_task_list[1])  
-        cert_args = get_cert_set_args(module,sub_task_name,cert_common_args)
+        cert_args = get_cert_restore_args(module,sub_task_name,cert_common_args)
+        
  
     certificate_validations(sub_task_name,module)        
 
@@ -242,9 +243,8 @@ def update_set_option_args(cert_base_args):
     return temp_set_base_args  
 
 def certificate_validations(sub_task,module):
-    regex = module.params[sub_task][REGEX]
-    validate_regex(REGEX,regex,module)
-    if sub_task == sub_task_list[0]:
+    validate_regex(REGEX,module.params[sub_task][REGEX],module)
+    if sub_task == sub_task_list[1]:
         workdir = module.params[sub_task][WORKDIR]
         validate_existing_file_type(WORKDIR,get_workdir(workdir,module.params[ADDRESS]),module)
 

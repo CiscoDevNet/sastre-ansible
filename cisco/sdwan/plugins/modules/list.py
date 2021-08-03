@@ -189,7 +189,7 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     validate_non_empty_type,validate_ext_template_type
 )
 
-sub_task_list = ['configuration','certificate','transform'] 
+sub_task_list = ['configuration','transform','certificate'] 
 
 def main():
     """main entry point for module execution
@@ -210,17 +210,14 @@ def main():
             options = update_transform_option_args(list_base_args))
     )
 
-    update_vManage_args(argument_spec)
-    argument_spec.update(address=dict(type="str", required=False,fallback=(env_fallback, ['VMANAGE_IP'])),
-                         user=dict(type="str", required=False,fallback=(env_fallback, ['VMANAGE_USER'])),
-                         password=dict(type="str", required=False,no_log=True,fallback=(env_fallback, ['VMANAGE_PASSWORD'])))
-    
+    update_vManage_args(argument_spec,False)
+
     module = AnsibleModule(
         argument_spec=argument_spec, mutually_exclusive=[sub_task_list], required_one_of=[sub_task_list], supports_check_mode=True
     )
     set_log_level(module.params[VERBOSE])
     log = logging.getLogger(__name__)
-        
+    log.debug(f"Task List started.")
     result = {"changed": False }
    
     vManage_ip = module.params[ADDRESS]    
@@ -234,11 +231,11 @@ def main():
     elif module.params[sub_task_list[1]]:
         sub_task_name  = sub_task_list[1]
         list_common_args = get_list_common_args(module,sub_task_list[1])  
-        list_args = get_list_certificate_args(sub_task_name,list_common_args)
+        list_args = get_list_transform_args(module,sub_task_name,list_common_args)
     elif module.params[sub_task_list[2]]:
         sub_task_name  = sub_task_list[2]
         list_common_args = get_list_common_args(module,sub_task_list[2]) 
-        list_args = get_list_transform_args(module,sub_task_name,list_common_args)
+        list_args = get_list_certificate_args(sub_task_name,list_common_args)
   
     list_validations(sub_task_name,module)  
     
@@ -313,10 +310,8 @@ def update_transform_option_args(list_base_args):
     return temp_list_base_args  
 
 def list_validations(sub_task,module):
-    regex = module.params[sub_task][REGEX]
-    validate_regex(REGEX,regex,module)
-    csv = module.params[sub_task][CSV]
-    validate_filename(CSV,csv,module)
+    validate_regex(REGEX,module.params[sub_task][REGEX],module)
+    validate_filename(CSV,module.params[sub_task][CSV],module)
     workdir = module.params[sub_task][WORKDIR]
     validate_existing_file_type(WORKDIR,workdir,module)
 
@@ -325,9 +320,8 @@ def list_validations(sub_task,module):
         validate_non_empty_type(USER,module.params[USER],module)    
         validate_non_empty_type(PASSWORD,module.params[PASSWORD],module)     
 
-    if sub_task == sub_task_list[2]:
-        name_regex = module.params[sub_task][NAME_REGEX]
-        validate_ext_template_type(NAME_REGEX,name_regex,module)
+    if sub_task == sub_task_list[1]:
+        validate_ext_template_type(NAME_REGEX,module.params[sub_task][NAME_REGEX],module)
 
 if __name__ == "__main__":
     main()
