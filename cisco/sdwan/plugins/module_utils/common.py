@@ -12,6 +12,7 @@ from cisco_sdwan.base.models_base import (
 from cisco_sdwan.tasks.utils import (
     regex_type,TagOptions,default_workdir,site_id_type,ipv4_type,int_type,
     filename_type,ext_template_type,non_empty_type,existing_file_type,
+    version_type,uuid_type,
 )
 from cisco_sdwan.tasks.common import (
     TaskArgs,
@@ -59,6 +60,14 @@ HOURS="hours"
 CSV="csv"
 NAME_REGEX="name_regex"
 STATUS="status"
+FILE="file"
+SCOPE="scope"
+OUTPUT="output"
+NAME="name"
+FROM_VERSION="from_version"
+TO="to"
+ID="id"
+WITH_REFS="with_refs"
 # Default tag value
 DEFAULT_LOG_LEVEL="DEBUG"
 DEFAULT_PID = "0"
@@ -95,12 +104,12 @@ def set_log_level(log_level):
     file_handler['level'] = log_level
     logging.config.dictConfig(logging_config)
 
-def update_vManage_args(args_spec):
+def update_vManage_args(args_spec,mandatory=True):
     args = dict(
-        address=dict(type="str", required=True,fallback=(env_fallback, ['VMANAGE_IP'])),
+        address=dict(type="str", required=mandatory,fallback=(env_fallback, ['VMANAGE_IP'])),
         port=dict(type="int", default=VMANAGE_PORT,fallback=(env_fallback, ['VMANAGE_PORT'])),
-        user=dict(type="str", required=True,fallback=(env_fallback, ['VMANAGE_USER'])),
-        password=dict(type="str", required=True,no_log=True,fallback=(env_fallback, ['VMANAGE_PASSWORD'])),
+        user=dict(type="str", required=mandatory,fallback=(env_fallback, ['VMANAGE_USER'])),
+        password=dict(type="str", required=mandatory,no_log=True,fallback=(env_fallback, ['VMANAGE_PASSWORD'])),
         timeout=dict(type="int", default=REST_TIMEOUT),
         pid=dict(type="str",default=DEFAULT_PID,fallback=(env_fallback, ['CX_PID'])),
         verbose=dict(type="str",default=DEFAULT_LOG_LEVEL,choices=logging_levels),
@@ -117,14 +126,6 @@ def submit_usage_stats(**kwargs):
     aide_thread.join(timeout=AIDE_TIMEOUT)
     if aide_thread.is_alive():
         logging.getLogger(__name__).warning('AIDE statistics collection timeout')
-    
-def validate_regex(regex_arg,regex,module):
-    if regex is not None:
-        try:  
-          regex_type(regex)
-        except Exception as ex:
-          logging.getLogger(__name__).critical(ex)
-          module.fail_json(msg=f'{regex_arg}: {regex} is not a valid regular expression.') 
           
 def process_task(task,module,**task_args):
     task_args = TaskArgs(**task_args)
@@ -151,6 +152,14 @@ def process_task(task,module,**task_args):
     finally:    
         kwargs={'pid': module.params[PID], 'savings': task.savings}
         submit_usage_stats(**kwargs)
+
+def validate_regex(regex_arg,regex,module):
+    if regex is not None:
+        try:  
+          regex_type(regex)
+        except Exception as ex:
+          logging.getLogger(__name__).critical(ex)
+          module.fail_json(msg=f'{regex_arg}: {regex} is not a valid regular expression.') 
         
 def validate_site(site_arg,site,module):
     if site is not None:
@@ -176,18 +185,6 @@ def validate_batch(batch_arg,batch,module):
         except Exception as ex:
           logging.getLogger(__name__).critical(ex)
           module.fail_json(msg=f'{batch_arg}: Invalid value: {batch}. Must be an integer between 1 and 9999 inclusive.')
-          
-def attach_detach_validations(module):
-    templates = module.params[TEMPLATES]
-    validate_regex(TEMPLATES,templates,module)
-    devices = module.params[DEVICES]
-    validate_regex(DEVICES,devices,module)
-    site= module.params[SITE]
-    validate_site(SITE,site,module)
-    system_ip= module.params[SYSTEM_IP]
-    validate_ipv4(SYSTEM_IP,system_ip,module)
-    batch = module.params[BATCH]
-    validate_batch(BATCH,batch,module)
     
 def validate_filename(filename_arg,filename,module):
     if filename is not None:
@@ -228,3 +225,25 @@ def validate_existing_file_type(workdir_arg,workdir,module):
         except Exception as ex:
             logging.getLogger(__name__).critical(ex)
             module.fail_json(msg=f'{workdir_arg}:Work directory "{workdir}" not found.')
+
+def validate_version_type(version_arg,version,module):
+        try:
+            version_type(version)
+        except Exception as ex:
+            logging.getLogger(__name__).critical(ex)
+            module.fail_json(msg=f'{version_arg}:{version}" is not a valid version identifier.')
+
+def validate_uuid_type(uuid_arg,uuid,module):
+    if uuid is not None:
+        try:
+            uuid_type(uuid)
+        except Exception as ex:
+            logging.getLogger(__name__).critical(ex)
+            module.fail_json(msg=f'{uuid_arg}:{uuid} is not a valid item ID.') 
+            
+def attach_detach_validations(module):
+    validate_regex(TEMPLATES,module.params[TEMPLATES],module)
+    validate_regex(DEVICES,module.params[DEVICES],module)
+    validate_site(SITE,module.params[SITE],module)
+    validate_ipv4(SYSTEM_IP,module.params[SYSTEM_IP],module)
+    validate_batch(BATCH,module.params[BATCH],module)
