@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: cisco.sdwan.delete
+module: delete
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Delete configuration items on SD-WAN vManage.
 description: This delete module connects to SD-WAN vManage using HTTP REST to 
@@ -151,7 +151,7 @@ from cisco_sdwan.tasks.implementation._delete import (
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,REGEX,VERBOSE,
     DRYRUN,TAG,DETACH,
-    set_log_level,update_vManage_args,validate_regex,process_task,tag_list,
+    set_log_level,update_vManage_args,validate_regex,process_task,tag_list,get_env_args
 )
 
 
@@ -182,7 +182,7 @@ def main():
     task_delete = TaskDelete()
     delete_args = {'regex':regex,'dryrun':dryrun,'detach':module.params[DETACH],'tag':module.params[TAG]}
     try:
-        process_task(task_delete,module,**delete_args)
+        process_task(task_delete,get_env_args(module),**delete_args)
     except Exception as ex:
         module.fail_json(msg=f"Failed to delete , check the logs for more detaills... {ex}")
         

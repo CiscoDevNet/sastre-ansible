@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: cisco.sdwan.certificate
+module: certificate
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Restore device certificate validity status from a backup or set to a desired value (i.e. valid, invalid or staging).
 description: The certificate task can be used to items from backup directory or to a
@@ -139,7 +139,7 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     DRYRUN,STATUS,WORKDIR,
     set_log_level,update_vManage_args,process_task,
     get_workdir,validate_regex,
-    validate_existing_file_type
+    validate_existing_file_type,get_env_args
 )
 
 sub_task_list = ['set','restore']  
@@ -187,7 +187,7 @@ def main():
     log.debug(f"Task Certificate: {sub_task_name} started.")
     task_certificate = TaskCertificate()
     try:
-        process_task(task_certificate,module,**cert_args)
+        process_task(task_certificate,get_env_args(module),**cert_args)
     except Exception as ex:
         module.fail_json(msg=f"Task Certificate: {sub_task_name} failed , check the logs for more details... {ex}")
         

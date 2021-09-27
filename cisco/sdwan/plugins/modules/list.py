@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: cisco.sdwan.list
+module: list
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file.
 description: The list task can be used to show items from a target vManage,
@@ -186,7 +186,7 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     TAGS,CSV,WORKDIR,NAME_REGEX,
     set_log_level,update_vManage_args,process_task,tag_list,
     validate_regex,validate_existing_file_type,validate_filename,
-    validate_non_empty_type,validate_ext_template_type
+    validate_non_empty_type,validate_ext_template_type,get_env_args
 )
 
 sub_task_list = ['configuration','transform','certificate'] 
@@ -244,7 +244,7 @@ def main():
     list_args.update({'task_output':task_output})
     task_list = TaskList()
     try:
-        process_task(task_list,module,**list_args)
+        process_task(task_list,get_env_args(module),**list_args)
     except Exception as ex:
         module.fail_json(msg=f"Task List: {sub_task_name} failed , check the logs for more details... {ex}")
         

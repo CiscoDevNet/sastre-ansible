@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: cisco.sdwan.attach
+module: attach
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Attach WAN Edges/vSmarts to templates. Allows further customization on top of the functionality available via "restore --attach".
 description: This attach module connects to SD-WAN vManage using HTTP REST to 
@@ -191,7 +191,7 @@ from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,WORKDIR,VERBOSE,TEMPLATES,DEVICES,SITE,
     SYSTEM_IP,DRYRUN,BATCH,REACHABLE,DEVICE_TYPE,
     set_log_level,update_vManage_args,process_task,get_workdir,
-    attach_detach_device_types,attach_detach_validations,
+    attach_detach_device_types,attach_detach_validations,get_env_args
 )
 
 def main():
@@ -236,7 +236,7 @@ def main():
     attach_args = {'workdir':workdir,'templates':module.params[TEMPLATES],'devices':module.params[DEVICES],'reachable':module.params[REACHABLE],'site':module.params[SITE],'system_ip':module.params[SYSTEM_IP],'dryrun':dryrun,'batch':module.params[BATCH]}
     attach_args.update(default_args)
     try:
-        process_task(task_attach,module,**attach_args)
+        process_task(task_attach,get_env_args(module),**attach_args)
     except Exception as ex:
         module.fail_json(msg=f"Failed to attach , check the logs for more detaills... {ex}")
   

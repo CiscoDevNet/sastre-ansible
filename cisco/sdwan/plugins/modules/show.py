@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: cisco.sdwan.show
+module: show
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Run vManage real-time, state or statistics commands; collecting data from one or more devices.
 description: This show module connects to SD-WAN vManage using HTTP REST to 
@@ -224,6 +224,7 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,REGEX,VERBOSE,REACHABLE,SITE,SYSTEM_IP,CSV,CMDS,DETAIL,DAYS,HOURS,
     set_log_level,update_vManage_args,process_task,validate_time,
     validate_filename,validate_regex,validate_site,validate_ipv4,
+    get_env_args
 )
 
 sub_task_list = ['realtime','state','statistics','devices']  
@@ -288,7 +289,7 @@ def main():
     show_args.update({'task_output':task_output})
     task_show = TaskShow()
     try:
-        process_task(task_show,module,**show_args)
+        process_task(task_show,get_env_args(module),**show_args)
     except Exception as ex:
         module.fail_json(msg=f"Task Show: {sub_task_name} failed , check the logs for more detaills... {ex}")
         

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: cisco.sdwan.restore
+module: restore
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Restore configuration items from a local backup to SD-WAN vManage. 
 description: This restore module connects to SD-WAN vManage using HTTP REST to 
@@ -193,7 +193,7 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,WORKDIR,REGEX,VERBOSE,
     DRYRUN,TAG,ATTACH,FORCE,
     set_log_level,update_vManage_args,validate_regex,process_task,tag_list,
-    get_workdir,
+    get_workdir,get_env_args
 )
 
 
@@ -234,7 +234,7 @@ def main():
     task_restore = TaskRestore()
     restore_args = {'workdir':workdir,'regex':regex,'dryrun':dryrun,'attach':module.params[ATTACH],'force':module.params[FORCE],'tag':module.params[TAG]}
     try:
-        process_task(task_restore,module,**restore_args)
+        process_task(task_restore,get_env_args(module),**restore_args)
     except Exception as ex:
         module.fail_json(msg=f"Failed to restore , check the logs for more detaills... {ex}")
     
