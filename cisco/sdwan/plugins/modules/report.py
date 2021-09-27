@@ -1,11 +1,11 @@
 #!/usr/bin/python
 DOCUMENTATION = """
-module: cisco.sdwan.report
+module: report
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Generate a report file containing the output from all list and show-template commands.
 description: This report module generates report from local backup directory
              or from vManage and saves to local file.
-             A log file is created under a "logs" directory. This "logs" directory
+             A log file is created under a logs directory. This logs directory
              is relative to directory where Ansible runs.
 notes: 
 - Tested against 20.4.1.1
@@ -17,7 +17,7 @@ options:
     type: str
   file:
     description: 
-    - report filename (default: report_{current_date}.txt)
+    - report filename (default filename - report_{current_date}.txt)
     required: false
     type: str
   verbose:
@@ -78,14 +78,14 @@ EXAMPLES = """
     port: 8443
     user: admin
     password: admin
-    verbose: DEBUG
+    verbose: "DEBUG"
     pid: "2"
     timeout: 300
 - name: Report from local folder
   cisco.sdwan.report:
     workdir: backup_198.18.1.10_20210726
     file: todays_report.txt
-    verbose: DEBUG
+    verbose: "DEBUG"
     pid: "2"
 """
 
@@ -102,7 +102,6 @@ stdout_lines:
   sample: ['Successfully Report saved as report_20210802.txt']
 """
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.basic import env_fallback
 import logging
 from datetime import date
 from cisco_sdwan.tasks.implementation._report import (
@@ -111,7 +110,7 @@ from cisco_sdwan.tasks.implementation._report import (
 from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,WORKDIR,VERBOSE,FILE,USER,PASSWORD,
     set_log_level,update_vManage_args,validate_filename,process_task,
-    validate_existing_file_type,validate_non_empty_type
+    validate_existing_file_type,validate_non_empty_type,get_env_args
 )
 
 
@@ -141,7 +140,7 @@ def main():
     task_report = TaskReport()
     reportArgs = {'workdir':workdir,'file':file,}
     try:
-        process_task(task_report,module,**reportArgs)
+        process_task(task_report,get_env_args(module),**reportArgs)
     except Exception as ex:
         module.fail_json(msg=f"Failed to create report, check the logs for more details... {ex}")
   

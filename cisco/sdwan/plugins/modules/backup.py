@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: cisco.sdwan.backup
+module: backup
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Save SD-WAN vManage configuration items to local backup
 description: This backup module connects to SD-WAN vManage using HTTP REST and 
@@ -175,7 +175,7 @@ from cisco_sdwan.tasks.implementation._backup import (
 from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,WORKDIR,REGEX,TAGS,NO_ROLLOVER,VERBOSE,
     set_log_level,update_vManage_args,validate_regex,process_task,tag_list,
-    get_workdir,
+    get_workdir,get_env_args
 )
 
 
@@ -206,7 +206,7 @@ def main():
     task_backup = TaskBackup()
     backupArgs = {'workdir':workdir,'no_rollover':module.params[NO_ROLLOVER],'regex':regex,'tags':module.params[TAGS]}
     try:
-        process_task(task_backup,module,**backupArgs)
+        process_task(task_backup,get_env_args(module),**backupArgs)
     except Exception as ex:
         module.fail_json(msg=f"Failed to take backup , check the logs for more detaills... {ex}")
   

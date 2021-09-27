@@ -1,6 +1,6 @@
 #!/usr/bin/python
 DOCUMENTATION = """
-module: cisco.sdwan.migrate
+module: migrate
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description:  Migrate configuration items from a vManage release to another. 
                     Currently, only 18.4, 19.2 or 19.3 to 20.1 is supported. Minor revision numbers (e.g. 20.1.1) 
@@ -164,7 +164,7 @@ from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     USER,PASSWORD,
     set_log_level,update_vManage_args,validate_filename,process_task,
     validate_existing_file_type,validate_non_empty_type, 
-    validate_ext_template_type,validate_version_type
+    validate_ext_template_type,validate_version_type,get_env_args
 )
 
 
@@ -200,7 +200,7 @@ def main():
     migrateArgs = get_migrate_args(module)
 
     try:
-        process_task(task_migrate,module,**migrateArgs)
+        process_task(task_migrate,get_env_args(module),**migrateArgs)
     except Exception as ex:
         module.fail_json(msg=f"Failed to migrate, check the logs for more details... {ex}")
   

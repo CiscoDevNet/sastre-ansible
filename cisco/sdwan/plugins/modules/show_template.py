@@ -1,6 +1,6 @@
 #!/usr/bin/python
 DOCUMENTATION = """
-module: cisco.sdwan.show_template
+module: show_template
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Show details about device templates on vManage or from a local backup. Display as table or export as csv file.
 description: The Show template task can be used to show device templates from a target vManage,
@@ -168,7 +168,7 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
     ADDRESS,REGEX,VERBOSE,WORKDIR,CSV,NAME,ID,WITH_REFS,USER,PASSWORD,
     set_log_level,update_vManage_args,process_task,
     validate_filename,validate_regex,validate_existing_file_type,
-    validate_non_empty_type,validate_uuid_type
+    validate_non_empty_type,validate_uuid_type,get_env_args
 )
 
 sub_task_list = ['values','references']  
@@ -218,7 +218,7 @@ def main():
     show_args.update({'task_output':task_output})
     task_show_template = TaskShowTemplate()
     try:
-        process_task(task_show_template,module,**show_args)
+        process_task(task_show_template,get_env_args(module),**show_args)
     except Exception as ex:
         module.fail_json(msg=f"Task Show-template: {sub_task_name} failed , check the logs for more detaills... {ex}")
         
