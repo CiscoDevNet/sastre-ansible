@@ -1,6 +1,6 @@
 #!/usr/bin/python
 DOCUMENTATION = """
-module: report
+module: report_create
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Generate a report file containing the output from all list and show-template commands.
 description: This report module generates report from local backup directory
@@ -101,63 +101,60 @@ stdout_lines:
   type: list
   sample: ['Successfully Report saved as report_20210802.txt']
 """
-from ansible.module_utils.basic import AnsibleModule
 import logging
 from datetime import date
-from cisco_sdwan.tasks.implementation._report import (
-    TaskReport
-)
-from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    ADDRESS,WORKDIR,VERBOSE,FILE,USER,PASSWORD,
-    set_log_level,update_vManage_args,validate_filename,process_task,
-    validate_existing_file_type,validate_non_empty_type,get_env_args
-)
+from pydantic import ValidationError
+from ansible.module_utils.basic import AnsibleModule
+from cisco_sdwan.tasks.implementation import TaskReport, ReportCreateArgs
+from cisco_sdwan.tasks.common import TaskException
+from cisco_sdwan.base.rest_api import Rest, RestAPIException
+from cisco_sdwan.base.models_base import ModelException
+from cisco.sdwan.plugins.module_utils.common import api_args, VERBOSE, set_log_level, common_arg_spec
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = dict(
         workdir=dict(type="str"),
-        file=dict(type="str", default=f'report_{date.today():%Y%m%d}.txt')
+        file=dict(type="str", default=f'report_{date.today():%Y%m%d}.txt'),
+        spec_file=dict(type="str"),
+        spec_json=dict(type="str")
     )
-    update_vManage_args(argument_spec,False)
-    
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec={**common_arg_spec(), **argument_spec},
+        mutually_exclusive=[('spec_file', 'spec_json')],
+        supports_check_mode=True
     )
-    
+
     set_log_level(module.params[VERBOSE])
     log = logging.getLogger(__name__)
     log.debug("Task Report started.")
-    
-    result = {"changed": False }
-   
-    workdir = module.params[WORKDIR]
-    file = module.params[FILE]
-    report_validations(workdir,file,module)
-    
-    task_report = TaskReport()
-    reportArgs = {'workdir':workdir,'file':file,}
+
     try:
-        process_task(task_report,get_env_args(module),**reportArgs)
-    except Exception as ex:
-        module.fail_json(msg=f"Failed to create report, check the logs for more details... {ex}")
-  
-    log.debug("Task Report completed successfully.")
-    result.update(
-        {"stdout": f"Successfully Report saved as {file}"}
-    )
-    module.exit_json(**result)
+        task_args = ReportCreateArgs(
+            workdir=module.params['workdir'],
+            file=module.params['file'],
+            spec_file=module.params['spec_file'],
+            spec_json=module.params['spec_json']
+        )
+        task = TaskReport()
+        if task.is_api_required(task_args):
+            with Rest(**api_args(module_params=module.params)) as api:
+                task_output = task.runner(task_args, api)
+        else:
+            task_output = task.runner(task_args)
 
-def report_validations(workdir,file,module):
-    validate_filename(FILE,file,module)
-    validate_existing_file_type(WORKDIR,workdir,module)
+        result = {
+            "changed": False,
+            "stdout": "\n\n".join(str(entry) for entry in task_output) if task_output else "",
+            "outcome": f"Task completed {task.outcome('successfully', 'with caveats: {tally}')}"
+        }
+        module.exit_json(**result)
 
-    if workdir is None:
-        validate_non_empty_type(ADDRESS,module.params[ADDRESS],module)
-        validate_non_empty_type(USER,module.params[USER],module)    
-        validate_non_empty_type(PASSWORD,module.params[PASSWORD],module)  
+    except ValidationError as ex:
+        module.fail_json(msg=f"Invalid report create parameter: {ex}")
+    except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
+        module.fail_json(msg=f"Report create error: {ex}")
+
 
 if __name__ == "__main__":
     main()
