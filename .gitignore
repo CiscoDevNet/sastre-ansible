@@ -6,8 +6,8 @@ logs/
 build/
 dist/
 *.egg-info/
+sastre-volume/
 *.csv
-*.txt
 
 # IDE project files
 .vscode/
