@@ -19,6 +19,17 @@ Name | Description
 [cisco.sdwan.delete](https://github.com/ansible-collections/cisco.sdwan/blob/main/docs/cisco.ios.delete.rst)|Delete configuration items on SD-WAN vManage.
 
 <!--end collection content-->
+
+## Building the collection
+
+From the top directory:
+
+    % ls
+    CHANGELOG.md			LICENSE				cisco				requirements.txt
+    Jenkinsfile			README.md
+    % ansible-galaxy collection build cisco/sdwan
+
+
 ## Installing this collection
 
 You can install the Cisco SDWAN collection with the Ansible Galaxy CLI:

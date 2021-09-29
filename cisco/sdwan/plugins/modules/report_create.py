@@ -137,8 +137,9 @@ def main():
         )
         task_result = run_task(TaskReport, task_args, module.params)
 
+        # changed flag is True when 'diff' option is provided and diff comparison indicates differences between reports
         result = {
-            "changed": False
+            "changed": module.params['diff'] is not None and len(task_result.get('stdout', '').splitlines()) > 4
         }
         module.exit_json(**result, **task_result)
 
