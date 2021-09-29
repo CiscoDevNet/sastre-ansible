@@ -1,12 +1,5 @@
-import logging
-import logging.config
-import logging.handlers
-from pathlib import Path
-import json
-from ansible.utils.display import Display
 from functools import partial
 from ansible.module_utils.basic import env_fallback
-from cisco_sdwan.base.models_base import SASTRE_ROOT_DIR
 from cisco_sdwan.tasks.utils import (
     regex_type, TagOptions, default_workdir, site_id_type, ipv4_type, int_type,
     filename_type, ext_template_type, non_empty_type, existing_file_type,
@@ -15,11 +8,68 @@ from cisco_sdwan.tasks.utils import (
 from cisco_sdwan.tasks.common import TaskArgs, TaskException
 from cisco_sdwan.base.rest_api import Rest, LoginFailedException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.cmd import (
-    submit_aide_stats, LOGGING_CONFIG,
-    VMANAGE_PORT, REST_TIMEOUT, BASE_URL, AIDE_TIMEOUT
-)
+from cisco_sdwan.cmd import VMANAGE_PORT, REST_TIMEOUT, BASE_URL
 
+
+def common_arg_spec():
+    return dict(
+        address=dict(type="str", fallback=(env_fallback, ['VMANAGE_IP'])),
+        user=dict(type="str", fallback=(env_fallback, ['VMANAGE_USER'])),
+        password=dict(type="str", no_log=True, fallback=(env_fallback, ['VMANAGE_PASSWORD'])),
+        tenant=dict(type="str"),
+        pid=dict(type="str", default="0", fallback=(env_fallback, ['CX_PID'])),
+        port=dict(type="int", default=VMANAGE_PORT, fallback=(env_fallback, ['VMANAGE_PORT'])),
+        timeout=dict(type="int", default=REST_TIMEOUT),
+    )
+
+
+def module_params(*param_names, module_param_dict):
+    values = [module_param_dict.get(name) for name in param_names]
+    return {
+        name: value for name, value in zip(param_names, values) if value is not None
+    }
+
+
+def sdwan_api_args(module_param_dict):
+    missing_required = [
+        required_param for required_param in ['address', 'user', 'password']
+        if not module_param_dict[required_param]
+    ]
+    if missing_required:
+        raise TaskException(f"Missing parameters: {', '.join(missing_required)}")
+
+    api_args = {
+        'base_url': BASE_URL.format(address=module_param_dict['address'], port=module_param_dict['port']),
+        'username': module_param_dict['user'],
+        'password': module_param_dict['password'],
+        'timeout': module_param_dict['timeout']
+    }
+    if module_param_dict['tenant'] is not None:
+        api_args['tenant'] = module_param_dict['tenant']
+
+    return api_args
+
+
+def run_task(task_cls, task_args, module_param_dict):
+    task = task_cls()
+    if task.is_api_required(task_args):
+        with Rest(**sdwan_api_args(module_param_dict=module_param_dict)) as api:
+            task_output = task.runner(task_args, api)
+    else:
+        task_output = task.runner(task_args)
+
+    result = {}
+    if task_output:
+        result["stdout"] = "\n\n".join(str(entry) for entry in task_output)
+
+    result["msg"] = f"Task completed {task.outcome('successfully', 'with caveats: {tally}')}"
+
+    return result
+
+
+#
+# Below is deprecated
+#
 # Ansible YML argument keys
 ADDRESS = "address"
 PORT = "port"
@@ -62,15 +112,6 @@ WITH_REFS = "with_refs"
 
 attach_detach_device_types = ['edge', 'vsmart']
 
-# Logging setup
-logging_config = json.loads(LOGGING_CONFIG)
-console_handler = logging_config.get('handlers', {}).get('console')
-display = Display()
-
-file_handler = logging_config.get('handlers', {}).get('file')
-if file_handler is not None:
-    file_handler['filename'] = str(Path(SASTRE_ROOT_DIR, file_handler['filename']))
-    Path(file_handler['filename']).parent.mkdir(parents=True, exist_ok=True)
 
 tag_list = list(TagOptions.tag_options)
 
@@ -79,53 +120,6 @@ def get_workdir(workdir, vManage_ip):
     if workdir is None:
         return default_workdir(vManage_ip)
     return workdir
-
-
-def set_log_level(log_level):
-    console_handler['level'] = log_level
-    file_handler['level'] = log_level
-    logging.config.dictConfig(logging_config)
-
-
-def common_arg_spec():
-    return dict(
-        address=dict(type="str", required=False, fallback=(env_fallback, ['VMANAGE_IP'])),
-        user=dict(type="str", required=False, fallback=(env_fallback, ['VMANAGE_USER'])),
-        password=dict(type="str", required=False, no_log=True, fallback=(env_fallback, ['VMANAGE_PASSWORD'])),
-        tenant=dict(type="str"),
-        pid=dict(type="str", required=True, fallback=(env_fallback, ['CX_PID'])),
-        port=dict(type="int", default=VMANAGE_PORT, fallback=(env_fallback, ['VMANAGE_PORT'])),
-        timeout=dict(type="int", default=REST_TIMEOUT),
-    )
-
-
-def api_args(module_params):
-    missing_required = [
-        required_param for required_param in ['address', 'user', 'password']
-        if not module_params[required_param]
-    ]
-    if missing_required:
-        raise TaskException(f"Missing parameters: {', '.join(missing_required)}")
-
-    return {
-        'base_url': BASE_URL.format(address=module_params['address'], port=module_params['port']),
-        'username': module_params['user'],
-        'password': module_params['password'],
-        'tenant': module_params['tenant'],
-        'timeout': module_params['timeout']
-    }
-
-
-def submit_usage_stats(**kwargs):
-    # Submit usage statistics to AIDE (https://wwwin-github.cisco.com/AIDE/aide-python-tools)
-    import threading
-    aide_thread = threading.Thread(
-        target=submit_aide_stats, kwargs={'pid': kwargs['pid'], 'estimated_savings': kwargs['savings']}, daemon=True
-    )
-    aide_thread.start()
-    aide_thread.join(timeout=AIDE_TIMEOUT)
-    if aide_thread.is_alive():
-        logging.getLogger(__name__).warning('AIDE statistics collection timeout')
 
 
 def get_env_args(module):
@@ -163,7 +157,6 @@ def process_task(task, env_args, **task_args):
         raise Exception(ex) from None
     finally:
         kwargs = {'pid': env_args[PID], 'savings': task.savings}
-        submit_usage_stats(**kwargs)
 
 
 def validate_regex(regex_arg, regex, module=None):
@@ -172,7 +165,6 @@ def validate_regex(regex_arg, regex, module=None):
             regex_type(regex)
         except Exception as ex:
             ex_msg = f'{regex_arg}: {regex} is not a valid regular expression.'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -182,7 +174,6 @@ def validate_site(site_arg, site, module=None):
             site_id_type(site)
         except Exception as ex:
             ex_msg = f'{site_arg}: {site} is not a valid site-id.'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -192,7 +183,6 @@ def validate_ipv4(ipv4_arg, ipv4_str, module=None):
             ipv4_type(ipv4_str)
         except Exception as ex:
             ex_msg = f'{ipv4_arg}: {ipv4_str} is not a valid IPv4 address.'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -203,7 +193,6 @@ def validate_batch(batch_arg, batch, module=None):
             partial_batch(batch)
         except Exception as ex:
             ex_msg = f'{batch_arg}: Invalid value: {batch}. Must be an integer between 1 and 9999 inclusive.'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -213,7 +202,6 @@ def validate_filename(filename_arg, filename, module=None):
             filename_type(filename)
         except Exception as ex:
             ex_msg = f'{filename_arg}: Invalid name {filename}. Only alphanumeric characters, "-", "_", and "." are allowed.'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -224,7 +212,6 @@ def validate_time(time_arg, time, module=None):
             time_func(time)
         except Exception as ex:
             ex_msg = f'{time_arg}: Invalid value: {time}. Must be an integer between 0 and 9999 inclusive.'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -233,7 +220,6 @@ def validate_non_empty_type(src_str_arg, src_str, module=None):
         non_empty_type(src_str)
     except Exception as ex:
         ex_msg = f'{src_str_arg}:Value cannot be empty.'
-        logging.getLogger(__name__).critical(ex)
         raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -243,7 +229,6 @@ def validate_ext_template_type(name_regex_arg, template_str, module=None):
             ext_template_type(template_str)
         except Exception as ex:
             ex_msg = f'{name_regex_arg}:{ex}'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -253,7 +238,6 @@ def validate_existing_file_type(workdir_arg, workdir, module=None):
             existing_file_type(workdir)
         except Exception as ex:
             ex_msg = f'{workdir_arg}:Work directory "{workdir}" not found.'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -262,7 +246,6 @@ def validate_version_type(version_arg, version, module=None):
         version_type(version)
     except Exception as ex:
         ex_msg = f'{version_arg}:{version}" is not a valid version identifier.'
-        logging.getLogger(__name__).critical(ex)
         raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
@@ -272,7 +255,6 @@ def validate_uuid_type(uuid_arg, uuid, module=None):
             uuid_type(uuid)
         except Exception as ex:
             ex_msg = f'{uuid_arg}:{uuid} is not a valid item ID.'
-            logging.getLogger(__name__).critical(ex)
             raise Exception(ex_msg) if module is None else module.fail_json(msg=ex_msg)
 
 
