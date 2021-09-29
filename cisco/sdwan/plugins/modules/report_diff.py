@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 DOCUMENTATION = """
-module: report_create
+module: report_diff
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Generate a report file containing the output from all list and show-template commands.
 description: This report module generates report from local backup directory
@@ -10,29 +10,24 @@ description: This report module generates report from local backup directory
 notes: 
 - Tested against 20.4.1.1
 options: 
-  file:
+  report_a:
     description: 
-    - report filename (default filename - report_{current_date}.txt)
+    - report a filename (from)
+    required: true
+    type: str
+  report_b:
+    description: 
+    - report b filename (to)
+    required: true
+    type: str
+  save_html:
+    description: 
+    - save report diff as html file
     required: false
     type: str
-  workdir:
+  save_txt:
     description: 
-    - report from the specified directory instead of target vManage
-    required: false
-    type: str
-  spec_file:
-    description: 
-    - load custom report specification from YAML file
-    required: false
-    type: str
-  spec_json:
-    description: 
-    - load custom report specification from JSON-formatted string
-    required: false
-    type: str
-  diff:
-    description: 
-    - generate diff between the specified previous report and the current report
+    - save report diff as text file
     required: false
     type: str
   address:
@@ -108,7 +103,7 @@ stdout_lines:
 """
 from pydantic import ValidationError
 from ansible.module_utils.basic import AnsibleModule
-from cisco_sdwan.tasks.implementation import TaskReport, ReportCreateArgs
+from cisco_sdwan.tasks.implementation import TaskReport, ReportDiffArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
@@ -119,21 +114,19 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
-        workdir=dict(type="str"),
-        file=dict(type="str"),
-        spec_file=dict(type="str"),
-        spec_json=dict(type="json"),
-        diff=dict(type="str")
+        report_a=dict(type="str", required=True),
+        report_b=dict(type="str", required=True),
+        save_html=dict(type="str"),
+        save_txt=dict(type="str")
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('spec_file', 'spec_json')],
         supports_check_mode=True
     )
 
     try:
-        task_args = ReportCreateArgs(
-            **module_params('workdir', 'file', 'spec_file', 'spec_json', 'diff', module_param_dict=module.params)
+        task_args = ReportDiffArgs(
+            **module_params('report_a', 'report_b', 'save_html', 'save_txt', module_param_dict=module.params)
         )
         task_result = run_task(TaskReport, task_args, module.params)
 
@@ -143,9 +136,9 @@ def main():
         module.exit_json(**result, **task_result)
 
     except ValidationError as ex:
-        module.fail_json(msg=f"Invalid report create parameter: {ex}")
+        module.fail_json(msg=f"Invalid report diff parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"Report create error: {ex}")
+        module.fail_json(msg=f"Report diff error: {ex}")
 
 
 if __name__ == "__main__":

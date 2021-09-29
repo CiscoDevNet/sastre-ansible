@@ -8,6 +8,7 @@ dist/
 *.egg-info/
 sastre-volume/
 *.csv
+*.gz
 
 # IDE project files
 .vscode/
