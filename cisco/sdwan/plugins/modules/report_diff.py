@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 DOCUMENTATION = """
 module: report_diff
-author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description: Generate a report file containing the output from all list and show-template commands.
 description: This report module generates report from local backup directory
              or from vManage and saves to local file.
