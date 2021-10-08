@@ -137,7 +137,8 @@ class LookupModule(LookupBase):
                 with Rest(term, variables.get('ansible_user'), variables.get('ansible_password'),
                           timeout=self.timeout_secs) as api:
                     cedge_set = {
-                        elem['name'] for elem in api.get('device/models')['data'] if elem['templateClass'] == 'cedge'
+                        elem['name'] for elem in api.get('device/models')['data']
+                        if elem['deviceClass'] in {'cisco-router', 'eio-lte', 'vbranch'}
                     }
                     device_list.extend(elem._asdict() for elem in self.device_info_iter(api, cedge_set))
                     display.display(f"Matched devices: {len(device_list)}")
