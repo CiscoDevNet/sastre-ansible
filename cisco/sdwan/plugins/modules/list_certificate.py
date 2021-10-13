@@ -102,10 +102,10 @@ stdout_lines:
   sample: show table view data
 """
 from ansible.module_utils.basic import AnsibleModule
+from pydantic import  ValidationError
 from cisco_sdwan.tasks.implementation._list import (
     TaskList, ListCertificateArgs
 )
-from pydantic import  ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException

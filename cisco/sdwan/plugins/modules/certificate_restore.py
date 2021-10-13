@@ -104,10 +104,10 @@ stdout_lines:
   sample: ['Task Certificate: restore completed successfully.vManage address 198.18.1.10']
 """
 from ansible.module_utils.basic import AnsibleModule
+from pydantic import ValidationError
 from cisco_sdwan.tasks.implementation._certificate import (
     TaskCertificate,CertificateRestoreArgs
 )
-from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException

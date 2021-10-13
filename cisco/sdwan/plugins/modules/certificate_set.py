@@ -3,7 +3,7 @@
 DOCUMENTATION = """
 module: certificate
 short_description: Set Certificate status
-description: The certificate set task can be used to set of desired value to target vManage. 
+description: The certificate set task can be used to set desired value to target vManage. 
              Matching or not matching criteria can contain regular expression value.
 notes: 
 - Tested against 20.4.1.1
@@ -105,11 +105,10 @@ stdout_lines:
   sample: ['Task Certificate: set completed successfully.vManage address 198.18.1.10']
 """
 from ansible.module_utils.basic import AnsibleModule
+from pydantic import ValidationError
 from cisco_sdwan.tasks.implementation._certificate import (
     TaskCertificate,CertificateSetArgs
 )
-import logging
-from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
