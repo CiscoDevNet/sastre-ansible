@@ -1,37 +1,35 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: certificate
-short_description: Restore device certificate status from a backup
-description: The certificate restore task can be used to set items from backup directory. 
-             Matching or not matching criteria can contain regular expression value.
+module: certificate_restore
+short_description: Restore WAN edge certificate validity status to from a backup.
+description: The certificate restore task can be used to restore WAN edge certificate validity status to the same 
+             values as in the provided backup. A regular expression can be used to select one or more WAN edges.
 notes: 
 - Tested against 20.4.1.1
 options: 
   regex:
     description: 
-    - Regular expression selecting devices to modify certificate status. 
-      Matches on the hostname or chassis/uuid. Use "^-$" to match devices without a hostname.
+    - Regular expression selecting devices to modify certificate status. Matches on the hostname or chassis/uuid. 
+      Use "^-$" to match devices without a hostname.
     required: false
     type: str
   not_regex:
     description: 
-    - Regular expression selecting devices NOT to modify certificate status. 
-      Matches on the hostname or chassis/uuid.
+    - Regular expression selecting devices NOT to modify certificate status. Matches on the hostname or chassis/uuid.
     required: false
     type: str
   dryrun:
     description: 
-    - dry-run mode. List modifications that would be performed without pushing changes to vManage.
+    - Dry-run mode. List modifications that would be performed without pushing changes to vManage.
     required: false
     type: bool
     default: False
   workdir:
     description: 
-    - Restore source location.Defines the location (in the local machine) where vManage data files are located.
+    - Restore source. Directory in the local machine under 'data' where vManage backup is located. The  'data' directory 
+      is relative to the directory where Ansible script is run.
       By default, it follows the format "backup_<address>_<yyyymmdd>". 
-      The workdir argument can be used to specify a different location. 
-      workdir is under a 'data' directory. This 'data' directory is relative to the directory where Ansible script is run.
     required: false
     type: str
     default: "backup_<address>_<yyyymmdd>"
@@ -69,20 +67,19 @@ options:
 """
 
 EXAMPLES = """
-- name: Certificate Set
+- name: Certificate restore
   cisco.sdwan.certificate_restore:
     workdir: backup_198.18.1.10_20210720
-    regex: ".*"
+    regex: "cedge_1"
     dryrun: True
     address: 198.18.1.10
     port: 8443
     user: admin
     password: admin
     timeout: 300
-- name: Certificate Set
+- name: Certificate restore
   cisco.sdwan.certificate_restore:
     workdir: backup_198.18.1.10_20210720
-    not_regex: ".*"
     dryrun: True
     address: 198.18.1.10
     port: 8443
@@ -105,15 +102,12 @@ stdout_lines:
 """
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._certificate import (
-    TaskCertificate,CertificateRestoreArgs
-)
+from cisco_sdwan.tasks.implementation import TaskCertificate, CertificateRestoreArgs
 from cisco_sdwan.tasks.common import TaskException
+from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec,module_params, run_task
-)
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
@@ -124,18 +118,17 @@ def main():
         regex=dict(type="str"),
         not_regex=dict(type="str"),
         dryrun=dict(type="bool"),
-        workdir=dict(type="str")
+        workdir=dict(type="str", default=default_workdir(argument_spec.get('address')))
     )
-    
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
-    
+
     try:
         task_args = CertificateRestoreArgs(
-            **module_params('regex','not_regex','dryrun', 'workdir','address',module_param_dict=module.params)
+            **module_params('regex', 'not_regex', 'dryrun', 'workdir', module_param_dict=module.params)
         )
         task_result = run_task(TaskCertificate, task_args, module.params)
 
@@ -143,10 +136,12 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
+
     except ValidationError as ex:
-        module.fail_json(msg=f"Invalid Certificate restore parameter: {ex}")
+        module.fail_json(msg=f"Invalid certificate restore parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"Certificate restore task error: {ex}")
+        module.fail_json(msg=f"Certificate restore error: {ex}")
+
 
 if __name__ == "__main__":
     main()

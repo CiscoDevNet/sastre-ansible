@@ -1,28 +1,27 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: certificate
-short_description: Set Certificate status
-description: The certificate set task can be used to set desired value to target vManage. 
-             Matching or not matching criteria can contain regular expression value.
+module: certificate_set
+short_description: Set WAN edge certificate validity status.
+description: The certificate set task can be used to set the certificate validity status of one or more WAN edges to
+             'invalid', 'staging' or 'valid'. A regular expression can be used to select one or more WAN edges.
 notes: 
 - Tested against 20.4.1.1
 options: 
   regex:
     description:
-    - Regular expression selecting devices to modify certificate status. Matches on
-      the hostname or chassis/uuid. Use "^-$" to match devices without a hostname.'
+    - Regular expression selecting devices to modify certificate status. Matches on the hostname or chassis/uuid. 
+      Use "^-$" to match devices without a hostname.'
     required: false
     type: str
   not_regex:
     description:
-    - Regular expression selecting devices NOT to modify certificate status. Matches on
-      the hostname or chassis/uuid.'
+    - Regular expression selecting devices NOT to modify certificate status. Matches on the hostname or chassis/uuid.'
     required: false
     type: str
   dryrun:
     description:
-    - dry-run mode. List modifications that would be performed without pushing changes to vManage.
+    - Dry-run mode. List modifications that would be performed without pushing changes to vManage.
     required: false
     type: bool
     default: False
@@ -70,20 +69,19 @@ options:
 """
 
 EXAMPLES = """
-- name: Certificate Set
+- name: Certificate set
   cisco.sdwan.certificate_set:
     status: valid
-    regex: ".*"
+    regex: "cedge_1"
     dryrun: True
     address: 198.18.1.10
     port: 8443
     user: admin
     password: admin
     timeout: 300
-- name: Certificate Set
+- name: Certificate set
   cisco.sdwan.certificate_set:
     status: valid
-    not_regex: ".*"
     dryrun: True
     address: 198.18.1.10
     port: 8443
@@ -104,17 +102,14 @@ stdout_lines:
   type: list
   sample: ['Task Certificate: set completed successfully.vManage address 198.18.1.10']
 """
-from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._certificate import (
-    TaskCertificate,CertificateSetArgs
-)
+from ansible.module_utils.basic import AnsibleModule
+from cisco_sdwan.tasks.implementation import TaskCertificate, CertificateSetArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec,module_params, run_task
-)
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
+
 
 def main():
     """main entry point for module execution
@@ -126,16 +121,15 @@ def main():
         dryrun=dict(type="bool"),
         status=dict(type="str", required=True)
     )
-    
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
-    
+
     try:
         task_args = CertificateSetArgs(
-            **module_params('regex','not_regex','dryrun', 'status',module_param_dict=module.params)
+            **module_params('regex', 'not_regex', 'dryrun', 'status', module_param_dict=module.params)
         )
         task_result = run_task(TaskCertificate, task_args, module.params)
 
@@ -143,10 +137,12 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
+
     except ValidationError as ex:
-        module.fail_json(msg=f"Invalid Certificate set parameter: {ex}")
+        module.fail_json(msg=f"Invalid certificate set parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"Certificate set task error: {ex}")
+        module.fail_json(msg=f"Certificate set error: {ex}")
+
 
 if __name__ == "__main__":
     main()

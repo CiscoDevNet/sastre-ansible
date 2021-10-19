@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: list
+module: list_configuration
 short_description: List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file.
 description: The list task can be used to show items from a target vManage,
              or a backup directory. Matching criteria can contain item tag(s) 
@@ -131,17 +131,13 @@ stdout_lines:
 """
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._list import (
-    TaskList, ListConfigurationArgs
-)
+from cisco_sdwan.tasks.implementation import TaskList, ListConfigArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec,module_params, run_task
-)
-    
+
 def main():
     """main entry point for module execution
     """
@@ -154,16 +150,16 @@ def main():
         save_json=dict(type="str"),
         tags=dict(type="list", elements="str", required=True)
     )
-    
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
-   
+
     try:
-        task_args = ListConfigurationArgs(
-            **module_params('regex','not_regex','workdir', 'save_csv','save_json','tags', module_param_dict=module.params)
+        task_args = ListConfigArgs(
+            **module_params('regex', 'not_regex', 'workdir', 'save_csv', 'save_json', 'tags',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskList, task_args, module.params)
 
@@ -171,10 +167,11 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
+
     except ValidationError as ex:
-        module.fail_json(msg=f"Invalid List Configuration parameter: {ex}")
+        module.fail_json(msg=f"Invalid list configuration parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"List Configuration task error: {ex}")
+        module.fail_json(msg=f"List configuration error: {ex}")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 DOCUMENTATION = """
-module: show_template
+module: show_template_references
 short_description: Show template references about device templates on vManage or from a local backup. Display as table or export as csv/json file.
 description: 
         - The Show template task can be used to show device templates from a target vManage or a backup directory. 
@@ -112,17 +112,13 @@ stdout_lines:
 """
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._show_template import (
-    TaskShowTemplate,ShowTemplateReferencesArgs
-)
+from cisco_sdwan.tasks.implementation import TaskShowTemplate, ShowTemplateRefArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec,module_params, run_task
-)
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
-  
+
 def main():
     """main entry point for module execution
     """
@@ -133,18 +129,18 @@ def main():
         workdir=dict(type="str"),
         save_csv=dict(type="str"),
         save_json=dict(type="str"),
-        with_refs=dict(type="bool",default=False)
+        with_refs=dict(type="bool", default=False)
     )
-    
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
-    
+
     try:
-        task_args = ShowTemplateReferencesArgs(
-            **module_params('regex', 'not_regex', 'workdir', 'save_csv','save_json','with_refs', module_param_dict=module.params)
+        task_args = ShowTemplateRefArgs(
+            **module_params('regex', 'not_regex', 'workdir', 'save_csv', 'save_json', 'with_refs',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskShowTemplate, task_args, module.params)
 
@@ -152,12 +148,12 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
+
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid show template references parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"Show template references error: {ex}")
-  
+
+
 if __name__ == "__main__":
     main()
-
-
