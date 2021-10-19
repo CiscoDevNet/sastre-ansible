@@ -1,14 +1,11 @@
 #!/usr/bin/python
 DOCUMENTATION = """
 module: migrate
-author: Satish Kumar Kamavaram (sakamava@cisco.com)
 short_description:  Migrate configuration items from a vManage release to another. 
                     Currently, only 18.4, 19.2 or 19.3 to 20.1 is supported. Minor revision numbers (e.g. 20.1.1) 
                     are not relevant for the template migration.
 description: This migrate module migrates configuration items from vManage release
              to another from local specified directory or target vManage.
-             A log file is created under a "logs" directory. This "logs" directory
-             is relative to directory where Ansible runs.
 notes: 
 - Tested against 20.4.1.1
 options: 
@@ -28,7 +25,7 @@ options:
     type: str
   workdir:
     description: 
-    - migrate will read from the specified directory instead of target vManage. Either workdir or address/user/password is mandatory
+    - Migrate will read from the specified directory instead of target vManage. Either workdir or address/user/password is mandatory
     required: false
     type: str
   no_rollover:
@@ -60,20 +57,6 @@ options:
     required: false
     type: str
     default: 20.1
-  verbose:
-    description:
-    - Defines to control log level for the logs generated under "logs/sastre.log" when Ansible script is run.
-      Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL
-    required: false
-    type: str
-    default: "DEBUG"
-    choices:
-    - "NOTSET"
-    - "DEBUG"
-    - "INFO"
-    - "WARNING"
-    - "ERROR"
-    - "CRITICAL"
   address:
     description:
     - vManage IP address or can also be defined via VMANAGE_IP environment variable
@@ -95,19 +78,17 @@ options:
     - password or can also be defined via VMANAGE_PASSWORD environment variable.
     required: true
     type: str
+  tenant:
+    description: 
+    - tenant name, when using provider accounts in multi-tenant deployments.
+    required: false
+    type: str
   timeout:
     description: 
     - vManage REST API timeout in seconds
     required: false
     type: int
     default: 300
-  pid:
-    description: 
-    - CX project id or can also be defined via CX_PID environment variable. 
-      This is collected for AIDE reporting purposes only.
-    required: false
-    type: str
-    default: 0
 """
 
 EXAMPLES = """
@@ -120,9 +101,6 @@ EXAMPLES = """
     from: '18.4'
     to: '20.1'
     no_rollover: false
-    port: 8443
-    verbose: INFO
-    pid: "2"
 - name: Migrate from vManage to local output
   cisco.sdwan.migrate:
     scope: attached
@@ -135,8 +113,6 @@ EXAMPLES = """
     port: 8443
     user: admin
     password: admin
-    verbose: INFO
-    pid: "2"
     timeout: 300
 """
 
@@ -153,87 +129,52 @@ stdout_lines:
   sample: ['Successfully saved migrated templates at test_migrates']
 """
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.basic import env_fallback
-import logging
-from datetime import date
+from pydantic import ValidationError
+from cisco_sdwan.tasks.common import TaskException
+from cisco_sdwan.base.rest_api import RestAPIException
+from cisco_sdwan.base.models_base import ModelException
 from cisco_sdwan.tasks.implementation._migrate import (
-    TaskMigrate
+    TaskMigrate,MigrateArgs
 )
-from  ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    ADDRESS,WORKDIR,VERBOSE,SCOPE,OUTPUT,NO_ROLLOVER,NAME,FROM_VERSION,TO,
-    USER,PASSWORD,
-    set_log_level,update_vManage_args,validate_filename,process_task,
-    validate_existing_file_type,validate_non_empty_type, 
-    validate_ext_template_type,validate_version_type,get_env_args
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
+    common_arg_spec,module_params, run_task
 )
 
 
 def main():
     """main entry point for module execution
     """
-    argument_spec = dict(
-        scope=dict(type="str", required=True, choices=['all','attached']),
+    
+    argument_spec = common_arg_spec()
+    argument_spec.update(
+        scope=dict(type="str", required=True),
         output=dict(type="str",required=True),
         no_rollover=dict(type="bool",default=False),
-        name=dict(type="str",default='migrated_{name}'),
-        from_version=dict(type="str",default='18.4',aliases=['from']),
-        to=dict(type="str",default='20.1'),
+        name=dict(type="str"),
+        from_version=dict(type="str",aliases=['from']),
+        to_version=dict(type="str",aliases=['to']),
         workdir=dict(type="str")
     )
-
-    update_vManage_args(argument_spec,False)
-
+    
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True
     )
     
-    set_log_level(module.params[VERBOSE])
-    log = logging.getLogger(__name__)
-    log.debug("Task Migrate started.")
-    
-    result = {"changed": False }
-   
-    output = module.params[OUTPUT]
-    migrate_validations(module)
-    
-    task_migrate = TaskMigrate()
-    migrateArgs = get_migrate_args(module)
-
     try:
-        process_task(task_migrate,get_env_args(module),**migrateArgs)
-    except Exception as ex:
-        module.fail_json(msg=f"Failed to migrate, check the logs for more details... {ex}")
-  
-    log.debug("Task Migrate completed successfully.")
-    result.update(
-        {"stdout": f"Successfully saved migrated templates at {output}"}
-    )
-    module.exit_json(**result)
+        task_args = MigrateArgs(
+            **module_params('scope','output','no_rollover', 'name','from_version','to_version','workdir', module_param_dict=module.params)
+        )
+        task_result = run_task(TaskMigrate, task_args, module.params)
 
-def get_migrate_args(module):
-    args= {
-            'scope':module.params[SCOPE],
-            'output':module.params[OUTPUT],
-            'no_rollover':module.params[NO_ROLLOVER],
-            'name':module.params[NAME],
-            'from_version':module.params[FROM_VERSION],
-            'to_version':module.params[TO],
-            'workdir':module.params[WORKDIR]
+        result = {
+            "changed": False
         }
-    return args
-
-def migrate_validations(module):
-    validate_filename(OUTPUT,module.params[OUTPUT],module)
-    validate_ext_template_type(NAME,module.params[NAME],module)
-    validate_version_type('from',module.params[FROM_VERSION],module)
-    validate_version_type(TO,module.params[TO],module)
-    workdir = module.params[WORKDIR]
-    validate_existing_file_type(WORKDIR,workdir,module)
-
-    if workdir is None:
-        validate_non_empty_type(ADDRESS,module.params[ADDRESS],module)
-        validate_non_empty_type(USER,module.params[USER],module)    
-        validate_non_empty_type(PASSWORD,module.params[PASSWORD],module)        
+        module.exit_json(**result, **task_result)
+    except ValidationError as ex:
+        module.fail_json(msg=f"Invalid Migrate parameter: {ex}")
+    except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
+        module.fail_json(msg=f"Migrate task error: {ex}")
 
 if __name__ == "__main__":
     main()
