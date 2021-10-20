@@ -3,19 +3,16 @@ import logging
 from ansible.errors import AnsibleLookupError, AnsibleOptionsError
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
-from cisco_sdwan.tasks.implementation._show import TaskShow
+from cisco_sdwan.tasks.implementation import TaskShow
 from cisco_sdwan.tasks.utils import (
-    OpType,RTCmdSemantics,StateCmdSemantics,
+    OpType, RTCmdSemantics, StateCmdSemantics,
     StatsCmdSemantics
 )
 from cisco_sdwan.cmd import (
-   REST_TIMEOUT
+    REST_TIMEOUT
 )
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    ADDRESS,REGEX,SITE,SYSTEM_IP,CSV,CMDS,DAYS,HOURS,PORT,USER,PASSWORD,TIMEOUT,PID,DEFAULT_PID,DEFAULT_LOG_LEVEL,
-    process_task,validate_time,validate_filename,validate_regex,
-    validate_site,validate_ipv4,set_log_level
-)
+
+
 DOCUMENTATION = """
 lookup: show
 author: Satish Kumar Kamavaram (sakamava@cisco.com)
@@ -132,23 +129,24 @@ RETURN = """
 """
 
 display = Display()
-sub_task_list = ['realtime','state','statistics','devices']
+sub_task_list = ['realtime', 'state', 'statistics', 'devices']
+
 
 class LookupModule(LookupBase):
-        
+
     def parse_optional_args(self, **kwargs):
         optional_args = [
             ('regex', str, 'a string', None),
-            ('not_regex',str,'a string', None),
+            ('not_regex', str, 'a string', None),
             ('reachable', bool, 'a boolean', False),
             ('site', str, 'a string', None),
             ('system_ip', str, 'a string', None),
             ('csv', str, 'a string', None),
             ('detail', bool, 'a boolean', False),
-            ('cmds',list,'a list of string',[]),
-            ('days',int,'an integer',0),
-            ('hours',int,'an integer',0),
-            ('verbose',str,'a string',DEFAULT_LOG_LEVEL)
+            ('cmds', list, 'a list of string', []),
+            ('days', int, 'an integer', 0),
+            ('hours', int, 'an integer', 0),
+            ('verbose', str, 'a string', DEFAULT_LOG_LEVEL)
         ]
         for arg_name, arg_type, arg_hint, arg_default in optional_args:
             arg_val = kwargs.get(arg_name)
@@ -161,90 +159,90 @@ class LookupModule(LookupBase):
 
     def get_show_devices_args(self, sub_task, show_common_args):
         devices_args = {
-                        'subtask_info':sub_task,
-                        'subtask_handler':TaskShow.devices
-                        }             
+            'subtask_info': sub_task,
+            'subtask_handler': TaskShow.devices
+        }
         show_common_args.update(devices_args)
-        return show_common_args 
+        return show_common_args
 
     def get_show_realtime_args(self, sub_task, show_common_args):
         realtime_args = {
-                        'subtask_info':sub_task,
-                        'subtask_handler':TaskShow.realtime,
-                        'cmds':self.cmds,
-                        'detail':self.detail
-                    }
+            'subtask_info': sub_task,
+            'subtask_handler': TaskShow.realtime,
+            'cmds': self.cmds,
+            'detail': self.detail
+        }
         show_common_args.update(realtime_args)
-        return show_common_args 
+        return show_common_args
 
     def get_show_state_args(self, sub_task, show_common_args):
         state_args = {
-                    'subtask_info':sub_task,
-                    'subtask_handler':TaskShow.bulk_state,
-                    'cmds':self.cmds,
-                    'detail':self.detail
-                }
+            'subtask_info': sub_task,
+            'subtask_handler': TaskShow.bulk_state,
+            'cmds': self.cmds,
+            'detail': self.detail
+        }
         show_common_args.update(state_args)
-        return show_common_args 
+        return show_common_args
 
     def get_show_statistics_args(self, sub_task, show_common_args):
         statistics_args = {
-                        'subtask_info':sub_task,
-                        'subtask_handler':TaskShow.bulk_stats,
-                        'days':self.days,
-                        'hours':self.hours,
-                        'cmds':self.cmds,
-                        'detail':self.detail
-                    }
+            'subtask_info': sub_task,
+            'subtask_handler': TaskShow.bulk_stats,
+            'days': self.days,
+            'hours': self.hours,
+            'cmds': self.cmds,
+            'detail': self.detail
+        }
         show_common_args.update(statistics_args)
-        return show_common_args  
-    
-    def validate_show_cmds(self,cmds_arg,values,op_type):
+        return show_common_args
+
+    def validate_show_cmds(self, cmds_arg, values, op_type):
         if values is not None:
-            try:  
+            try:
                 if op_type == OpType.RT:
-                  cmd_obj = RTCmdSemantics(values,cmds_arg)
-                  cmd_obj.__call__(object,cmd_obj,values)
+                    cmd_obj = RTCmdSemantics(values, cmds_arg)
+                    cmd_obj.__call__(object, cmd_obj, values)
                 elif op_type == OpType.STATE:
-                  cmd_obj = StateCmdSemantics(values,cmds_arg)
-                  cmd_obj.__call__(object,cmd_obj,values)
+                    cmd_obj = StateCmdSemantics(values, cmds_arg)
+                    cmd_obj.__call__(object, cmd_obj, values)
                 elif op_type == OpType.STATS:
-                  cmd_obj = StatsCmdSemantics(values,cmds_arg)
-                  cmd_obj.__call__(object,cmd_obj,values)   
+                    cmd_obj = StatsCmdSemantics(values, cmds_arg)
+                    cmd_obj.__call__(object, cmd_obj, values)
             except Exception as ex:
-              logging.getLogger(__name__).critical(ex)
-              raise Exception(f'{cmds_arg}: Invalid value(s): {values}:{ex}')  
+                logging.getLogger(__name__).critical(ex)
+                raise Exception(f'{cmds_arg}: Invalid value(s): {values}:{ex}')
 
     def show_validations(self, sub_task):
-        validate_regex(REGEX,self.regex)
-        validate_site(SITE,self.site)
-        validate_ipv4(SYSTEM_IP,self.system_ip)
-        validate_filename(CSV,self.csv)
-    
+        validate_regex(REGEX, self.regex)
+        validate_site(SITE, self.site)
+        validate_ipv4(SYSTEM_IP, self.system_ip)
+        validate_filename(CSV, self.csv)
+
         op_type = None
         if sub_task == sub_task_list[0]:
             op_type = OpType.RT
-        elif sub_task == sub_task_list[1]:    
+        elif sub_task == sub_task_list[1]:
             op_type = OpType.STATE
         elif sub_task == sub_task_list[2]:
             op_type = OpType.STATS
-            validate_time(DAYS,self.days)
-            validate_time(HOURS,self.hours)
+            validate_time(DAYS, self.days)
+            validate_time(HOURS, self.hours)
 
         if sub_task != sub_task_list[3]:
-            self.validate_show_cmds(CMDS,self.cmds,op_type)  
+            self.validate_show_cmds(CMDS, self.cmds, op_type)
 
-    def get_env_args(self,variables):
+    def get_env_args(self, variables):
         env_args = {
-                ADDRESS: variables.get('ansible_host'),
-                PORT:  (8443 if variables.get('vmanage_port') is None else variables.get('vmanage_port')),
-                USER: variables.get('ansible_user'),
-                PASSWORD: variables.get('ansible_password'),
-                PID: (DEFAULT_PID if variables.get('pid') is None else variables.get('pid')) ,
-                TIMEOUT: (REST_TIMEOUT if variables.get('timeout') is None else variables.get('timeout'))
-            }      
+            ADDRESS: variables.get('ansible_host'),
+            PORT: (8443 if variables.get('vmanage_port') is None else variables.get('vmanage_port')),
+            USER: variables.get('ansible_user'),
+            PASSWORD: variables.get('ansible_password'),
+            PID: (DEFAULT_PID if variables.get('pid') is None else variables.get('pid')),
+            TIMEOUT: (REST_TIMEOUT if variables.get('timeout') is None else variables.get('timeout'))
+        }
         return env_args
-        
+
     def run(self, terms, variables=None, **kwargs):
         self.set_options(var_options=variables, direct=kwargs)
         self.parse_optional_args(**kwargs)
@@ -252,15 +250,15 @@ class LookupModule(LookupBase):
         output_list = []
         task_output = []
         show_common_args = {
-                        'regex':self.regex,
-                        'not_regex':self.not_regex,
-                        'reachable':self.reachable,
-                        'site':self.site,
-                        'system_ip':self.system_ip,
-                        'csv':self.csv,
-                        'task_output':task_output
-                    }
-        task_show = TaskShow()       
+            'regex': self.regex,
+            'not_regex': self.not_regex,
+            'reachable': self.reachable,
+            'site': self.site,
+            'system_ip': self.system_ip,
+            'csv': self.csv,
+            'task_output': task_output
+        }
+        task_show = TaskShow()
         for term in terms:
             if term not in sub_task_list:
                 raise AnsibleOptionsError(f"Task: {term} must be one of {sub_task_list}")
@@ -270,21 +268,21 @@ class LookupModule(LookupBase):
                 elif term == sub_task_list[1]:
                     show_args = self.get_show_state_args(term, show_common_args)
                 elif term == sub_task_list[2]:
-                    show_args = self.get_show_statistics_args(term, show_common_args)        
+                    show_args = self.get_show_statistics_args(term, show_common_args)
                 elif term == sub_task_list[3]:
-                    show_args = self.get_show_devices_args(term, show_common_args)  
-                
-                self.show_validations(term) 
+                    show_args = self.get_show_devices_args(term, show_common_args)
+
+                self.show_validations(term)
                 process_task(task_show, self.get_env_args(variables), **show_args)
                 if task_output and isinstance(task_output, list) and len(task_output):
-                   output = ''.join(task_output)
-                   output = output.split('\n')
-                   output_list.append(output)
+                    output = ''.join(task_output)
+                    output = output.split('\n')
+                    output_list.append(output)
                 else:
-                   display.display("Task Show: {} completed successfully. csv files @ {}".format(term, self.csv))    
-            
-            except Exception as ex: 
-                raise AnsibleLookupError(ex) from None    
-            
-        #return task_output
+                    display.display("Task Show: {} completed successfully. csv files @ {}".format(term, self.csv))
+
+            except Exception as ex:
+                raise AnsibleLookupError(ex) from None
+
+                # return task_output
         return output_list

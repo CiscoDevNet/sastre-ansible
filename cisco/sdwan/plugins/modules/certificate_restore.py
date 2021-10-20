@@ -118,7 +118,7 @@ def main():
         regex=dict(type="str"),
         not_regex=dict(type="str"),
         dryrun=dict(type="bool"),
-        workdir=dict(type="str", default=default_workdir(argument_spec.get('address')))
+        workdir=dict(type="str")
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
@@ -128,7 +128,8 @@ def main():
 
     try:
         task_args = CertificateRestoreArgs(
-            **module_params('regex', 'not_regex', 'dryrun', 'workdir', module_param_dict=module.params)
+            workdir=module.params['workdir'] or default_workdir(module.params['address']),
+            **module_params('regex', 'not_regex', 'dryrun', module_param_dict=module.params)
         )
         task_result = run_task(TaskCertificate, task_args, module.params)
 
