@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: list
+module: list_transform
 short_description: List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file.
 description: The list task can be used to show items from a target vManage,
              or a backup directory. Matching criteria can contain item tag(s) 
@@ -143,15 +143,12 @@ stdout_lines:
 """
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._list import (
-    TaskList, ListTransformArgs
-)
+from cisco_sdwan.tasks.implementation import TaskList, ListTransformArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec,module_params, run_task
-)
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
+
 
 def main():
     """main entry point for module execution
@@ -164,18 +161,18 @@ def main():
         save_csv=dict(type="str"),
         save_json=dict(type="str"),
         tags=dict(type="list", elements="str", required=True),
-        name_regex=dict(type="str",required=True)
+        name_regex=dict(type="str", required=True)
     )
-    
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
-   
+
     try:
         task_args = ListTransformArgs(
-            **module_params('regex','not_regex','workdir', 'save_csv','save_json','tags','name_regex', module_param_dict=module.params)
+            **module_params('regex', 'not_regex', 'workdir', 'save_csv', 'save_json', 'tags', 'name_regex',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskList, task_args, module.params)
 
@@ -183,10 +180,11 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
+
     except ValidationError as ex:
-        module.fail_json(msg=f"Invalid List Transform parameter: {ex}")
+        module.fail_json(msg=f"Invalid list transform parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"List Transform task error: {ex}")
+        module.fail_json(msg=f"List transform error: {ex}")
 
 
 if __name__ == "__main__":

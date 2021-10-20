@@ -74,7 +74,6 @@ RETURN = """
 
 display = Display()
 
-
 iter_fields = ('uuid', 'host-name', 'deviceId', 'site-id', 'reachability', 'device-type', 'device-model', 'version')
 
 
@@ -119,10 +118,10 @@ class LookupModule(LookupBase):
             d_type = device_type(d_class, model)
             regex = self.regex or self.not_regex
             if ((regex is None or regex_search(regex, name, inverse=self.regex is None)) and
-                (not self.reachable or state == 'reachable') and
-                (self.site is None or site_id == self.site) and
-                (self.system_ip is None or system_ip == self.system_ip) and
-                (self.device_type is None or d_type == self.device_type)):
+                    (not self.reachable or state == 'reachable') and
+                    (self.site is None or site_id == self.site) and
+                    (self.system_ip is None or system_ip == self.system_ip) and
+                    (self.device_type is None or d_type == self.device_type)):
                 yield DeviceInfo(uuid, name, system_ip, site_id, state, model, version, d_type)
 
             continue
