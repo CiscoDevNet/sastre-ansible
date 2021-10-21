@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: attach
+module: attach_edge
 short_description: Attach templates to WAN Edges.
 description: This attach module connects to SD-WAN vManage using HTTP REST to 
              updated configuration data stored in local default backup or configured argument
