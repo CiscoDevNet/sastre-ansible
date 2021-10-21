@@ -19,6 +19,16 @@ options:
     - report b filename (to)
     required: true
     type: str
+  spec_file:
+    description: 
+    - load custom report specification from YAML file
+    required: false
+    type: str
+  spec_json:
+    description: 
+    - load custom report specification from JSON-formatted string
+    required: false
+    type: str
   save_html:
     description: 
     - save report diff as html file
@@ -115,17 +125,21 @@ def main():
     argument_spec.update(
         report_a=dict(type="str", required=True),
         report_b=dict(type="str", required=True),
+        spec_file=dict(type="str"),
+        spec_json=dict(type="json"),
         save_html=dict(type="str"),
         save_txt=dict(type="str")
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
+        mutually_exclusive=[('spec_file', 'spec_json')],
         supports_check_mode=True
     )
 
     try:
         task_args = ReportDiffArgs(
-            **module_params('report_a', 'report_b', 'save_html', 'save_txt', module_param_dict=module.params)
+            **module_params('report_a', 'report_b', 'spec_file', 'spec_json', 'save_html', 'save_txt',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskReport, task_args, module.params)
 
