@@ -17,9 +17,8 @@ def common_arg_spec():
 
 
 def module_params(*param_names, module_param_dict):
-    values = [module_param_dict.get(name) for name in param_names]
     return {
-        name: value for name, value in zip(param_names, values) if value is not None
+       name: module_param_dict.get(name) for name in param_names if module_param_dict.get(name) is not None
     }
 
 
