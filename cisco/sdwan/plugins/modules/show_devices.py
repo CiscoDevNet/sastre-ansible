@@ -1,57 +1,53 @@
 #!/usr/bin/python
 
 DOCUMENTATION = """
-module: delete
-short_description: Delete configuration items on SD-WAN vManage.
-description: This delete module connects to SD-WAN vManage using HTTP REST to 
-             delete configuration items. This module contains multiple arguments with 
-             connection and filter details to delete all or specific configurtion data.
+module: show_devices
+short_description: Show Device List
+description: This show devices module connects to SD-WAN vManage using HTTP REST to 
+             retrieve different data.This module contains multiple arguments with 
+             connection and filter details to retrieve devices,data. 
+             The retrieved data will be displayed to console in table
+             format or can be exported as csv/json files.
+             When multiple filters are defined, the result is an AND of all filters.
 notes: 
 - Tested against 20.4.1.1
 options: 
   regex:
     description:
-    - Regular expression matching item names to be deleted, within selected tags
+    - Regular expression matching device name, type or model to display
     required: false
     type: str
   not_regex:
     description:
-    - Regular expression matching item names NOT to delete, within selected tags
+    - Regular expression matching device name, type or model NOT to display.
     required: false
     type: str
-  dryrun:
+  reachable:
     description:
-    - dry-run mode. Items matched for removal are listed but not deleted.
+    - Display only reachable devices
     required: false
     type: bool
     default: False
-  detach:
+  site:
     description:
-    - USE WITH CAUTION! Detach devices from templates and deactivate vSmart policy 
-      before deleting items. This allows deleting items that are associated with 
-      attached templates and active policies.
+    - Select devices with site ID.
     required: false
-    type: bool
-    default: False
-  tag:
-    description:
-    - Tag for selecting items to be deleted. Available tags are template_feature, policy_profile, policy_definition,
-      all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
-      policy_customapp. Special tag "all" selects all items.
-    required: true
     type: str
-    choices:
-    - "template_feature"
-    - "policy_profile"
-    - "policy_definition"
-    - "all"
-    - "policy_list"
-    - "policy_vedge"
-    - "policy_voice"
-    - "policy_vsmart"
-    - "template_device"
-    - "policy_security"
-    - "policy_customapp"
+  system_ip:
+    description:
+    - Select device with system IP.
+    required: false
+    type: str
+  save_csv:
+    description:
+    - Export results as CSV files under the specified directory
+    required: false
+    type: str
+  save_json:
+    description:
+    - Export results as JSON-formatted file
+    required: false
+    type: str
   address:
     description:
     - vManage IP address or can also be defined via VMANAGE_IP environment variable
@@ -87,50 +83,52 @@ options:
 """
 
 EXAMPLES = """
-- name: "Delete vManage configuration"
-  cisco.sdwan.delete: 
-    address: "198.18.1.10"
+- name: Show devices data
+  cisco.sdwan.show_devices:
+    regex: ".*"
+    reachable: true
+    site: "100"
+    system_ip: 10.1.0.2
+    save_csv: show_devices_csv
+    save_json: show_devices_json
+    address: 198.18.1.10
     port: 8443
     user: admin
     password: admin
     timeout: 300
-    regex: ".*"
-    dryrun: True
-    detach: False
-    tag: "template_device"
-- name: "Delete vManage configuration with some vManage config arguments saved in environment variables"
-  cisco.sdwan.delete: 
-    timeout: 300
+- name: Show devices data
+  cisco.sdwan.show_devices:
     not_regex: ".*"
-    dryrun: True
-    detach: False
-    tag: "all"
-- name: "Delete vManage configuration with all defaults"
-  cisco.sdwan.delete: 
-    address: "198.18.1.10"
+    reachable: true
+    site: "100"
+    system_ip: 10.1.0.2
+    save_csv: show_devices_csv
+    save_json: show_devices_json
+    address: 198.18.1.10
+    port: 8443
     user: admin
     password: admin
-    tag: "template_device"
+    timeout: 300
 """
 
 RETURN = """
 stdout:
-  description: Status of delete
+  description: Status of show devices
   returned: always apart from low level errors
   type: str
-  sample: 'Delete completed successfully'
+  sample: 'Task show devices completed successfully'
 stdout_lines:
   description: The value of stdout split into a list
   returned: always apart from low level errors
   type: list
-  sample: ['Delete completed successfully']
+  sample: show table view data
 """
 from ansible.module_utils.basic import AnsibleModule
+from cisco_sdwan.tasks.implementation._show import TaskShow, ShowDevicesArgs
 from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation._delete import TaskDelete, DeleteArgs
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 def main():
@@ -140,9 +138,11 @@ def main():
     argument_spec.update(
         regex=dict(type="str"),
         not_regex=dict(type="str"),
-        dryrun=dict(type="bool"),
-        detach=dict(type="bool"),
-        tag=dict(type="str", required=True)
+        reachable=dict(type="bool"),
+        site=dict(type="str"),
+        system_ip=dict(type="str"),
+        save_csv=dict(type="str"),
+        save_json=dict(type="str")
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
@@ -151,11 +151,11 @@ def main():
     )
 
     try:
-        task_args = DeleteArgs(
-            **module_params('regex', 'not_regex', 'dryrun', 'detach', 'tag', 
+        task_args = ShowDevicesArgs(
+            **module_params('regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json',
                             module_param_dict=module.params)
         )
-        task_result = run_task(TaskDelete, task_args, module.params)
+        task_result = run_task(TaskShow, task_args, module.params)
 
         result = {
             "changed": False
@@ -163,9 +163,10 @@ def main():
         module.exit_json(**result, **task_result)
 
     except ValidationError as ex:
-        module.fail_json(msg=f"Invalid delete parameter: {ex}")
+        module.fail_json(msg=f"Invalid show devices parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"Delete error: {ex}")
+        module.fail_json(msg=f"Show devices error: {ex}")
+
 
 if __name__ == "__main__":
     main()

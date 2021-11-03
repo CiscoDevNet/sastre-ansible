@@ -14,12 +14,10 @@ def common_arg_spec():
         port=dict(type="int", default=VMANAGE_PORT, fallback=(env_fallback, ['VMANAGE_PORT'])),
         timeout=dict(type="int", default=REST_TIMEOUT),
     )
-
-
+    
 def module_params(*param_names, module_param_dict):
-    values = [module_param_dict.get(name) for name in param_names]
     return {
-        name: value for name, value in zip(param_names, values) if value is not None
+       name: module_param_dict.get(name) for name in param_names if module_param_dict.get(name) is not None
     }
 
 
@@ -45,11 +43,7 @@ def sdwan_api_args(module_param_dict):
 
 def run_task(task_cls, task_args, module_param_dict):
     task = task_cls()
-    if task.is_api_required(task_args):
-        with Rest(**sdwan_api_args(module_param_dict=module_param_dict)) as api:
-            task_output = task.runner(task_args, api)
-    else:
-        task_output = task.runner(task_args)
+    task_output = execute_task(task, task_args, module_param_dict)
 
     result = {}
     if task_output:
@@ -58,3 +52,23 @@ def run_task(task_cls, task_args, module_param_dict):
     result["msg"] = f"Task completed {task.outcome('successfully', 'with caveats: {tally}')}"
 
     return result
+
+def execute_task(task, task_args, module_param_dict):
+    if task.is_api_required(task_args):
+        with Rest(**sdwan_api_args(module_param_dict=module_param_dict)) as api:
+            task_output = task.runner(task_args, api)
+    else:
+        task_output = task.runner(task_args)
+    
+    return task_output
+
+def is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
+    if mutual_exclusive_fields is not None and len(mutual_exclusive_fields) > 1:
+        is_mutually_exlusive: bool = False
+        for arg in mutual_exclusive_fields:
+            if kwargs.get(arg) is None:
+                continue
+            elif is_mutually_exlusive:
+                return is_mutually_exlusive
+            is_mutually_exlusive = True
+          
