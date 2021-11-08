@@ -1,12 +1,12 @@
-:source: list.py
+:source: list_transform.py
 
 :orphan:
 
-.. _cisco.sdwan.list_module:
+.. _list_transform_module:
 
 
-cisco.sdwan.list - List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+list_transform - List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -44,23 +44,22 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>csv</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <b>name_regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Export table as a csv file</div>
+                                                                        <div>name-regex used to transform an existing item name. Variable {name} is replaced with the original template name. Sections of the original template name can be selected using the {name &lt;regex&gt;} format. Where  is a regular expression that must contain at least one capturing group. Capturing groups identify sections of the original name to keep. For transform option, this param is mandatory.</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>name_regex</b>
+                    <b>not_regex</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
-                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">no</div>
-                                    </td>
+                                                                                                                                                            </td>
                                                                 <td>
-                                                                        <div>name-regex used to transform an existing item name. Variable {name} is replaced with the original template name. Sections of the original template name can be selected using the {name &lt;regex&gt;} format. Where  is a regular expression that must contain at least one capturing group. Capturing groups identify sections of the original name to keep. For transform option, this param is mandatory.</div>
+                                                                        <div>Regular expression selecting items NOT to list, match on original item names.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -71,17 +70,6 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>password or can also be defined via VMANAGE_PASSWORD environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>pid</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>CX project id or can also be defined via CX_PID environment variable. This is collected for AIDE reporting purposes only.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -102,13 +90,33 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>For configuration option, regular expression selecting items to list. Match on item names or item IDs. For certificate option,  regular expression selecting devices to list. Match on hostname or chassis/uuid. Use &quot;^-$&quot; to match devices without a hostname. For transform option, regular expression selecting items to list, match on original item names</div>
+                                                                        <div>Regular expression selecting items to list, match on original item names.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_csv</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export table as a csv file</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_json</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export table as a json file</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
                     <b>tags</b>
-                    <br/><div style="font-size: small; color: red">list</div>                                                        </td>
+                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                             <ul><b>Choices:</b>
                                                                                                                                                                 <li>template_feature</li>
@@ -125,7 +133,17 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Defines one or more tags for selecting groups of items. Multiple tags should be configured as list. Available tags are template_feature, policy_profile, policy_definition, all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security, policy_customapp. Special tag &quot;all&quot; selects all items, including WAN edge certificates and device configurations. For configuration option, this param is mandatory. For transform option, this param is mandatory.</div>
+                                                                        <div>Defines one or more tags for selecting groups of items. Multiple tags should be configured as list. Available tags are template_feature, policy_profile, policy_definition, all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security, policy_customapp. Special tag &quot;all&quot; selects all items, including WAN edge certificates and device configurations.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>tenant</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>tenant name, when using provider accounts in multi-tenant deployments.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -151,30 +169,12 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>verbose</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>NOTSET</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>DEBUG</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>INFO</li>
-                                                                                                                                                                                                <li>WARNING</li>
-                                                                                                                                                                                                <li>ERROR</li>
-                                                                                                                                                                                                <li>CRITICAL</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>workdir</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>list will read from the specified directory instead of target vManage. Either workdir or vManage address is mandatory</div>
+                                                                        <div>list will read from the specified directory instead of target vManage. Either workdir or vManage address/user/password is mandatory</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -195,50 +195,29 @@ Examples
 
     
     - name: List Configuration
-      cisco.sdwan.list:
-        configuration: 
-            tags:
-                - template_feature
-                - policy_vedge
-            regex: ".*"
-            workdir: backup_198.18.1.10_20210720 
-            csv: csvtest.csv
+      cisco.sdwan.list_transform:
+        tags:
+            - template_feature
+            - policy_vedge
+        regex: ".*"
+        workdir: backup_198.18.1.10_20210720 
+        name_regex: '{name}'
+        save_csv: list_config_csv
+        save_json: list_config_json
+    - name: List Configuration
+      cisco.sdwan.list_transform:
+        tags:
+            - template_feature
+            - policy_vedge
+        not_regex: ".*"
+        save_csv: list_config_csv
+        save_json: list_config_json
+        name_regex: '{name}'
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
         timeout: 300
-        pid: "2"
-        verbose: DEBUG
-    - name: List Certificate
-      cisco.sdwan.list:
-        certificate:
-            regex: ".*"
-            workdir: backup_198.18.1.10_20210720
-            csv: list_cert.csv
-        address: 198.18.1.10
-        port: 8443
-        user: admin
-        password: admin
-        timeout: 300
-        pid: "2"
-        verbose: DEBUG
-    - name: List Transform
-      cisco.sdwan.list:
-        transform: 
-            tags:
-                - template_feature
-            name_regex: '{name}'
-            regex: ".*"
-            workdir: backup_198.18.1.10_20210720
-            csv: csvtest.csv
-        address: 198.18.1.10
-        port: 8443
-        user: admin
-        password: admin
-        timeout: 300
-        pid: "2"
-        verbose: DEBUG
 
 
 
@@ -253,8 +232,8 @@ Status
 Author
 ~~~~~~
 
-- Satish Kumar Kamavaram (sakamava@cisco.com)
+- UNKNOWN
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/list.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/list_transform.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

@@ -1,12 +1,12 @@
-:source: show_template.py
+:source: show_template_references.py
 
 :orphan:
 
-.. _cisco.sdwan.show_template_module:
+.. _show_template_references_module:
 
 
-cisco.sdwan.show_template - Show details about device templates on vManage or from a local backup. Display as table or export as csv file.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+show_template_references - Show template references about device templates on vManage or from a local backup. Display as table or export as csv/json file.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,8 @@ cisco.sdwan.show_template - Show details about device templates on vManage or fr
 
 Synopsis
 --------
-- The Show template task can be used to show device templates from a target vManage, or a backup directory. Criteria can contain regular expression with matching device or feature template names depending on type of option specified. A log file is created under a "logs" directory. This "logs" directoryis relative to directory where Ansible runs.
+- The Show template task can be used to show device templates from a target vManage or a backup directory.
+- Criteria can contain regular expression with matching or not matching device or feature template names.
 
 
 
@@ -35,62 +36,31 @@ Parameters
                     <tr>
                                                                 <td colspan="1">
                     <b>address</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>vManage IP address or can also be defined via VMANAGE_IP environment variable</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>csv</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Export tables as csv files under the specified directory</div>
+                                                                        <div>vManage IP address or can also be defined via VMANAGE_IP environment variable. Either workdir or address/user/password parameter is mandatory</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>id</b>
+                    <b>not_regex</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Device template id For values option, this param is applicable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>name</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Device template name For values option, this param is applicable.</div>
+                                                                        <div>Regular expression matching device template names or IDs NOT to inspect. regex and not_regex parameters are mutually exclusive</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
                     <b>password</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>password or can also be defined via VMANAGE_PASSWORD environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>pid</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>CX project id or can also be defined via CX_PID environment variable. This is collected for AIDE reporting purposes only.</div>
+                                                                        <div>password or can also be defined via VMANAGE_PASSWORD environment variable. Either workdir or address/user/password parameter is mandatory</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -111,7 +81,37 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>For values option, regular expression matching device template names. For references option, regular expression matching feature template names to include.</div>
+                                                                        <div>Regular expression matching device template names or IDs to inspect. regex and not_regex parameters are mutually exclusive</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_csv</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export tables as csv files under the specified directory</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_json</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Save teamplate references as json file</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>tenant</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>tenant name, when using provider accounts in multi-tenant deployments.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -128,29 +128,11 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>user</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>username or can also be defined via VMANAGE_USER environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>verbose</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>NOTSET</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>DEBUG</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>INFO</li>
-                                                                                                                                                                                                <li>WARNING</li>
-                                                                                                                                                                                                <li>ERROR</li>
-                                                                                                                                                                                                <li>CRITICAL</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
+                                                                        <div>username or can also be defined via VMANAGE_USER environment variable. Either workdir or address/user/password parameter is mandatory</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -164,7 +146,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Include only feature-templates with device-template references For references option, this param is applicable.</div>
+                                                                        <div>Include only feature-templates with device-template references</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -194,52 +176,23 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Show Template values from local backup directory
-      cisco.sdwan.show_template:
-        values: 
-            regex: ".*"
-            workdir: backup_198.18.1.10_20210720
-            csv: show_temp
-            name: DC-vEdges
-            id: 704bbc2f-aa9a-4068-84a2-fc31602ed553
-        verbose: DEBUG
-        pid: "2"
-    - name: Show Template values from vManage
-      cisco.sdwan.show_template:
-        values: 
-            regex: ".*"
-            csv: show_temp
-            name: DC-vEdges
-            id: 704bbc2f-aa9a-4068-84a2-fc31602ed553
-        address: 198.18.1.10
-        port: 8443
-        user: admin
-        password: admin
-        verbose: DEBUG
-        pid: "2"
-        timeout: 300
     - name: Show Template references from local backup directory
-      cisco.sdwan.show_template:
-        references: 
-            regex: ".*"
-            csv: show_temp
-            workdir: backup_198.18.1.10_20210720
-            with_refs: True
-        verbose: DEBUG
-        pid: "2"
+      cisco.sdwan.show_template_references:
+        regex: ".*"
+        save_csv: show_temp_csv
+        save_json: show_temp_json
+        workdir: backup_198.18.1.10_20210720
+        with_refs: True
     - name: Show Template references from vManage
-      cisco.sdwan.show_template:
-        references: 
-            regex: ".*"
-            csv: show_temp
-            with_refs: True
+      cisco.sdwan.show_template_references:
+        not_regex: ".*"
+        save_csv: show_temp_csv
+        save_json: show_temp_json
+        with_refs: True
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
-        verbose: DEBUG
-        pid: "2"
-        timeout: 300
 
 
 
@@ -254,8 +207,8 @@ Status
 Author
 ~~~~~~
 
-- Satish Kumar Kamavaram (sakamava@cisco.com)
+- UNKNOWN
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/show_template.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/show_template_references.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

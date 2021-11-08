@@ -1,12 +1,12 @@
-:source: migrate.py
+:source: list_configuration.py
 
 :orphan:
 
-.. _migrate_module:
+.. _list_configuration_module:
 
 
-migrate - Migrate configuration items from a vManage release to another. Currently, only 18.4, 19.2 or 19.3 to 20.1 is supported. Minor revision numbers (e.g. 20.1.1) are not relevant for the template migration.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+list_configuration - List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ migrate - Migrate configuration items from a vManage release to another. Current
 
 Synopsis
 --------
-- This migrate module migrates configuration items from vManage release to another from local specified directory or target vManage.
+- The list task can be used to show items from a target vManage, or a backup directory. Matching criteria can contain item tag(s) and regular expression.When multiple filters are defined, the result is an AND of all filters.A log file is created under a "logs" directory. This "logs" directoryis relative to directory where Ansible runs.
 
 
 
@@ -44,48 +44,12 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>from</b>
+                    <b>not_regex</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">18.4</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>vManage version from source templates</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>name</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">migrated_{name}</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>format used to name the migrated templates. Variable {name} is replaced with the original template name. Sections of the original template name can be selected using the {name &lt;regex&gt;} format. Where &lt;regex&gt; is a regular expression that must contain at least one capturing group. Capturing groups identify sections of the original name to keep.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>no_rollover</b>
-                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>By default, if the output directory already exists it is renamed using a rolling naming scheme. This option disables this automatic rollover.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>output</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Directory to save migrated templates</div>
+                                                                        <div>Regular expression selecting items NOT to list. Match on item names or IDs.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -111,16 +75,55 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>scope</b>
+                    <b>regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting items to list. Match on item names or IDs.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_csv</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export table as a csv file</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_json</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export table as a json file</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>tags</b>
                     <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                             <ul><b>Choices:</b>
-                                                                                                                                                                <li>all</li>
-                                                                                                                                                                                                <li>attached</li>
+                                                                                                                                                                <li>template_feature</li>
+                                                                                                                                                                                                <li>policy_profile</li>
+                                                                                                                                                                                                <li>policy_definition</li>
+                                                                                                                                                                                                <li>all</li>
+                                                                                                                                                                                                <li>policy_list</li>
+                                                                                                                                                                                                <li>policy_vedge</li>
+                                                                                                                                                                                                <li>policy_voice</li>
+                                                                                                                                                                                                <li>policy_vsmart</li>
+                                                                                                                                                                                                <li>template_device</li>
+                                                                                                                                                                                                <li>policy_security</li>
+                                                                                                                                                                                                <li>policy_customapp</li>
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Select whether to evaluate all feature templates, or only feature templates attached to device templates.</div>
+                                                                        <div>Defines one or more tags for selecting groups of items. Multiple tags should be configured as list. Available tags are template_feature, policy_profile, policy_definition, all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security, policy_customapp. Special tag &quot;all&quot; selects all items, including WAN edge certificates and device configurations.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -146,17 +149,6 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>to</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">20.1</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>target vManage version for template migration</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>user</b>
                     <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
@@ -172,7 +164,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Migrate will read from the specified directory instead of target vManage. Either workdir or address/user/password is mandatory</div>
+                                                                        <div>list will read from the specified directory instead of target vManage. Either workdir or vManage address/user/password is mandatory</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -192,23 +184,23 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Migrate from local backup to local output
-      cisco.sdwan.migrate:
-        scope: attached
-        output: test_migrate
-        workdir: backup_198.18.1.10_20210726
-        name: migrated_1_{name}
-        from: '18.4'
-        to: '20.1'
-        no_rollover: false
-    - name: Migrate from vManage to local output
-      cisco.sdwan.migrate:
-        scope: attached
-        output: test_migrate
-        name: migrated_1_{name}
-        from: '18.4'
-        to: '20.1'
-        no_rollover: false
+    - name: List Configuration
+      cisco.sdwan.list_configuration:
+        tags:
+            - template_feature
+            - policy_vedge
+        regex: ".*"
+        workdir: backup_198.18.1.10_20210720 
+        save_csv: list_config_csv
+        save_json: list_config_json
+    - name: List Configuration
+      cisco.sdwan.list_configuration:
+        tags:
+            - template_feature
+            - policy_vedge
+        not_regex: ".*"
+        save_csv: list_config_csv
+        save_json: list_config_json
         address: 198.18.1.10
         port: 8443
         user: admin
@@ -232,4 +224,4 @@ Author
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/migrate.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/list_configuration.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

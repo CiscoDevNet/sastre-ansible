@@ -1,12 +1,12 @@
-:source: migrate.py
+:source: certificate_set.py
 
 :orphan:
 
-.. _migrate_module:
+.. _certificate_set_module:
 
 
-migrate - Migrate configuration items from a vManage release to another. Currently, only 18.4, 19.2 or 19.3 to 20.1 is supported. Minor revision numbers (e.g. 20.1.1) are not relevant for the template migration.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+certificate_set - Set WAN edge certificate validity status.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ migrate - Migrate configuration items from a vManage release to another. Current
 
 Synopsis
 --------
-- This migrate module migrates configuration items from vManage release to another from local specified directory or target vManage.
+- The certificate set task can be used to set the certificate validity status of one or more WAN edges to 'invalid', 'staging' or 'valid'. A regular expression can be used to select one or more WAN edges.
 
 
 
@@ -44,29 +44,7 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>from</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">18.4</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>vManage version from source templates</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>name</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">migrated_{name}</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>format used to name the migrated templates. Variable {name} is replaced with the original template name. Sections of the original template name can be selected using the {name &lt;regex&gt;} format. Where &lt;regex&gt; is a regular expression that must contain at least one capturing group. Capturing groups identify sections of the original name to keep.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>no_rollover</b>
+                    <b>dryrun</b>
                     <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
                                                                                                                                                                                                                     <ul><b>Choices:</b>
@@ -75,17 +53,17 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>By default, if the output directory already exists it is renamed using a rolling naming scheme. This option disables this automatic rollover.</div>
+                                                                        <div>Dry-run mode. List modifications that would be performed without pushing changes to vManage.</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>output</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <b>not_regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Directory to save migrated templates</div>
+                                                                        <div>Regular expression selecting devices NOT to modify certificate status. Matches on the hostname or chassis/uuid.&#x27;</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -111,16 +89,27 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>scope</b>
-                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <b>regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting devices to modify certificate status. Matches on the hostname or chassis/uuid. Use &quot;^-$&quot; to match devices without a hostname.&#x27;</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>status</b>
+                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                             <ul><b>Choices:</b>
-                                                                                                                                                                <li>all</li>
-                                                                                                                                                                                                <li>attached</li>
+                                                                                                                                                                <li>invalid</li>
+                                                                                                                                                                                                <li>staging</li>
+                                                                                                                                                                                                <li>valid</li>
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Select whether to evaluate all feature templates, or only feature templates attached to device templates.</div>
+                                                                        <div>WAN edge certificate status</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -146,33 +135,12 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>to</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">20.1</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>target vManage version for template migration</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>user</b>
                     <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>workdir</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Migrate will read from the specified directory instead of target vManage. Either workdir or address/user/password is mandatory</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -192,23 +160,20 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Migrate from local backup to local output
-      cisco.sdwan.migrate:
-        scope: attached
-        output: test_migrate
-        workdir: backup_198.18.1.10_20210726
-        name: migrated_1_{name}
-        from: '18.4'
-        to: '20.1'
-        no_rollover: false
-    - name: Migrate from vManage to local output
-      cisco.sdwan.migrate:
-        scope: attached
-        output: test_migrate
-        name: migrated_1_{name}
-        from: '18.4'
-        to: '20.1'
-        no_rollover: false
+    - name: Certificate set
+      cisco.sdwan.certificate_set:
+        status: valid
+        regex: "cedge_1"
+        dryrun: True
+        address: 198.18.1.10
+        port: 8443
+        user: admin
+        password: admin
+        timeout: 300
+    - name: Certificate set
+      cisco.sdwan.certificate_set:
+        status: valid
+        dryrun: True
         address: 198.18.1.10
         port: 8443
         user: admin
@@ -232,4 +197,4 @@ Author
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/migrate.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/certificate_set.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

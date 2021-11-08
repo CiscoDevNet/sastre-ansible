@@ -123,7 +123,6 @@ EXAMPLES = """
     user: admin
     password: admin
     timeout: 300
-    verbose: INFO
     workdir: /home/user/backups
     no_rollover: false
     save_running: true
