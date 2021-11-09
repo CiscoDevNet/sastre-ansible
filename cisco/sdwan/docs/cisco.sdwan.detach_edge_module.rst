@@ -1,12 +1,12 @@
-:source: certificate.py
+:source: detach_edge.py
 
 :orphan:
 
-.. _cisco.sdwan.certificate_module:
+.. _detach_edge_module:
 
 
-cisco.sdwan.certificate - Restore device certificate validity status from a backup or set to a desired value (i.e. valid, invalid or staging).
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+detach_edge - Detach templates from WAN Edges.
+++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ cisco.sdwan.certificate - Restore device certificate validity status from a back
 
 Synopsis
 --------
-- The certificate task can be used to items from backup directory or to a set of desired value to target vManage. Matching criteria can contain regular expression.A log file is created under a "logs" directory. This "logs" directoryis relative to directory where Ansible runs.
+- This detach module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder. This module contains multiple arguments with connection and filter details to detach WAN Edges from templates. When multiple filters are defined, the result is an AND of all filters. Dry-run can be used to validate the expected outcome.The number of devices to include per detach request (to vManage) can be defined with the batch option.
 
 
 
@@ -44,6 +44,27 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <b>batch</b>
+                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">200</div>
+                                    </td>
+                                                                <td>
+                                                                        <div>Maximum number of devices to include per vManage detach request.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>devices</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting devices to detach. Match on device name.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <b>dryrun</b>
                     <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
@@ -53,7 +74,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>dry-run mode. List modifications that would be performed without pushing changes to vManage.</div>
+                                                                        <div>dry-run mode. Attach operations are listed but nothing is pushed to vManage.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -64,17 +85,6 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>password or can also be defined via VMANAGE_PASSWORD environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>pid</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>CX project id or can also be defined via CX_PID environment variable. This is collected for AIDE reporting purposes only.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -90,22 +100,56 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>regex</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <b>reachable</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
-                                                                                                                                                            </td>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
                                                                 <td>
-                                                                        <div>Regular expression selecting devices to modify certificate status. Matches on the hostname or chassis/uuid. Use &quot;^-$&quot; to match devices without a hostname.&#x27;</div>
+                                                                        <div>Select reachable devices only.</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>status</b>
+                    <b>site</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>WAN edge certificate status For set option, this param is mandatory.</div>
+                                                                        <div>Select devices with site ID.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>system_ip</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Select device with system IP.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>templates</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting templates to detach. Match on template name.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>tenant</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>tenant name, when using provider accounts in multi-tenant deployments.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -129,34 +173,6 @@ Parameters
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
                                                                                 </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>verbose</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>NOTSET</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>DEBUG</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>INFO</li>
-                                                                                                                                                                                                <li>WARNING</li>
-                                                                                                                                                                                                <li>ERROR</li>
-                                                                                                                                                                                                <li>CRITICAL</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>workdir</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>restore source from default or specified location For restore option, this param is mandatory.</div>
-                                                                                </td>
-            </tr>
                         </table>
     <br/>
 
@@ -174,32 +190,35 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Certificate Set
-      cisco.sdwan.certificate:
-        set:
-            status: valid
-            regex: ".*"
-            dryrun: True
-        address: 198.18.1.10
+    - name: "Detach vManage configuration"
+      cisco.sdwan.detach_edge:
+        address: "198.18.1.10"
         port: 8443
+        user: "admin"
+        password:"admin"
+        timeout: 300
+        templates: ".*"
+        devices: ".*"
+        reachable: True
+        site: "1"
+        system_ip: "12.12.12.12"
+        dryrun: False
+        batch: 99       
+    - name: "Detach vManage configuration with some vManage config arguments saved in environment variables"
+      cisco.sdwan.detach_edge: 
+        timeout: 300
+        templates: ".*"
+        devices: ".*"
+        reachable: True
+        site: "1"
+        system_ip: "12.12.12.12"
+        dryrun: True
+        batch: 99    
+    - name: "Detach vManage configuration with all defaults"
+      cisco.sdwan.detach_edge: 
+        address: "198.18.1.10"
         user: admin
         password: admin
-        timeout: 300
-        pid: "2"
-        verbose: DEBUG
-    - name: Certificate restore
-      cisco.sdwan.certificate:
-        restore:
-            regex: ".*"
-            workdir: backup_198.18.1.10_20210720
-            dryrun: True
-        address: 198.18.1.10
-        port: 8443
-        user: admin
-        password: admin
-        timeout: 300
-        pid: "2"
-        verbose: DEBUG
 
 
 
@@ -214,8 +233,8 @@ Status
 Author
 ~~~~~~
 
-- Satish Kumar Kamavaram (sakamava@cisco.com)
+- UNKNOWN
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/certificate.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/detach_edge.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

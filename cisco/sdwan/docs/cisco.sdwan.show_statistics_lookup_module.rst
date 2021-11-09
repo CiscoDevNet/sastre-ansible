@@ -1,12 +1,12 @@
-:source: detach.py
+:source: show_statistics.py
 
 :orphan:
 
-.. _cisco.sdwan.detach_module:
+.. _show_statistics_module:
 
 
-cisco.sdwan.detach - Detach WAN Edges/vSmarts from templates. Allows further customization on top of the functionality available via "delete --detach".
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+show_statistics - Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ cisco.sdwan.detach - Detach WAN Edges/vSmarts from templates. Allows further cus
 
 Synopsis
 --------
-- This detach module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder. This module contains multiple arguments with connection and filter details to detach WAN Edges/vSmarts from templates. When multiple filters are defined, the result is an AND of all filters. Dry-run can be used to validate the expected outcome.The number of devices to include per detach request (to vManage) can be defined with the --batch option. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
+- This show statistics module connects to SD-WAN vManage using HTTP REST to retrieve different data.This module contains multiple arguments with connection and filter details to retrieve devices,data. The retrieved data will be displayed to console in table format or can be exported as csv/json files. When multiple filters are defined, the result is an AND of all filters.
 
 
 
@@ -44,42 +44,28 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>batch</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">200</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>Maximum number of devices to include per vManage detach request.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>device_type</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>edge</li>
-                                                                                                                                                                                                <li>vsmart</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Select type of devices to dettach templates. Available types are edge,vsmart</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>devices</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <b>cmd</b>
+                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression selecting devices to detach. Match on device name.</div>
+                                                                        <div>group of, or specific command to execute. Group options are all, bfd, control, interface, omp, system. Command options are bfd sessions, control connections, control local-properties, interface cedge, interface vedge, omp peers, system info.</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>dryrun</b>
+                    <b>days</b>
+                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
+                                    </td>
+                                                                <td>
+                                                                        <div>Query statistics from &lt;days&gt; ago (default is now)</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>detail</b>
                     <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
                                                                                                                                                                                                                     <ul><b>Choices:</b>
@@ -88,7 +74,28 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>dry-run mode. Attach operations are listed but nothing is pushed to vManage.</div>
+                                                                        <div>Detailed output</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>hours</b>
+                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
+                                    </td>
+                                                                <td>
+                                                                        <div>Query statistics from &lt;hours&gt; ago (default is now)</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>not_regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression matching device name, type or model NOT to display.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -99,17 +106,6 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>password or can also be defined via VMANAGE_PASSWORD environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>pid</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>CX project id or can also be defined via CX_PID environment variable. This is collected for AIDE reporting purposes only.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -134,7 +130,37 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Select reachable devices only.</div>
+                                                                        <div>Display only reachable devices</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression matching device name, type or model to display</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_csv</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export results as CSV files under the specified directory</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_json</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export results as JSON-formatted file</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -159,12 +185,12 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>templates</b>
+                    <b>tenant</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression selecting templates to detach. Match on template name.</div>
+                                                                        <div>tenant name, when using provider accounts in multi-tenant deployments.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -188,24 +214,6 @@ Parameters
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
                                                                                 </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>verbose</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>NOTSET</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>DEBUG</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>INFO</li>
-                                                                                                                                                                                                <li>WARNING</li>
-                                                                                                                                                                                                <li>ERROR</li>
-                                                                                                                                                                                                <li>CRITICAL</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
-                                                                                </td>
-            </tr>
                         </table>
     <br/>
 
@@ -223,42 +231,42 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: "Detach vManage configuration"
-      cisco.sdwan.detach:
-        address: "198.18.1.10"
+    - name: Show state data
+      cisco.sdwan.show_statistics:
+        regex: ".*"
+        reachable: true
+        site: "100"
+        system_ip: 10.1.0.2
+        save_csv: show_statistics_csv
+        save_json: show_statistics_json
+        cmd:
+          - all
+        detail: true
+        days: 1
+        hours: 1
+        address: 198.18.1.10
         port: 8443
-        user: "admin"
-        password:"admin"
-        timeout: 300
-        pid: "2"
-        verbose: "DEBUG"
-        device_type: "edge"
-        templates: ".*"
-        devices: ".*"
-        reachable: True
-        site: "1"
-        system_ip: "12.12.12.12"
-        dryrun: False
-        batch: 99       
-    - name: "Detach vManage configuration with some vManage config arguments saved in environment variables"
-      cisco.sdwan.detach: 
-        timeout: 300
-        verbose: INFO
-        workdir: /home/user/backups
-        device_type: "edge"
-        templates: ".*"
-        devices: ".*"
-        reachable: True
-        site: "1"
-        system_ip: "12.12.12.12"
-        dryrun: True
-        batch: 99    
-    - name: "Detach vManage configuration with all defaults"
-      cisco.sdwan.detach: 
-        address: "198.18.1.10"
         user: admin
         password: admin
-        device_type: "edge"
+        timeout: 300
+    - name: Show state data
+      cisco.sdwan.show_statistics:
+        not_regex: ".*"
+        reachable: true
+        site: "100"
+        system_ip: 10.1.0.2
+        save_csv: show_statistics_csv
+        save_json: show_statistics_json
+        cmd:
+          - all
+        detail: true
+        days: 1
+        hours: 1
+        address: 198.18.1.10
+        port: 8443
+        user: admin
+        password: admin
+        timeout: 300
 
 
 
@@ -273,8 +281,8 @@ Status
 Author
 ~~~~~~
 
-- Satish Kumar Kamavaram (sakamava@cisco.com)
+- UNKNOWN
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/detach.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/show_statistics.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

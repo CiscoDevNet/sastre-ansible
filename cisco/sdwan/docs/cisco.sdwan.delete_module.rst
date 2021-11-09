@@ -2,11 +2,11 @@
 
 :orphan:
 
-.. _cisco.sdwan.delete_module:
+.. _delete_module:
 
 
-cisco.sdwan.delete - Delete configuration items on SD-WAN vManage.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+delete - Delete configuration items on SD-WAN vManage.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ cisco.sdwan.delete - Delete configuration items on SD-WAN vManage.
 
 Synopsis
 --------
-- This delete module connects to SD-WAN vManage using HTTP REST to delete configuration items. This module contains multiple arguments with connection and filter details to delete all or specific configurtion data. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
+- This delete module connects to SD-WAN vManage using HTTP REST to delete configuration items. This module contains multiple arguments with connection and filter details to delete all or specific configurtion data.
 
 
 
@@ -72,23 +72,22 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <b>not_regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression matching item names NOT to delete, within selected tags</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <b>password</b>
                     <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>password or can also be defined via VMANAGE_PASSWORD environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>pid</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>CX project id or can also be defined via CX_PID environment variable. This is collected for AIDE reporting purposes only.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -137,6 +136,16 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <b>tenant</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>tenant name, when using provider accounts in multi-tenant deployments.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <b>timeout</b>
                     <br/><div style="font-size: small; color: red">int</div>                                                        </td>
                                 <td>
@@ -154,24 +163,6 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>verbose</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>NOTSET</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>DEBUG</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>INFO</li>
-                                                                                                                                                                                                <li>WARNING</li>
-                                                                                                                                                                                                <li>ERROR</li>
-                                                                                                                                                                                                <li>CRITICAL</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -198,8 +189,6 @@ Examples
         user: admin
         password: admin
         timeout: 300
-        pid: "2"
-        verbose: INFO
         regex: ".*"
         dryrun: True
         detach: False
@@ -207,8 +196,7 @@ Examples
     - name: "Delete vManage configuration with some vManage config arguments saved in environment variables"
       cisco.sdwan.delete: 
         timeout: 300
-        verbose: INFO
-        regex: ".*"
+        not_regex: ".*"
         dryrun: True
         detach: False
         tag: "all"
@@ -232,7 +220,7 @@ Status
 Author
 ~~~~~~
 
-- Satish Kumar Kamavaram (sakamava@cisco.com)
+- UNKNOWN
 
 
 .. hint::

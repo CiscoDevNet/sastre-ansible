@@ -1,12 +1,12 @@
-:source: attach.py
+:source: attach_vsmart.py
 
 :orphan:
 
-.. _cisco.sdwan.attach_module:
+.. _attach_vsmart_module:
 
 
-cisco.sdwan.attach - Attach WAN Edges/vSmarts to templates. Allows further customization on top of the functionality available via "restore --attach".
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+attach_vsmart - Attach templates to Vsmarts
++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ cisco.sdwan.attach - Attach WAN Edges/vSmarts to templates. Allows further custo
 
 Synopsis
 --------
-- This attach module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder. This module contains multiple arguments with connection and filter details to attach WAN Edges/vSmarts to templates. When multiple filters are defined, the result is an AND of all filters. Dry-run can be used to validate the expected outcome.The number of devices to include per attach request (to vManage) can be defined with the --batch option. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
+- This attach module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder. This module contains multiple arguments with connection and filter details to attach Vsmarts to templates. When multiple filters are defined, the result is an AND of all filters. Dry-run can be used to validate the expected outcome.The number of devices to include per attach request (to vManage) can be defined with the batch param.
 
 
 
@@ -55,20 +55,6 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>device_type</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>edge</li>
-                                                                                                                                                                                                <li>vsmart</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Select type of devices to attach templates. Available types are edge,vsmart</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>devices</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
@@ -99,17 +85,6 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>password or can also be defined via VMANAGE_PASSWORD environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>pid</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>CX project id or can also be defined via CX_PID environment variable. This is collected for AIDE reporting purposes only.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -169,6 +144,16 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <b>tenant</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>tenant name, when using provider accounts in multi-tenant deployments.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <b>timeout</b>
                     <br/><div style="font-size: small; color: red">int</div>                                                        </td>
                                 <td>
@@ -186,24 +171,6 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>verbose</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>NOTSET</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>DEBUG</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>INFO</li>
-                                                                                                                                                                                                <li>WARNING</li>
-                                                                                                                                                                                                <li>ERROR</li>
-                                                                                                                                                                                                <li>CRITICAL</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -235,15 +202,12 @@ Examples
 
     
     - name: "Attach vManage configuration"
-      cisco.sdwan.attach:
+      cisco.sdwan.attach_vsmart:
         address: "198.18.1.10"
         port: 8443
         user: "admin"
         password:"admin"
         timeout: 300
-        pid: "2"
-        verbose: "DEBUG"
-        device_type: "edge"
         workdir: "/home/user/backups"
         templates: ".*"
         devices: ".*"
@@ -253,11 +217,8 @@ Examples
         dryrun: False
         batch: 99       
     - name: "Attach vManage configuration with some vManage config arguments saved in environment variables"
-      cisco.sdwan.attach: 
+      cisco.sdwan.attach_vsmart: 
         timeout: 300
-        verbose: INFO
-        workdir: /home/user/backups
-        device_type: "edge"
         workdir: "/home/user/backups"
         templates: ".*"
         devices: ".*"
@@ -267,11 +228,10 @@ Examples
         dryrun: True
         batch: 99    
     - name: "Attach vManage configuration with all defaults"
-      cisco.sdwan.attach: 
+      cisco.sdwan.attach_vsmart: 
         address: "198.18.1.10"
         user: admin
         password: admin
-        device_type: "edge"
 
 
 
@@ -286,8 +246,8 @@ Status
 Author
 ~~~~~~
 
-- Satish Kumar Kamavaram (sakamava@cisco.com)
+- UNKNOWN
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/attach.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/attach_vsmart.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

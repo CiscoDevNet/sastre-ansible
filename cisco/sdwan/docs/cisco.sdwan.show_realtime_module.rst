@@ -1,12 +1,12 @@
-:source: migrate.py
+:source: show_realtime.py
 
 :orphan:
 
-.. _migrate_module:
+.. _show_realtime_module:
 
 
-migrate - Migrate configuration items from a vManage release to another. Currently, only 18.4, 19.2 or 19.3 to 20.1 is supported. Minor revision numbers (e.g. 20.1.1) are not relevant for the template migration.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+show_realtime - Realtime commands. Slower, but up-to-date data. vManage collect data from devices in realtime.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ migrate - Migrate configuration items from a vManage release to another. Current
 
 Synopsis
 --------
-- This migrate module migrates configuration items from vManage release to another from local specified directory or target vManage.
+- This show realtime module connects to SD-WAN vManage using HTTP REST to retrieve different data.This module contains multiple arguments with connection and filter details to retrieve devices,data. The retrieved data will be displayed to console in table format or can be exported as csv/json files. When multiple filters are defined, the result is an AND of all filters.
 
 
 
@@ -44,29 +44,17 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>from</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <b>cmd</b>
+                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">18.4</div>
-                                    </td>
+                                                                                                                                                            </td>
                                                                 <td>
-                                                                        <div>vManage version from source templates</div>
+                                                                        <div>group of, or specific command to execute. Group options are all, app-route, bfd, control, dpi, interface, omp, software, system, tunnel. Command options are app-route sla-class, app-route stats, bfd sessions, control connections, control local-properties, dpi summary, interface info, omp adv-routes, omp peers, omp summary, software info, system status, tunnel stats.</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>name</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">migrated_{name}</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>format used to name the migrated templates. Variable {name} is replaced with the original template name. Sections of the original template name can be selected using the {name &lt;regex&gt;} format. Where &lt;regex&gt; is a regular expression that must contain at least one capturing group. Capturing groups identify sections of the original name to keep.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>no_rollover</b>
+                    <b>detail</b>
                     <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
                                                                                                                                                                                                                     <ul><b>Choices:</b>
@@ -75,17 +63,17 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>By default, if the output directory already exists it is renamed using a rolling naming scheme. This option disables this automatic rollover.</div>
+                                                                        <div>Detailed output</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>output</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <b>not_regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Directory to save migrated templates</div>
+                                                                        <div>Regular expression matching device name, type or model NOT to display.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -111,16 +99,66 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>scope</b>
-                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <b>reachable</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>all</li>
-                                                                                                                                                                                                <li>attached</li>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Select whether to evaluate all feature templates, or only feature templates attached to device templates.</div>
+                                                                        <div>Display only reachable devices</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression matching device name, type or model to display</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_csv</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export results as CSV files under the specified directory</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_json</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Export results as JSON-formatted file</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>site</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Select devices with site ID.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>system_ip</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Select device with system IP.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -146,33 +184,12 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>to</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">20.1</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>target vManage version for template migration</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>user</b>
                     <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>workdir</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Migrate will read from the specified directory instead of target vManage. Either workdir or address/user/password is mandatory</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -192,23 +209,33 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Migrate from local backup to local output
-      cisco.sdwan.migrate:
-        scope: attached
-        output: test_migrate
-        workdir: backup_198.18.1.10_20210726
-        name: migrated_1_{name}
-        from: '18.4'
-        to: '20.1'
-        no_rollover: false
-    - name: Migrate from vManage to local output
-      cisco.sdwan.migrate:
-        scope: attached
-        output: test_migrate
-        name: migrated_1_{name}
-        from: '18.4'
-        to: '20.1'
-        no_rollover: false
+    - name: Show realtime data
+      cisco.sdwan.show_realtime:
+        regex: ".*"
+        reachable: true
+        site: "100"
+        system_ip: 10.1.0.2
+        save_csv: show_realtime_csv
+        save_json: show_realtime_json
+        cmd:
+          - all
+        detail: true
+        address: 198.18.1.10
+        port: 8443
+        user: admin
+        password: admin
+        timeout: 300
+    - name: Show realtime data
+      cisco.sdwan.show_realtime:
+        not_regex: ".*"
+        reachable: true
+        site: "100"
+        system_ip: 10.1.0.2
+        save_csv: show_realtime_csv
+        save_json: show_realtime_json
+        cmd:
+          - all
+        detail: true
         address: 198.18.1.10
         port: 8443
         user: admin
@@ -232,4 +259,4 @@ Author
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/migrate.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/show_realtime.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

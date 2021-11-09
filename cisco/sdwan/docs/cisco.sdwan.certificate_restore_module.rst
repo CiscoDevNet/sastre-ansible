@@ -1,12 +1,12 @@
-:source: report.py
+:source: certificate_restore.py
 
 :orphan:
 
-.. _cisco.sdwan.report_module:
+.. _certificate_restore_module:
 
 
-cisco.sdwan.report - Generate a report file containing the output from all list and show-template commands.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+certificate_restore - Restore WAN edge certificate validity status to from a backup.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ cisco.sdwan.report - Generate a report file containing the output from all list 
 
 Synopsis
 --------
-- This report module generates report from local backup directory or from vManage and saves to local file. A log file is created under a "logs" directory. This "logs" directory is relative to directory where Ansible runs.
+- The certificate restore task can be used to restore WAN edge certificate validity status to the same values as in the provided backup. A regular expression can be used to select one or more WAN edges.
 
 
 
@@ -44,12 +44,26 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>file</b>
+                    <b>dryrun</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                                                        <div>Dry-run mode. List modifications that would be performed without pushing changes to vManage.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>not_regex</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>{&#x27;report filename (default&#x27;: &#x27;report_{current_date}.txt)&#x27;}</div>
+                                                                        <div>Regular expression selecting devices NOT to modify certificate status. Matches on the hostname or chassis/uuid.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -64,17 +78,6 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>pid</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>CX project id or can also be defined via CX_PID environment variable. This is collected for AIDE reporting purposes only.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>port</b>
                     <br/><div style="font-size: small; color: red">int</div>                                                        </td>
                                 <td>
@@ -82,6 +85,26 @@ Parameters
                                     </td>
                                                                 <td>
                                                                         <div>vManage port number or can also be defined via VMANAGE_PORT environment variable</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>regex</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting devices to modify certificate status. Matches on the hostname or chassis/uuid. Use &quot;^-$&quot; to match devices without a hostname.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>tenant</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>tenant name, when using provider accounts in multi-tenant deployments.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -107,30 +130,13 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>verbose</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                            <ul><b>Choices:</b>
-                                                                                                                                                                <li>NOTSET</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>DEBUG</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>INFO</li>
-                                                                                                                                                                                                <li>WARNING</li>
-                                                                                                                                                                                                <li>ERROR</li>
-                                                                                                                                                                                                <li>CRITICAL</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Defines to control log level for the logs generated under &quot;logs/sastre.log&quot; when Ansible script is run. Supported log levels are NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>workdir</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
-                                                                                                                                                            </td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">backup_&lt;address&gt;_&lt;yyyymmdd&gt;</div>
+                                    </td>
                                                                 <td>
-                                                                        <div>Report will read from the specified directory instead of target vManage. Either workdir or address/user/password is mandatory</div>
+                                                                        <div>Restore source. Directory in the local machine under &#x27;data&#x27; where vManage backup is located. The  &#x27;data&#x27; directory is relative to the directory where Ansible script is run. By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;.</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -150,22 +156,25 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Report from vManage
-      cisco.sdwan.report:
-        file: todays_report.txt
+    - name: Certificate restore
+      cisco.sdwan.certificate_restore:
+        workdir: backup_198.18.1.10_20210720
+        regex: "cedge_1"
+        dryrun: True
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
-        verbose: DEBUG
-        pid: "2"
         timeout: 300
-    - name: Report from local folder
-      cisco.sdwan.report:
-        workdir: backup_198.18.1.10_20210726
-        file: todays_report.txt
-        verbose: DEBUG
-        pid: "2"
+    - name: Certificate restore
+      cisco.sdwan.certificate_restore:
+        workdir: backup_198.18.1.10_20210720
+        dryrun: True
+        address: 198.18.1.10
+        port: 8443
+        user: admin
+        password: admin
+        timeout: 300
 
 
 
@@ -180,8 +189,8 @@ Status
 Author
 ~~~~~~
 
-- Satish Kumar Kamavaram (sakamava@cisco.com)
+- UNKNOWN
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/report.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/certificate_restore.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
