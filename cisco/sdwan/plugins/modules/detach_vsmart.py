@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: detach_vsmart
 short_description: Detach templates from vSmarts.
@@ -136,7 +135,8 @@ from cisco_sdwan.tasks.implementation._attach_detach import TaskDetach, DetachVs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from  ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
+
 
 def main():
     """main entry point for module execution
@@ -158,7 +158,7 @@ def main():
 
     try:
         task_args = DetachVsmartArgs(
-            **module_params('templates', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch', 
+            **module_params('templates', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskDetach, task_args, module.params)
@@ -172,6 +172,7 @@ def main():
         module.fail_json(msg=f"Invalid detach vsmart parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"Detach vsmart error: {ex}")
+
 
 if __name__ == "__main__":
     main()

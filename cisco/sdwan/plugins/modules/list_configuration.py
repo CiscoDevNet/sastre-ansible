@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: list_configuration
 short_description: List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file.

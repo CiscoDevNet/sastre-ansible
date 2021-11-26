@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/env python3
 from ansible.errors import AnsibleLookupError, AnsibleOptionsError
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
@@ -8,9 +8,10 @@ from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import is_mutually_exclusive
-from ansible_collections.cisco.sdwan.plugins.module_utils.common_lookup import (run_task, get_plugin_inventory_args, validate_show_type_args,
-                                                                                validate_show_mandatory_args, set_show_default_args)
-
+from ansible_collections.cisco.sdwan.plugins.module_utils.common_lookup import (run_task, get_plugin_inventory_args,
+                                                                                validate_show_type_args,
+                                                                                validate_show_mandatory_args,
+                                                                                set_show_default_args)
 
 DOCUMENTATION = """
 lookup: show_state
@@ -81,12 +82,13 @@ RETURN = """
 
 display = Display()
 
+
 class LookupModule(LookupBase):
-    
+
     def run(self, terms, variables=None, **kwargs):
         self.set_options(var_options=variables, direct=kwargs)
-        mutual_exclusive_fields = ('regex','not_regex')
-        if is_mutually_exclusive(mutual_exclusive_fields,**kwargs):
+        mutual_exclusive_fields = ('regex', 'not_regex')
+        if is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
             raise AnsibleOptionsError(f"Parameters are mutually exclusive: {mutual_exclusive_fields}")
         validate_show_mandatory_args(**kwargs)
         validate_show_type_args(**kwargs)

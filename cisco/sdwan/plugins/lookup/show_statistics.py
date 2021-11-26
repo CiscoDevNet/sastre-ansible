@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/env python3
 from ansible.errors import AnsibleLookupError, AnsibleOptionsError
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
@@ -8,9 +8,10 @@ from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import is_mutually_exclusive
-from ansible_collections.cisco.sdwan.plugins.module_utils.common_lookup import (run_task, get_plugin_inventory_args, validate_show_type_args,
-                                                                                validate_show_mandatory_args, set_show_default_args)
-
+from ansible_collections.cisco.sdwan.plugins.module_utils.common_lookup import (run_task, get_plugin_inventory_args,
+                                                                                validate_show_type_args,
+                                                                                validate_show_mandatory_args,
+                                                                                set_show_default_args)
 
 DOCUMENTATION = """
 lookup: show_statistics
@@ -90,9 +91,10 @@ RETURN = """
 
 display = Display()
 
+
 class LookupModule(LookupBase):
-    
-    def validate_statistics_type_args(self,**kwargs):
+
+    def validate_statistics_type_args(self, **kwargs):
         validate_show_type_args(**kwargs)
         type_args = [
             ('days', int, 'an integer'),
@@ -102,11 +104,11 @@ class LookupModule(LookupBase):
             arg_val = kwargs.get(arg_name)
             if arg_val is not None and not isinstance(arg_val, arg_type):
                 raise AnsibleOptionsError(f"Parameter {arg_name} must be {arg_hint}")
-        
+
     def run(self, terms, variables=None, **kwargs):
         self.set_options(var_options=variables, direct=kwargs)
-        mutual_exclusive_fields = ('regex','not_regex')
-        if is_mutually_exclusive(mutual_exclusive_fields,**kwargs):
+        mutual_exclusive_fields = ('regex', 'not_regex')
+        if is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
             raise AnsibleOptionsError(f"Parameters are mutually exclusive: {mutual_exclusive_fields}")
         validate_show_mandatory_args(**kwargs)
         self.validate_statistics_type_args(**kwargs)

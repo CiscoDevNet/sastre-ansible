@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: restore
 short_description: Restore configuration items from a local backup to SD-WAN vManage. 
@@ -164,13 +163,13 @@ stdout_lines:
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
 from cisco_sdwan.tasks.implementation._restore import (
-    TaskRestore,RestoreArgs
+    TaskRestore, RestoreArgs
 )
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec,module_params, run_task
+    common_arg_spec, module_params, run_task
 )
 
 
@@ -187,16 +186,17 @@ def main():
         force=dict(type="bool", default=False),
         tag=dict(type="str", required=True)
     )
-    
+
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
-    
+
     try:
         task_args = RestoreArgs(
-            **module_params('regex','not_regex','workdir', 'dryrun','attach','force','tag','address', module_param_dict=module.params)
+            **module_params('regex', 'not_regex', 'workdir', 'dryrun', 'attach', 'force', 'tag', 'address',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskRestore, task_args, module.params)
 
@@ -208,6 +208,7 @@ def main():
         module.fail_json(msg=f"Invalid Restore parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"Restore task error: {ex}")
+
 
 if __name__ == "__main__":
     main()

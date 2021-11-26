@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: certificate_restore
 short_description: Restore WAN edge certificate validity status to from a backup.

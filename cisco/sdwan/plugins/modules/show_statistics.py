@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: show_statistics
 short_description: Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries.
@@ -167,6 +166,7 @@ from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
+
 def main():
     """main entry point for module execution
     """
@@ -179,7 +179,7 @@ def main():
         system_ip=dict(type="str"),
         save_csv=dict(type="str"),
         save_json=dict(type="str"),
-        cmd=dict(type="list", elements="str",required=True),
+        cmd=dict(type="list", elements="str", required=True),
         detail=dict(type="bool"),
         days=dict(type="int"),
         hours=dict(type="int")
@@ -192,7 +192,8 @@ def main():
 
     try:
         task_args = ShowStatisticsArgs(
-            **module_params('regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd', 'detail', 'days', 'hours',
+            **module_params('regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd',
+                            'detail', 'days', 'hours',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)

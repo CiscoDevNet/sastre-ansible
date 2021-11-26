@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: show_template_references
 short_description: Show template references about device templates on vManage or from a local backup. Display as table or export as csv/json file.

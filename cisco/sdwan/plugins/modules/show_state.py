@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: show_state
 short_description: State commands. Faster and up-to-date synced state data.
@@ -164,7 +163,7 @@ def main():
         system_ip=dict(type="str"),
         save_csv=dict(type="str"),
         save_json=dict(type="str"),
-        cmd=dict(type="list", elements="str",required=True),
+        cmd=dict(type="list", elements="str", required=True),
         detail=dict(type="bool")
     )
     module = AnsibleModule(
@@ -175,7 +174,8 @@ def main():
 
     try:
         task_args = ShowStateArgs(
-            **module_params('regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd', 'detail',
+            **module_params('regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd',
+                            'detail',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)
