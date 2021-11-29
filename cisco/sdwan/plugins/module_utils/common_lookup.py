@@ -1,22 +1,27 @@
 from ansible.errors import AnsibleOptionsError
-from cisco_sdwan.cmd import REST_TIMEOUT
-from .common import execute_task
+from cisco_sdwan.base.rest_api import Rest
+from cisco_sdwan.cmd import REST_TIMEOUT, VMANAGE_PORT
+from .common import sdwan_api_args
 
 
 def get_plugin_inventory_args(variables):
     return dict(
         address=variables.get('ansible_host'),
-        port=(8443 if variables.get('vmanage_port') is None else variables.get('vmanage_port')),
         user=variables.get('ansible_user'),
         password=variables.get('ansible_password'),
         tenant=variables.get('tenant'),
-        timeout=(REST_TIMEOUT if variables.get('timeout') is None else variables.get('timeout'))
+        port=variables.get('vmanage_port') or VMANAGE_PORT,
+        timeout=variables.get('timeout') or REST_TIMEOUT
     )
 
 
 def run_task(task_cls, task_args, module_param_dict):
     task = task_cls()
-    task_output = execute_task(task, task_args, module_param_dict)
+    if task.is_api_required(task_args):
+        with Rest(**sdwan_api_args(module_param_dict=module_param_dict)) as api:
+            task_output = task.runner(task_args, api)
+    else:
+        task_output = task.runner(task_args)
 
     result = []
     if task_output:
@@ -60,3 +65,14 @@ def set_show_default_args(**kwargs):
     for arg_name, arg_default in default_args:
         kwargs.pop(arg_name, arg_default)
     return kwargs
+
+
+def is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
+    if mutual_exclusive_fields is not None and len(mutual_exclusive_fields) > 1:
+        is_mutually_exlusive: bool = False
+        for arg in mutual_exclusive_fields:
+            if kwargs.get(arg) is None:
+                continue
+            elif is_mutually_exlusive:
+                return is_mutually_exlusive
+            is_mutually_exlusive = True

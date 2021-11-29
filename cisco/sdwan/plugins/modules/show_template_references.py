@@ -120,8 +120,6 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),
@@ -129,7 +127,7 @@ def main():
         workdir=dict(type="str"),
         save_csv=dict(type="str"),
         save_json=dict(type="str"),
-        with_refs=dict(type="bool", default=False)
+        with_refs=dict(type="bool")
     )
     module = AnsibleModule(
         argument_spec=argument_spec,

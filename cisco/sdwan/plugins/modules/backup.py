@@ -155,20 +155,17 @@ stdout_lines:
   type: list
   sample: ['Successfully backed up files at backup_198.18.1.10_20210628']
 """
-
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
 from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation._backup import TaskBackup, BackupArgs
+from cisco_sdwan.tasks.implementation import TaskBackup, BackupArgs
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),

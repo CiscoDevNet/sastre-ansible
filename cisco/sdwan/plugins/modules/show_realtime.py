@@ -144,7 +144,7 @@ stdout_lines:
   sample: show table view data
 """
 from ansible.module_utils.basic import AnsibleModule
-from cisco_sdwan.tasks.implementation._show import TaskShow, ShowRealtimeArgs
+from cisco_sdwan.tasks.implementation import TaskShow, ShowRealtimeArgs
 from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
@@ -153,8 +153,6 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),
@@ -165,19 +163,19 @@ def main():
         save_csv=dict(type="str"),
         save_json=dict(type="str"),
         cmd=dict(type="list", elements="str", required=True),
-        detail=dict(type="bool")
+        detail=dict(type="bool"),
+        simple=dict(type="bool")
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('regex', 'not_regex')],
+        mutually_exclusive=[('regex', 'not_regex'), ('detail', 'simple')],
         supports_check_mode=True
     )
 
     try:
         task_args = ShowRealtimeArgs(
             **module_params('regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd',
-                            'detail',
-                            module_param_dict=module.params)
+                            'detail', 'simple', module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)
 

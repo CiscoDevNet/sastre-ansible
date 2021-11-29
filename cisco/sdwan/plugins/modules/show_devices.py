@@ -123,7 +123,7 @@ stdout_lines:
   sample: show table view data
 """
 from ansible.module_utils.basic import AnsibleModule
-from cisco_sdwan.tasks.implementation._show import TaskShow, ShowDevicesArgs
+from cisco_sdwan.tasks.implementation import TaskShow, ShowDevicesArgs
 from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
@@ -132,8 +132,6 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),

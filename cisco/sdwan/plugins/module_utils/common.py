@@ -1,5 +1,5 @@
 from ansible.module_utils.basic import env_fallback
-from cisco_sdwan.tasks.common import TaskException
+from cisco_sdwan.tasks.common import TaskException, Table
 from cisco_sdwan.base.rest_api import Rest
 from cisco_sdwan.cmd import VMANAGE_PORT, REST_TIMEOUT, BASE_URL
 
@@ -44,33 +44,22 @@ def sdwan_api_args(module_param_dict):
 
 def run_task(task_cls, task_args, module_param_dict):
     task = task_cls()
-    task_output = execute_task(task, task_args, module_param_dict)
-
-    result = {}
-    if task_output:
-        result["stdout"] = "\n\n".join(str(entry) for entry in task_output)
-
-    result["msg"] = f"Task completed {task.outcome('successfully', 'with caveats: {tally}')}"
-
-    return result
-
-
-def execute_task(task, task_args, module_param_dict):
     if task.is_api_required(task_args):
         with Rest(**sdwan_api_args(module_param_dict=module_param_dict)) as api:
             task_output = task.runner(task_args, api)
     else:
         task_output = task.runner(task_args)
 
-    return task_output
+    result = {}
+    if task_output:
+        result["stdout"] = "\n\n".join(str(entry) for entry in task_output)
+        for entry in task_output:
+            if isinstance(entry, Table):
+                result.setdefault("tables", []).append(entry.dict())
 
+    if task.is_dryrun:
+        result['stdout'] = result.get("stdout", "") + str(task.dryrun_report)
 
-def is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
-    if mutual_exclusive_fields is not None and len(mutual_exclusive_fields) > 1:
-        is_mutually_exlusive: bool = False
-        for arg in mutual_exclusive_fields:
-            if kwargs.get(arg) is None:
-                continue
-            elif is_mutually_exlusive:
-                return is_mutually_exlusive
-            is_mutually_exlusive = True
+    result["msg"] = f"Task completed {task.outcome('successfully', 'with caveats: {tally}')}"
+
+    return result

@@ -3,15 +3,15 @@ from ansible.errors import AnsibleLookupError, AnsibleOptionsError
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._show import TaskShow, ShowStatisticsArgs
+from cisco_sdwan.tasks.implementation import TaskShow, ShowStatisticsArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import is_mutually_exclusive
 from ansible_collections.cisco.sdwan.plugins.module_utils.common_lookup import (run_task, get_plugin_inventory_args,
                                                                                 validate_show_type_args,
                                                                                 validate_show_mandatory_args,
-                                                                                set_show_default_args)
+                                                                                set_show_default_args,
+                                                                                is_mutually_exclusive)
 
 DOCUMENTATION = """
 lookup: show_statistics

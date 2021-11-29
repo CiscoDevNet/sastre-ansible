@@ -128,10 +128,9 @@ stdout_lines:
   type: list
   sample: ['Successfully detached templates from vsmarts']
 """
-
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._attach_detach import TaskDetach, DetachVsmartArgs
+from cisco_sdwan.tasks.implementation import TaskDetach, DetachVsmartArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
@@ -139,8 +138,6 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         templates=dict(type="str"),

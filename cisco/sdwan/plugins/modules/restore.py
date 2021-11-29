@@ -159,31 +159,25 @@ stdout_lines:
   type: list
   sample:  [ "Successfully restored files from local backup_198.18.1.10_20210625 to vManage address 198.18.1.10"]
 """
-
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._restore import (
-    TaskRestore, RestoreArgs
-)
+from cisco_sdwan.tasks.utils import default_workdir
+from cisco_sdwan.tasks.implementation import TaskRestore, RestoreArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec, module_params, run_task
-)
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),
         not_regex=dict(type="str"),
         workdir=dict(type="str"),
-        dryrun=dict(type="bool", default=False),
-        attach=dict(type="bool", default=False),
-        force=dict(type="bool", default=False),
+        dryrun=dict(type="bool"),
+        attach=dict(type="bool"),
+        update=dict(type="bool"),
         tag=dict(type="str", required=True)
     )
 
@@ -195,7 +189,8 @@ def main():
 
     try:
         task_args = RestoreArgs(
-            **module_params('regex', 'not_regex', 'workdir', 'dryrun', 'attach', 'force', 'tag', 'address',
+            workdir=module.params['workdir'] or default_workdir(module.params['address']),
+            **module_params('regex', 'not_regex', 'dryrun', 'attach', 'update', 'tag',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskRestore, task_args, module.params)
@@ -204,6 +199,7 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
+
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid Restore parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

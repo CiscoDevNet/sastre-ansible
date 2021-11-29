@@ -133,23 +133,16 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation._migrate import (
-    TaskMigrate, MigrateArgs
-)
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec, module_params, run_task
-)
+from cisco_sdwan.tasks.implementation import TaskMigrate, MigrateArgs
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
-    """main entry point for module execution
-    """
-
     argument_spec = common_arg_spec()
     argument_spec.update(
         scope=dict(type="str", required=True),
         output=dict(type="str", required=True),
-        no_rollover=dict(type="bool", default=False),
+        no_rollover=dict(type="bool"),
         name=dict(type="str"),
         from_version=dict(type="str", aliases=['from']),
         to_version=dict(type="str", aliases=['to']),
@@ -172,6 +165,7 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
+
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid Migrate parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
