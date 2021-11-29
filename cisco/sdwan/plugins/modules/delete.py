@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: delete
 short_description: Delete configuration items on SD-WAN vManage.
@@ -130,12 +129,11 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation._delete import TaskDelete, DeleteArgs
+from cisco_sdwan.tasks.implementation import TaskDelete, DeleteArgs
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
+
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),
@@ -152,8 +150,7 @@ def main():
 
     try:
         task_args = DeleteArgs(
-            **module_params('regex', 'not_regex', 'dryrun', 'detach', 'tag', 
-                            module_param_dict=module.params)
+            **module_params('regex', 'not_regex', 'dryrun', 'detach', 'tag', module_param_dict=module.params)
         )
         task_result = run_task(TaskDelete, task_args, module.params)
 
@@ -166,6 +163,7 @@ def main():
         module.fail_json(msg=f"Invalid delete parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"Delete error: {ex}")
+
 
 if __name__ == "__main__":
     main()

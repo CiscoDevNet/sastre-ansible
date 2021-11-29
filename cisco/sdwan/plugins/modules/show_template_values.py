@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: show_template_values
 short_description: Show template values about device templates on vManage or from a local backup. Display as table or export as csv/json file.
@@ -113,8 +113,6 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),

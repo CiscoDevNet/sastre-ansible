@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: migrate
 short_description:  Migrate configuration items from a vManage release to another. 
@@ -133,37 +133,31 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation._migrate import (
-    TaskMigrate,MigrateArgs
-)
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import (
-    common_arg_spec,module_params, run_task
-)
+from cisco_sdwan.tasks.implementation import TaskMigrate, MigrateArgs
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
-    """main entry point for module execution
-    """
-    
     argument_spec = common_arg_spec()
     argument_spec.update(
         scope=dict(type="str", required=True),
-        output=dict(type="str",required=True),
-        no_rollover=dict(type="bool",default=False),
+        output=dict(type="str", required=True),
+        no_rollover=dict(type="bool"),
         name=dict(type="str"),
-        from_version=dict(type="str",aliases=['from']),
-        to_version=dict(type="str",aliases=['to']),
+        from_version=dict(type="str", aliases=['from']),
+        to_version=dict(type="str", aliases=['to']),
         workdir=dict(type="str")
     )
-    
+
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True
     )
-    
+
     try:
         task_args = MigrateArgs(
-            **module_params('scope','output','no_rollover', 'name','from_version','to_version','workdir', module_param_dict=module.params)
+            **module_params('scope', 'output', 'no_rollover', 'name', 'from_version', 'to_version', 'workdir',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskMigrate, task_args, module.params)
 
@@ -171,10 +165,12 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
+
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid Migrate parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"Migrate task error: {ex}")
+
 
 if __name__ == "__main__":
     main()

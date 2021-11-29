@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: attach_edge
 short_description: Attach templates to WAN Edges.
@@ -144,16 +143,15 @@ stdout_lines:
 
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation._attach_detach import TaskAttach, AttachEdgeArgs
+from cisco_sdwan.tasks.implementation import TaskAttach, AttachEdgeArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
+
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         workdir=dict(type="str"),
@@ -173,7 +171,7 @@ def main():
     try:
         task_args = AttachEdgeArgs(
             workdir=module.params['workdir'] or default_workdir(module.params['address']),
-            **module_params('templates', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch', 
+            **module_params('templates', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskAttach, task_args, module.params)
@@ -187,7 +185,7 @@ def main():
         module.fail_json(msg=f"Invalid attach edge parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"Attach edge error: {ex}")
-    
-      
+
+
 if __name__ == "__main__":
     main()

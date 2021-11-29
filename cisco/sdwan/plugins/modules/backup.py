@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: backup
 short_description: Save SD-WAN vManage configuration items to local backup
@@ -156,20 +155,17 @@ stdout_lines:
   type: list
   sample: ['Successfully backed up files at backup_198.18.1.10_20210628']
 """
-
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
 from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation._backup import TaskBackup, BackupArgs
-from  ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
+from cisco_sdwan.tasks.implementation import TaskBackup, BackupArgs
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),
@@ -188,7 +184,7 @@ def main():
     try:
         task_args = BackupArgs(
             workdir=module.params['workdir'] or default_workdir(module.params['address']),
-            **module_params('regex', 'not_regex', 'no_rollover', 'save_running', 'tags', 
+            **module_params('regex', 'not_regex', 'no_rollover', 'save_running', 'tags',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskBackup, task_args, module.params)
@@ -202,6 +198,7 @@ def main():
         module.fail_json(msg=f"Invalid backup parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"Backup error: {ex}")
+
 
 if __name__ == "__main__":
     main()

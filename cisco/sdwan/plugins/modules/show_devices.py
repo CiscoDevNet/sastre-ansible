@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: show_devices
 short_description: Show Device List
@@ -124,16 +123,15 @@ stdout_lines:
   sample: show table view data
 """
 from ansible.module_utils.basic import AnsibleModule
-from cisco_sdwan.tasks.implementation._show import TaskShow, ShowDevicesArgs
+from cisco_sdwan.tasks.implementation import TaskShow, ShowDevicesArgs
 from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
 from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
+
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),

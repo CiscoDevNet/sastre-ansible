@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#! /usr/bin/env python3
 DOCUMENTATION = """
 module: certificate_set
 short_description: Set WAN edge certificate validity status.
@@ -112,8 +111,6 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 
 
 def main():
-    """main entry point for module execution
-    """
     argument_spec = common_arg_spec()
     argument_spec.update(
         regex=dict(type="str"),
