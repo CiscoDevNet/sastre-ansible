@@ -61,11 +61,11 @@ options:
     required: false
     type: bool
     default: False
-  force:
+  update:
     description:
-    - Target vManage items with the same name as the corresponding item in workdir
-      are updated with the contents from workdir. Without this option, those items
-      are skipped and not overwritten.
+    - Update vManage items that have the same name but different content as the
+      corresponding item in workdir. Without this option, such items are skipped
+      from restore.
     required: false
     type: bool
     default: False
@@ -115,7 +115,7 @@ EXAMPLES = """
     regex: ".*"
     dryrun: False
     attach: False
-    force: False
+    update: False
     tag: "template_device"
 - name: Restore all vManage configuration
   cisco.sdwan.restore:
@@ -128,7 +128,7 @@ EXAMPLES = """
     regex: ".*"
     dryrun: False
     attach: False
-    force: False
+    update: False
     tag: "all"
 - name: Restore vManage configuration with some vManage config arguments saved in environment variables
   cisco.sdwan.restore:
@@ -137,7 +137,7 @@ EXAMPLES = """
     not_regex: ".*"
     dryrun: False
     attach: False
-    force: False
+    update: False
     tag: "all"
 - name: Restore vManage configuration with all defaults
   cisco.sdwan.restore:
