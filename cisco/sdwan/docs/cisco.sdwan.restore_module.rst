@@ -72,20 +72,6 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>force</b>
-                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Target vManage items with the same name as the corresponding item in workdir are updated with the contents from workdir. Without this option, those items are skipped and not overwritten.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>not_regex</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
@@ -171,6 +157,20 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <b>update</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                                                        <div>Update vManage items that have the same name but different content as the corresponding item in workdir. Without this option, such items are skipped from restore.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <b>user</b>
                     <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
@@ -218,7 +218,7 @@ Examples
         regex: ".*"
         dryrun: False
         attach: False
-        force: False
+        update: False
         tag: "template_device"
     - name: Restore all vManage configuration
       cisco.sdwan.restore:
@@ -231,7 +231,7 @@ Examples
         regex: ".*"
         dryrun: False
         attach: False
-        force: False
+        update: False
         tag: "all"
     - name: Restore vManage configuration with some vManage config arguments saved in environment variables
       cisco.sdwan.restore:
@@ -240,7 +240,7 @@ Examples
         not_regex: ".*"
         dryrun: False
         attach: False
-        force: False
+        update: False
         tag: "all"
     - name: Restore vManage configuration with all defaults
       cisco.sdwan.restore:

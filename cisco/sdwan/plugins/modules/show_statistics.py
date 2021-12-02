@@ -57,7 +57,13 @@ options:
     type: list
   detail:
     description:
-    - Detailed output
+    - Detailed output (i.e. more columns)
+    required: false
+    type: bool
+    default: False
+  simple:
+    description:
+    - Simple output (i.e. less columns)
     required: false
     type: bool
     default: False

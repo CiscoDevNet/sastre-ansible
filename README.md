@@ -32,7 +32,7 @@ Name | Description
 [cisco.sdwan.show_devices](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_devices_module.rst)|Show Device List
 [cisco.sdwan.show_realtime](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_realtime_module.rst)|Realtime commands. Slower, but up-to-date data. vManage collect data from devices in realtime
 [cisco.sdwan.show_state](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_state_module.rst)|State commands. Faster and up-to-date synced state data
-[cisco.sdwan.show_statistics](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_statistics_plugin.rst)|Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries
+[cisco.sdwan.show_statistics](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_statistics_module.rst)|Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries
 [cisco.sdwan.show_template_references](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_template_references_module.rst)|Show template references about device templates on vManage or from a local backup. Display as table or export as csv/json file
 [cisco.sdwan.show_template_values](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_template_values_module.rst)|Show template values about device templates on vManage or from a local backup. Display as table or export as csv/json file
 <!--end collection content-->
@@ -44,7 +44,7 @@ Name | Description
 [cisco.sdwan.show_devices](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_devices_lookup_plugin.rst)|Show Device List
 [cisco.sdwan.show_realtime](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_realtime_lookup_plugin.rst)|Realtime commands. Slower, but up-to-date data. vManage collect data from devices in realtime
 [cisco.sdwan.show_state](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_state_lookup_plugin.rst)|State commands. Faster and up-to-date synced state data
-[cisco.sdwan.show_statistics](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_statistics_plugin.rst)|Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries
+[cisco.sdwan.show_statistics](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_statistics_lookup_plugin.rst)|Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries
 
 ## Building the collection
 

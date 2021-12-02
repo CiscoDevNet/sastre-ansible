@@ -63,7 +63,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>Detailed output</div>
+                                                                        <div>Detailed output (i.e. more columns)</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -139,6 +139,20 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>Export results as JSON-formatted file</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>simple</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                                                        <div>Simple output (i.e. less columns)</div>
                                                                                 </td>
             </tr>
                                 <tr>
