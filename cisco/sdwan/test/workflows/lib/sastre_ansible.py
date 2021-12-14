@@ -102,20 +102,3 @@ class sastre_ansible(object):
         except FileNotFoundError as err:
             raise AssertionError(err)
         return True
-
-
-
-if __name__ == "__main__":
-    sastre_ansible = sastre_ansible()
-    #invalid_files = sastre_ansible.compare_show_template_values_attach_noattach(
-    #    "/Users/sakamava/Work/SD-WAN/Ansible_learning/lear1/show_temp_values_with_attachments",
-    #    "/Users/sakamava/Work/SD-WAN/Ansible_learning/lear1/show_temp_values_no_attachment")
-    #invalid_files = sastre_ansible.show_template_values_should_be_equal(
-    #    "/Users/sakamava/Work/SD-WAN/Ansible_learning/lear1/show_temp_values_with_attachments",
-    #    "/Users/sakamava/Work/SD-WAN/Ansible_learning/lear1/show_temp_values")
-
-    invalid_files = sastre_ansible.csv_files_should_be_equal(
-        "/Users/sakamava/Work/SD-WAN/Ansible_learning/lear1/list_config_csv123",
-        "/Users/sakamava/Work/SD-WAN/Ansible_learning/lear1/list_config_csv",0)
-
-    print(invalid_files)
