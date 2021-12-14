@@ -23,5 +23,5 @@ These workflows are tested against following CXTA versions: **==21.9**.
 
 ## Dependency
 
-Install [Sastre-Pro](https://wwwin-github.cisco.com/AIDE/Sastre-Pro) using pip
-Install [Sastre-Ansible](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible) refer [ReadMe](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/README.md) for building and installation
+* Install [Sastre-Pro](https://wwwin-github.cisco.com/AIDE/Sastre-Pro) using pip
+* Install [Sastre-Ansible](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible) refer [ReadMe](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/README.md) for building and installation
