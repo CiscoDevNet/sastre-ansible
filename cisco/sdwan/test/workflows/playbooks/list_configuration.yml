@@ -1,0 +1,15 @@
+---
+#ansible-playbook list_configuration.yml --extra-vars "list_config_csv=list_config_csv123"
+###############################################################################
+- hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+    #List configuration
+    - name: List configuration
+      cisco.sdwan.list_configuration:
+        tags: "all"
+        regex: ".*"
+        #workdir: data #Either workdir or address is mandatory
+        save_csv: "{{ list_config_csv |  default('list_config.csv') }}"
