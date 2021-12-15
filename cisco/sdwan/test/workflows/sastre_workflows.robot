@@ -3,8 +3,9 @@ Library     CXTA
 Resource    cxta.robot
 
 Library     OperatingSystem
-Library     lib/sastre_ansible.py
 Library     Collections
+Library     lib/sastre_ansible.py
+
 Test Setup  Run Keyword  sdwan setup
 
 *** Variables ***
@@ -83,10 +84,10 @@ Workflow_01: Detach_Edge_Attach_Edge
     execute show template values task  show_template_csv_path=${show_template_csv}
     execute detach edge task
     execute show template values task  show_template_csv_path=${show_template_csv_with_no_attachment}
-    Compare Show Template Values Attach Detach  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_with_no_attachment}  msg=${show_template_attach_detach_compare_fail_msg}
+    compare show template values attach detach  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_with_no_attachment}  msg=${show_template_attach_detach_compare_fail_msg}
     execute attach edge task
     execute show template values task  show_template_csv_path=${show_template_csv_after_attachment}
-    Csv Folders Should Be Equal  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_after_attachment}
+    csv folders should be equal  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_after_attachment}
 
 Workflow_02: Backup_Delete_Restore
     [Documentation]  Executing list_config, show_template_values, backup, list_config, show_template_values  Tasks
@@ -99,5 +100,5 @@ Workflow_02: Backup_Delete_Restore
     sdwan setup  restore_backup_path=${backup_path}
     execute list configuration task  list_config_csv_file_path=${list_config_csv_after}
     execute show template values task  show_template_csv_path=${show_template_csv_after}
-    Csv Folders Should Be Equal  ${playbook_base_dir}/${show_template_csv_before}  ${playbook_base_dir}/${show_template_csv_after}
-    Csv Files Should Be Equal  ${playbook_base_dir}/${list_config_csv_before}  ${playbook_base_dir}/${list_config_csv_after}  0
+    csv folders should be equal  ${playbook_base_dir}/${show_template_csv_before}  ${playbook_base_dir}/${show_template_csv_after}
+    csv files should be equal  ${playbook_base_dir}/${list_config_csv_before}  ${playbook_base_dir}/${list_config_csv_after}  0
