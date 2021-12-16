@@ -90,7 +90,7 @@ Workflow_01: Detach_Edge_Attach_Edge
     csv folders should be equal  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_after_attachment}
 
 Workflow_02: Backup_Delete_Restore
-    [Documentation]  Executing list_config, show_template_values, backup, list_config, show_template_values  Tasks
+    [Documentation]  Executing list_config, show_template_values, backup, delete, restore, list_config, show_template_values  Tasks
     [Tags]  backup_delete_restore
 
     cleanup directory  directory=${playbook_base_dir}/${WorkFlow_02_Folder}
