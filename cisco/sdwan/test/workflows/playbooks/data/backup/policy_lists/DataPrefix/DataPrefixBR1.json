@@ -1,0 +1,39 @@
+{
+  "listId": "f2015a1d-b46d-48dc-a454-cb1a007c5851",
+  "name": "DataPrefixBR1",
+  "type": "dataPrefix",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "ipPrefix": "10.3.0.0/16"
+    }
+  ],
+  "lastUpdated": 1632364915590,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 4,
+  "references": [
+    {
+      "id": "ac4116ee-0910-4a52-aa56-9f17595f3c43",
+      "type": "data"
+    },
+    {
+      "id": "db5e38d6-1b88-4a30-ad40-d23dbe09e4be",
+      "type": "data"
+    },
+    {
+      "id": "3e53e7e8-f20c-494b-9bf3-997578a6308f",
+      "type": "data"
+    },
+    {
+      "id": "fd6f5e66-3ff6-4def-9861-1083a98b4af0",
+      "type": "zoneBasedFW"
+    }
+  ],
+  "activatedId": [
+    "76e86e25-5f29-4abc-bc99-ed6540123931"
+  ],
+  "isActivatedByVsmart": false
+}

@@ -1,0 +1,47 @@
+{
+  "definitionId": "7e535907-4070-4835-b651-3b9b33327482",
+  "name": "MultitopologyControl",
+  "type": "control",
+  "description": "Full mesh corp and H&S for PCI",
+  "sequences": [
+    {
+      "sequenceId": 1,
+      "sequenceName": "PCItoDC",
+      "baseAction": "accept",
+      "sequenceType": "route",
+      "match": {
+        "entries": [
+          {
+            "field": "siteList",
+            "ref": "03c1f6b5-f7e6-4724-97ed-f50d23f6a997"
+          },
+          {
+            "field": "vpnList",
+            "ref": "528e5192-536f-434f-9dc9-35900805bf77"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set",
+          "parameter": [
+            {
+              "field": "tlocList",
+              "ref": "4f5bc4b5-ac74-404f-9e50-8c09416fddad"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "defaultAction": {
+    "type": "accept"
+  },
+  "lastUpdated": 1632364918250,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

@@ -1,0 +1,110 @@
+{
+  "definitionId": "f53a2021-9630-49aa-8a58-58b8142bf472",
+  "name": "LAN-CLASSIFICATION",
+  "type": "acl",
+  "description": "Classify LAN Traffic",
+  "sequences": [
+    {
+      "sequenceId": 1,
+      "sequenceName": "Access Control List",
+      "baseAction": "accept",
+      "sequenceType": "acl",
+      "sequenceIpType": "ipv4",
+      "match": {
+        "entries": [
+          {
+            "field": "dscp",
+            "value": "46"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "class",
+          "parameter": {
+            "ref": "2ce45550-eca1-4c78-81e2-c76f189d97e5"
+          }
+        }
+      ]
+    },
+    {
+      "sequenceId": 11,
+      "sequenceName": "Access Control List",
+      "baseAction": "accept",
+      "sequenceType": "acl",
+      "sequenceIpType": "ipv4",
+      "match": {
+        "entries": [
+          {
+            "field": "dscp",
+            "value": "34"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "class",
+          "parameter": {
+            "ref": "f5e1c814-cf33-40a3-8df8-6f9d48a9c396"
+          }
+        }
+      ]
+    },
+    {
+      "sequenceId": 21,
+      "sequenceName": "Access Control List",
+      "baseAction": "accept",
+      "sequenceType": "acl",
+      "sequenceIpType": "ipv4",
+      "match": {
+        "entries": [
+          {
+            "field": "dscp",
+            "value": "26"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "class",
+          "parameter": {
+            "ref": "f153ffec-e2f1-41d6-88d8-95de4c1441ee"
+          }
+        }
+      ]
+    },
+    {
+      "sequenceId": 31,
+      "sequenceName": "Access Control List",
+      "baseAction": "accept",
+      "sequenceType": "acl",
+      "sequenceIpType": "ipv4",
+      "match": {
+        "entries": []
+      },
+      "actions": [
+        {
+          "type": "class",
+          "parameter": {
+            "ref": "4e0e92c7-9fba-42f7-9ebd-16b716802e6c"
+          }
+        }
+      ]
+    }
+  ],
+  "defaultAction": {
+    "type": "accept"
+  },
+  "lastUpdated": 1632364920341,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "3d0a74d5-ae6a-4785-954e-9cf45989f8ef",
+      "property": "policyId"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

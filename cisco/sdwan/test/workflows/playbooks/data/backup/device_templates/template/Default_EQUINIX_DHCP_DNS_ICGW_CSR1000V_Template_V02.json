@@ -1,0 +1,67 @@
+{
+  "templateName": "Default_EQUINIX_DHCP_DNS_ICGW_CSR1000V_Template_V02",
+  "templateDescription": "Default DHCP DNS device template for Equinix Interconnect Gateway CSR1000V",
+  "deviceType": "vedge-CSR-1000v",
+  "configType": "template",
+  "factoryDefault": true,
+  "policyId": "",
+  "featureTemplateUidRange": [],
+  "connectionPreference": true,
+  "connectionPreferenceRequired": true,
+  "generalTemplates": [
+    {
+      "templateId": "9f6122ea-e8eb-4609-b1bc-1db4a6d1d8f6",
+      "templateType": "cedge_aaa"
+    },
+    {
+      "templateId": "0109001a-f382-4299-a4d8-7bec03f27ec7",
+      "templateType": "cisco_bfd"
+    },
+    {
+      "templateId": "ba14f644-98f8-4849-b884-197ad2bb333c",
+      "templateType": "cisco_omp"
+    },
+    {
+      "templateId": "fc316dc0-c815-42d2-964e-49c7c3721512",
+      "templateType": "cisco_security"
+    },
+    {
+      "templateId": "9af5907d-5713-4030-bc50-f04db2376021",
+      "templateType": "cisco_system",
+      "subTemplates": [
+        {
+          "templateId": "6dfd8ab8-2e96-486b-9162-ba45f8887aeb",
+          "templateType": "cisco_logging"
+        }
+      ]
+    },
+    {
+      "templateId": "7df9976a-f3d9-4e82-99a6-aa80a4a9bf0d",
+      "templateType": "cisco_vpn",
+      "subTemplates": [
+        {
+          "templateId": "c48b268e-0f8d-48a1-abba-c4ac1d5190ef",
+          "templateType": "cisco_vpn_interface"
+        }
+      ]
+    },
+    {
+      "templateId": "a79295a7-2768-42e9-a1fe-2bf75cceccbe",
+      "templateType": "cisco_vpn",
+      "subTemplates": [
+        {
+          "templateId": "8d8ca19f-4302-4b73-8e11-e5fdf720fb95",
+          "templateType": "cisco_vpn_interface"
+        }
+      ]
+    },
+    {
+      "templateId": "bfcab33b-1c67-4179-9716-5ff753e29d3c",
+      "templateType": "cedge_global"
+    }
+  ],
+  "templateClass": "cedge",
+  "templateId": "fc78f054-a3d4-4594-b81e-f38a578e4ab7",
+  "deviceRole": "sdwan-edge",
+  "draftMode": false
+}

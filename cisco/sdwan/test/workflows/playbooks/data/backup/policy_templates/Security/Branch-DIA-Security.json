@@ -1,0 +1,55 @@
+{
+  "policyName": "Branch-DIA-Security",
+  "policyDescription": "Branch Guest DIA Security",
+  "policyMode": "security",
+  "policyDefinition": {
+    "assembly": [
+      {
+        "definitionId": "fd6f5e66-3ff6-4def-9861-1083a98b4af0",
+        "type": "zoneBasedFW"
+      },
+      {
+        "definitionId": "3ac26bc0-4591-44f4-8775-d3a2806561f3",
+        "type": "intrusionPrevention"
+      },
+      {
+        "definitionId": "f8522c36-d9a0-4359-9436-d8bbcf2ffd1b",
+        "type": "urlFiltering"
+      },
+      {
+        "definitionId": "9c6b4a4f-1334-4421-826e-ccc11c1ee801",
+        "type": "advancedMalwareProtection"
+      }
+    ],
+    "settings": {
+      "zoneToNozoneInternet": "deny",
+      "failureMode": "open"
+    }
+  },
+  "policyDefinitionEdit": {
+    "assembly": [
+      {
+        "definitionId": "fd6f5e66-3ff6-4def-9861-1083a98b4af0",
+        "type": "zoneBasedFW"
+      },
+      {
+        "definitionId": "3ac26bc0-4591-44f4-8775-d3a2806561f3",
+        "type": "intrusionPrevention"
+      },
+      {
+        "definitionId": "f8522c36-d9a0-4359-9436-d8bbcf2ffd1b",
+        "type": "urlFiltering"
+      },
+      {
+        "definitionId": "9c6b4a4f-1334-4421-826e-ccc11c1ee801",
+        "type": "advancedMalwareProtection"
+      }
+    ],
+    "settings": {
+      "zoneToNozoneInternet": "deny",
+      "failureMode": "open"
+    }
+  },
+  "policyType": "feature",
+  "policyUseCase": "custom"
+}

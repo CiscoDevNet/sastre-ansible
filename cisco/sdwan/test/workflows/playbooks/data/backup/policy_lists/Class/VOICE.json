@@ -1,0 +1,24 @@
+{
+  "listId": "2ce45550-eca1-4c78-81e2-c76f189d97e5",
+  "name": "VOICE",
+  "type": "class",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "queue": "0"
+    }
+  ],
+  "lastUpdated": 1632364916334,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "f53a2021-9630-49aa-8a58-58b8142bf472",
+      "type": "acl"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

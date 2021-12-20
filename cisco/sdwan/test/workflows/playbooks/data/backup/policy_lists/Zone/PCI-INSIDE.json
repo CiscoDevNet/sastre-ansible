@@ -1,0 +1,19 @@
+{
+  "listId": "0af763ee-d484-404e-8955-7d28cf8d77f8",
+  "name": "PCI-INSIDE",
+  "type": "zone",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "vpn": "20"
+    }
+  ],
+  "lastUpdated": 1632364913929,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

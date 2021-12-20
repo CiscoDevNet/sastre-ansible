@@ -1,0 +1,26 @@
+[
+  {
+    "host-name": "vSmart-1",
+    "deviceIP": "12.12.12.12",
+    "local-system-ip": "12.12.12.12",
+    "site-id": "10",
+    "device-groups": [
+      "No groups"
+    ],
+    "uuid": "10a98779-95f0-4383-871c-195d25bd9c74",
+    "personality": "vsmart",
+    "configCloudxMode": "none"
+  },
+  {
+    "host-name": "vSmart-2",
+    "deviceIP": "22.22.22.22",
+    "local-system-ip": "22.22.22.22",
+    "site-id": "20",
+    "device-groups": [
+      "No groups"
+    ],
+    "uuid": "704bbc2f-aa9a-4068-84a2-fc31602ed553",
+    "personality": "vsmart",
+    "configCloudxMode": "none"
+  }
+]

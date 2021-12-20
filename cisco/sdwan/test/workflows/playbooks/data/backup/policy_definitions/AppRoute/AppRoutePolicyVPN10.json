@@ -1,0 +1,228 @@
+{
+  "definitionId": "1546c897-6736-4e78-adc6-fdb873f38549",
+  "name": "AppRoutePolicyVPN10",
+  "type": "appRoute",
+  "description": "VPN 10 App Route Policy",
+  "sequences": [
+    {
+      "sequenceId": 1,
+      "sequenceName": "DSCP46",
+      "sequenceType": "appRoute",
+      "match": {
+        "entries": [
+          {
+            "field": "dscp",
+            "value": "46"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "slaClass",
+          "parameter": [
+            {
+              "field": "name",
+              "ref": "76162883-ce6e-4588-a48d-6587da25eeff"
+            },
+            {
+              "field": "preferredColor",
+              "value": "mpls"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sequenceId": 11,
+      "sequenceName": "DSCP24",
+      "sequenceType": "appRoute",
+      "match": {
+        "entries": [
+          {
+            "field": "dscp",
+            "value": "24"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "slaClass",
+          "parameter": [
+            {
+              "field": "name",
+              "ref": "83f4ca51-087e-4a2a-b1cc-67bdf914e4c6"
+            },
+            {
+              "field": "preferredColor",
+              "value": "mpls"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sequenceId": 21,
+      "sequenceName": "DSCP0",
+      "sequenceType": "appRoute",
+      "match": {
+        "entries": [
+          {
+            "field": "dscp",
+            "value": "0"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "slaClass",
+          "parameter": [
+            {
+              "field": "name",
+              "ref": "dc3d2474-0690-4aae-b25b-ae471bc6efa4"
+            },
+            {
+              "field": "preferredColor",
+              "value": "biz-internet"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sequenceId": 31,
+      "sequenceName": "Lync",
+      "sequenceType": "appRoute",
+      "match": {
+        "entries": [
+          {
+            "field": "appList",
+            "ref": "f30746d2-4bb6-491e-8103-1c7e8de8bb2f"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "slaClass",
+          "parameter": [
+            {
+              "field": "name",
+              "ref": "76162883-ce6e-4588-a48d-6587da25eeff"
+            },
+            {
+              "field": "preferredColor",
+              "value": "mpls"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sequenceId": 41,
+      "sequenceName": "O365",
+      "sequenceType": "appRoute",
+      "match": {
+        "entries": [
+          {
+            "field": "appList",
+            "ref": "493bdb50-b7b3-468b-a10d-6842f59c1a46"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "slaClass",
+          "parameter": [
+            {
+              "field": "name",
+              "ref": "83f4ca51-087e-4a2a-b1cc-67bdf914e4c6"
+            },
+            {
+              "field": "preferredColor",
+              "value": "mpls"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sequenceId": 51,
+      "sequenceName": "youtube",
+      "sequenceType": "appRoute",
+      "match": {
+        "entries": [
+          {
+            "field": "appList",
+            "ref": "6941e50b-3dff-4672-a0cd-42d5c11dc0e3"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "slaClass",
+          "parameter": [
+            {
+              "field": "name",
+              "ref": "ee1a79ea-67f3-4566-ae7c-8b355ef83d9a"
+            },
+            {
+              "field": "preferredColor",
+              "value": "biz-internet"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sequenceId": 61,
+      "sequenceName": "WEB",
+      "sequenceType": "appRoute",
+      "match": {
+        "entries": [
+          {
+            "field": "appList",
+            "ref": "875c6dbf-1d68-4bad-8626-73d0c52c6bd8"
+          },
+          {
+            "field": "dscp",
+            "value": "46"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "slaClass",
+          "parameter": [
+            {
+              "field": "name",
+              "ref": "dc3d2474-0690-4aae-b25b-ae471bc6efa4"
+            },
+            {
+              "field": "preferredColor",
+              "value": "biz-internet"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "defaultAction": {
+    "type": "slaClass",
+    "ref": "dc3d2474-0690-4aae-b25b-ae471bc6efa4"
+  },
+  "lastUpdated": 1632364922183,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "cb9a7bcd-c340-447a-afd9-834583ef5ebb",
+      "property": "policyId"
+    },
+    {
+      "id": "cb9a7bcd-c340-447a-afd9-834583ef5ebb",
+      "property": "policyId"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

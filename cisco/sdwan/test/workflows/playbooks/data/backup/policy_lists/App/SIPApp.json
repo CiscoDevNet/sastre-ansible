@@ -1,0 +1,24 @@
+{
+  "listId": "dd13f7ce-93ea-46da-8549-3f0546def136",
+  "name": "SIPApp",
+  "type": "app",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "appFamily": "audio-video"
+    }
+  ],
+  "lastUpdated": 1632145625711,
+  "owner": "system",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "40b8d81d-1785-4a7f-8c44-5ff63e305fca",
+      "type": "appRoute"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

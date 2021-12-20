@@ -1,0 +1,69 @@
+{
+  "definitionId": "f8522c36-d9a0-4359-9436-d8bbcf2ffd1b",
+  "name": "Branch-DIA-URLFilter",
+  "type": "urlFiltering",
+  "description": "",
+  "definition": {
+    "webCategoriesAction": "block",
+    "webCategories": [
+      "abortion",
+      "abused-drugs",
+      "adult-and-pornography",
+      "alcohol-and-tobacco",
+      "bot-nets",
+      "cult-and-occult",
+      "confirmed-spam-sources",
+      "dead-sites",
+      "gambling",
+      "hacking",
+      "illegal",
+      "keyloggers-and-monitoring",
+      "malware-sites",
+      "marijuana",
+      "p2p",
+      "parked-sites",
+      "pay-to-surf",
+      "phishing-and-other-frauds",
+      "proxy-avoid-and-anonymizers",
+      "sex-education",
+      "spam-urls",
+      "spyware-and-adware",
+      "cheating",
+      "dating",
+      "games",
+      "gross",
+      "hate-and-racism",
+      "social-network",
+      "violence",
+      "weapons"
+    ],
+    "webReputation": "moderate-risk",
+    "urlWhiteList": {
+      "ref": "1c7c5d88-0b22-4591-affe-1fb7e81cdf5a"
+    },
+    "urlBlackList": {},
+    "blockPageAction": "text",
+    "blockPageContents": "&lt;h3&gt;Access to the requested page has been denied&lt;/h3&gt;&lt;p&gt;Please contact your Network Administrator&lt;/p&gt;",
+    "enableAlerts": false,
+    "alerts": [],
+    "logging": [],
+    "targetVpns": [
+      "40"
+    ]
+  },
+  "lastUpdated": 1632364922833,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "76e86e25-5f29-4abc-bc99-ed6540123931",
+      "property": "policyId"
+    }
+  ],
+  "activatedId": [
+    "76e86e25-5f29-4abc-bc99-ed6540123931"
+  ],
+  "isActivatedByVsmart": false
+}

@@ -1,0 +1,27 @@
+{
+  "listId": "5fc0d181-6c3f-4a89-a245-4558f999d5b0",
+  "name": "GUEST-INSIDE",
+  "type": "zone",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "vpn": "40"
+    }
+  ],
+  "lastUpdated": 1632364914229,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "fd6f5e66-3ff6-4def-9861-1083a98b4af0",
+      "type": "zoneBasedFW"
+    }
+  ],
+  "activatedId": [
+    "76e86e25-5f29-4abc-bc99-ed6540123931"
+  ],
+  "isActivatedByVsmart": false
+}

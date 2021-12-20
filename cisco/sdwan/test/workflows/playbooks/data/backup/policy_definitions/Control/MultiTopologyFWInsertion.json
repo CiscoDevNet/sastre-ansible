@@ -1,0 +1,84 @@
+{
+  "definitionId": "32dfc588-2299-421e-9a11-834fe7dd6dfc",
+  "name": "MultiTopologyFWInsertion",
+  "type": "control",
+  "description": "FW Insertion in Corp VPN",
+  "sequences": [
+    {
+      "sequenceId": 1,
+      "sequenceName": "PCItoDC",
+      "baseAction": "accept",
+      "sequenceType": "route",
+      "match": {
+        "entries": [
+          {
+            "field": "siteList",
+            "ref": "03c1f6b5-f7e6-4724-97ed-f50d23f6a997"
+          },
+          {
+            "field": "vpnList",
+            "ref": "528e5192-536f-434f-9dc9-35900805bf77"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set",
+          "parameter": [
+            {
+              "field": "tlocList",
+              "ref": "4f5bc4b5-ac74-404f-9e50-8c09416fddad"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sequenceId": 11,
+      "sequenceName": "InsertFW",
+      "baseAction": "accept",
+      "sequenceType": "route",
+      "match": {
+        "entries": [
+          {
+            "field": "vpnList",
+            "ref": "76ffc3d4-f675-4b4b-8673-78c2d4506c85"
+          },
+          {
+            "field": "siteList",
+            "ref": "03c1f6b5-f7e6-4724-97ed-f50d23f6a997"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set",
+          "parameter": [
+            {
+              "field": "service",
+              "value": {
+                "type": "FW",
+                "vpn": "10"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "defaultAction": {
+    "type": "accept"
+  },
+  "lastUpdated": 1632364918808,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "8e5911fd-5a72-44cb-b2ff-d606f1ddd92f",
+      "property": "policyId"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

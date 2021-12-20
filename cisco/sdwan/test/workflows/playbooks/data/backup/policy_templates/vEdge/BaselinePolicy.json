@@ -1,0 +1,67 @@
+{
+  "policyName": "BaselinePolicy",
+  "policyDescription": "Baseline dCloud Policy for all WAN Edge",
+  "policyDefinition": {
+    "assembly": [
+      {
+        "definitionId": "d0c893bb-8dc8-4c47-8d6b-23cfbf853cab",
+        "type": "qosMap"
+      },
+      {
+        "definitionId": "f53a2021-9630-49aa-8a58-58b8142bf472",
+        "type": "acl"
+      },
+      {
+        "definitionId": "1d88fddf-af49-4fbb-b398-189e31321d2d",
+        "type": "acl"
+      },
+      {
+        "definitionId": "790f35d1-d536-4112-8cad-0a46c4ffc3af",
+        "type": "acl"
+      },
+      {
+        "definitionId": "25804a55-c7d5-44cb-9f12-3b629229635a",
+        "type": "vedgeRoute"
+      }
+    ],
+    "settings": {
+      "appVisibility": true,
+      "cloudQos": true,
+      "cloudQosServiceSide": true,
+      "flowVisibility": true,
+      "logFrequency": 10
+    }
+  },
+  "policyDefinitionEdit": {
+    "assembly": [
+      {
+        "definitionId": "d0c893bb-8dc8-4c47-8d6b-23cfbf853cab",
+        "type": "qosMap"
+      },
+      {
+        "definitionId": "f53a2021-9630-49aa-8a58-58b8142bf472",
+        "type": "acl"
+      },
+      {
+        "definitionId": "1d88fddf-af49-4fbb-b398-189e31321d2d",
+        "type": "acl"
+      },
+      {
+        "definitionId": "790f35d1-d536-4112-8cad-0a46c4ffc3af",
+        "type": "acl"
+      },
+      {
+        "definitionId": "25804a55-c7d5-44cb-9f12-3b629229635a",
+        "type": "vedgeRoute"
+      }
+    ],
+    "settings": {
+      "appVisibility": true,
+      "cloudQos": true,
+      "cloudQosServiceSide": true,
+      "flowVisibility": true,
+      "logFrequency": 10
+    }
+  },
+  "policyType": "feature"
+}

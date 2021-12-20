@@ -1,0 +1,281 @@
+{
+  "templateMinVersion": "15.0.0",
+  "templateType": "system-vsmart",
+  "deviceType": [
+    "vsmart"
+  ],
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "clock": {
+      "timezone": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": "UTC",
+        "vipVariableName": "system_timezone"
+      }
+    },
+    "gps-location": {
+      "latitude": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipVariableName": "system_latitude"
+      },
+      "longitude": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipVariableName": "system_longitude"
+      }
+    },
+    "timer": {
+      "dns-cache-timeout": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": 2,
+        "vipVariableName": "system_dns_cache_timeout"
+      }
+    },
+    "location": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "system_location"
+    },
+    "system-tunnel-mtu": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 1024,
+      "vipVariableName": "system_system_tunnel_mtu"
+    },
+    "track-transport": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_track_transport"
+    },
+    "port-offset": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 0,
+      "vipVariableName": "system_port_offset"
+    },
+    "port-hop": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_port_hop"
+    },
+    "control-session-pps": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 300,
+      "vipVariableName": "system_control_session_pps"
+    },
+    "controller-group-id": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 0,
+      "vipVariableName": "system_controller_group_id"
+    },
+    "description": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "system_description"
+    },
+    "device-groups": {
+      "vipObjectType": "list",
+      "vipType": "ignore",
+      "vipVariableName": "system_device_groups"
+    },
+    "site-id": {
+      "vipObjectType": "object",
+      "vipType": "variableName",
+      "vipValue": "",
+      "vipVariableName": "system_site_id"
+    },
+    "overlay-id": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 1,
+      "vipVariableName": "system_overlay_id"
+    },
+    "system-ip": {
+      "vipObjectType": "object",
+      "vipType": "variableName",
+      "vipValue": "",
+      "vipVariableName": "system_system_ip"
+    },
+    "host-name": {
+      "vipObjectType": "object",
+      "vipType": "variableName",
+      "vipValue": "",
+      "vipVariableName": "system_host_name"
+    },
+    "track-default-gateway": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_track_default_gateway"
+    },
+    "host-policer-pps": {},
+    "icmp-error-pps": {},
+    "iptables-enable": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_iptables_enable"
+    },
+    "admin-tech-on-failure": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_admin_tech_on_failure"
+    },
+    "idle-timeout": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "system_idle-timeout"
+    }
+  },
+  "gTemplateClass": "vedge",
+  "templateDefinition": {
+    "clock": {
+      "timezone": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": "UTC",
+        "vipVariableName": "system_timezone"
+      }
+    },
+    "gps-location": {
+      "latitude": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipVariableName": "system_latitude"
+      },
+      "longitude": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipVariableName": "system_longitude"
+      }
+    },
+    "timer": {
+      "dns-cache-timeout": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": 2,
+        "vipVariableName": "system_dns_cache_timeout"
+      }
+    },
+    "location": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "system_location"
+    },
+    "system-tunnel-mtu": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 1024,
+      "vipVariableName": "system_system_tunnel_mtu"
+    },
+    "track-transport": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_track_transport"
+    },
+    "port-offset": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 0,
+      "vipVariableName": "system_port_offset"
+    },
+    "port-hop": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_port_hop"
+    },
+    "control-session-pps": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 300,
+      "vipVariableName": "system_control_session_pps"
+    },
+    "controller-group-id": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 0,
+      "vipVariableName": "system_controller_group_id"
+    },
+    "description": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "system_description"
+    },
+    "device-groups": {
+      "vipObjectType": "list",
+      "vipType": "ignore",
+      "vipVariableName": "system_device_groups"
+    },
+    "site-id": {
+      "vipObjectType": "object",
+      "vipType": "variableName",
+      "vipValue": "",
+      "vipVariableName": "system_site_id"
+    },
+    "overlay-id": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": 1,
+      "vipVariableName": "system_overlay_id"
+    },
+    "system-ip": {
+      "vipObjectType": "object",
+      "vipType": "variableName",
+      "vipValue": "",
+      "vipVariableName": "system_system_ip"
+    },
+    "host-name": {
+      "vipObjectType": "object",
+      "vipType": "variableName",
+      "vipValue": "",
+      "vipVariableName": "system_host_name"
+    },
+    "track-default-gateway": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_track_default_gateway"
+    },
+    "host-policer-pps": {},
+    "icmp-error-pps": {},
+    "iptables-enable": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_iptables_enable"
+    },
+    "admin-tech-on-failure": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipValue": "true",
+      "vipVariableName": "system_admin_tech_on_failure"
+    },
+    "idle-timeout": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "system_idle-timeout"
+    }
+  },
+  "attachedMastersCount": 1,
+  "templateId": "7d17aad3-7601-47ff-b237-1a9111eccc06",
+  "configType": "xml",
+  "createdOn": 1632364958960,
+  "@rid": 2536,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "VSMART-system-feature",
+  "createdBy": "admin",
+  "devicesAttached": 2,
+  "templateDescription": "vSmart system template",
+  "lastUpdatedOn": 1632364958960
+}

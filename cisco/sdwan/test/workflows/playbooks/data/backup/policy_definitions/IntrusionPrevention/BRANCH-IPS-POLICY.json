@@ -1,0 +1,24 @@
+{
+  "definitionId": "c574ebf9-31c3-4185-8886-8cc5304bfcda",
+  "name": "BRANCH-IPS-POLICY",
+  "type": "intrusionPrevention",
+  "description": "Testing",
+  "definition": {
+    "signatureSet": "balanced",
+    "inspectionMode": "protection",
+    "signatureWhiteList": {},
+    "logLevel": "error",
+    "logging": [],
+    "targetVpns": [
+      "10",
+      "20"
+    ]
+  },
+  "lastUpdated": 1632364919100,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

@@ -1,0 +1,26 @@
+{
+  "listId": "83f4ca51-087e-4a2a-b1cc-67bdf914e4c6",
+  "name": "CriticalData",
+  "type": "sla",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "latency": "110",
+      "loss": null,
+      "jitter": null
+    }
+  ],
+  "lastUpdated": 1632364914577,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+      "type": "appRoute"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

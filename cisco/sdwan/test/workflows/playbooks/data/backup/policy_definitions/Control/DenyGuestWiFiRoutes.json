@@ -1,0 +1,33 @@
+{
+  "definitionId": "ea073085-3ee3-4a56-88fc-a050826ce3ad",
+  "name": "DenyGuestWiFiRoutes",
+  "type": "control",
+  "description": "Don't Propagate Guest Wifi Routes",
+  "sequences": [
+    {
+      "sequenceId": 1,
+      "sequenceName": "DenyGuestWifif",
+      "baseAction": "reject",
+      "sequenceType": "route",
+      "match": {
+        "entries": [
+          {
+            "field": "vpnList",
+            "ref": "902237c4-5552-443f-944d-e569deae43f6"
+          }
+        ]
+      },
+      "actions": []
+    }
+  ],
+  "defaultAction": {
+    "type": "accept"
+  },
+  "lastUpdated": 1632364918442,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

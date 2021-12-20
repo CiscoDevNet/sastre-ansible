@@ -1,0 +1,64 @@
+{
+  "definitionId": "fd6f5e66-3ff6-4def-9861-1083a98b4af0",
+  "name": "BRANCH-DIA-GUEST",
+  "type": "zoneBasedFW",
+  "description": "Branch Guest DIA Policy",
+  "definition": {
+    "defaultAction": {
+      "type": "drop"
+    },
+    "sequences": [
+      {
+        "sequenceId": 1,
+        "sequenceName": "",
+        "baseAction": "inspect",
+        "sequenceType": "zoneBasedFW",
+        "match": {
+          "entries": [
+            {
+              "field": "sourceDataPrefixList",
+              "ref": "f2015a1d-b46d-48dc-a454-cb1a007c5851"
+            }
+          ]
+        },
+        "actions": []
+      },
+      {
+        "sequenceId": 11,
+        "sequenceName": "",
+        "baseAction": "inspect",
+        "sequenceType": "zoneBasedFW",
+        "match": {
+          "entries": [
+            {
+              "field": "sourceDataPrefixList",
+              "ref": "7668607e-fdc2-4831-a016-c7ca7ad92c19"
+            }
+          ]
+        },
+        "actions": []
+      }
+    ],
+    "entries": [
+      {
+        "sourceZone": "5fc0d181-6c3f-4a89-a245-4558f999d5b0",
+        "destinationZone": "ed63903c-3714-48b6-9583-a5a977378c6c"
+      }
+    ]
+  },
+  "lastUpdated": 1632364922540,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "76e86e25-5f29-4abc-bc99-ed6540123931",
+      "property": "policyId"
+    }
+  ],
+  "activatedId": [
+    "76e86e25-5f29-4abc-bc99-ed6540123931"
+  ],
+  "isActivatedByVsmart": false
+}

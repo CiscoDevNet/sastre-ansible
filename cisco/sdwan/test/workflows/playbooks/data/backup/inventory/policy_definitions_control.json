@@ -1,0 +1,85 @@
+[
+  {
+    "name": "Hub-n-SpokeALLVPN",
+    "definitionId": "b5a125b1-3a13-4a62-a609-3b59f79b5a84",
+    "type": "control",
+    "description": "Create a BFD topology as Hub-n-Spoke for all VPNs",
+    "owner": "admin",
+    "lastUpdated": 1632364917996,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "6bf398aa-b740-434f-90ad-3b4127cf5da0",
+        "property": "policyId"
+      }
+    ]
+  },
+  {
+    "name": "MultitopologyControl",
+    "definitionId": "7e535907-4070-4835-b651-3b9b33327482",
+    "type": "control",
+    "description": "Full mesh corp and H&S for PCI",
+    "owner": "admin",
+    "lastUpdated": 1632364918250,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 0,
+    "references": []
+  },
+  {
+    "name": "DenyGuestWiFiRoutes",
+    "definitionId": "ea073085-3ee3-4a56-88fc-a050826ce3ad",
+    "type": "control",
+    "description": "Don't Propagate Guest Wifi Routes",
+    "owner": "admin",
+    "lastUpdated": 1632364918442,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 0,
+    "references": []
+  },
+  {
+    "name": "ControlMultiTopology",
+    "definitionId": "3a319a88-f4ea-4436-9c69-c29f43ab6388",
+    "type": "control",
+    "description": "Corp and PCI route policy",
+    "owner": "admin",
+    "lastUpdated": 1632364918590,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 3,
+    "references": [
+      {
+        "id": "b6a911f3-fad2-41b7-af4a-c5a75b3c39ff",
+        "property": "policyId"
+      },
+      {
+        "id": "bd7ae705-c846-44fe-bf4c-5e97141423fa",
+        "property": "policyId"
+      },
+      {
+        "id": "cb9a7bcd-c340-447a-afd9-834583ef5ebb",
+        "property": "policyId"
+      }
+    ]
+  },
+  {
+    "name": "MultiTopologyFWInsertion",
+    "definitionId": "32dfc588-2299-421e-9a11-834fe7dd6dfc",
+    "type": "control",
+    "description": "FW Insertion in Corp VPN",
+    "owner": "admin",
+    "lastUpdated": 1632364918808,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "8e5911fd-5a72-44cb-b2ff-d606f1ddd92f",
+        "property": "policyId"
+      }
+    ]
+  }
+]
