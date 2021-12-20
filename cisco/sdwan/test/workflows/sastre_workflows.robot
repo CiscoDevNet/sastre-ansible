@@ -1,0 +1,104 @@
+*** Settings ***
+Library     CXTA
+Resource    cxta.robot
+
+Library     OperatingSystem
+Library     Collections
+Library     lib/sastre_ansible.py
+
+Test Setup  Run Keyword  sdwan setup
+
+*** Variables ***
+${playbook_base_dir}                                 ${CURDIR}/playbooks
+
+${WorkFlow_01_Folder}                                WorkFlow_01
+${show_template_csv_after_attachment}                ${WorkFlow_01_Folder}/show_template_values_csv_after_attachment
+${show_template_csv_with_no_attachment}              ${WorkFlow_01_Folder}/show_template_values_csv_with_no_attachment
+${show_template_csv}                                 ${WorkFlow_01_Folder}/show_template_values_csv
+${show_template_attach_detach_compare_fail_msg}      show template values detach/attach file mismatch
+
+${WorkFlow_02_Folder}                                WorkFlow_02
+${backup_path}                                       ${WorkFlow_02_Folder}/backup
+${list_config_csv_before}                            ${WorkFlow_02_Folder}/list_config_before.csv
+${list_config_csv_after}                             ${WorkFlow_02_Folder}/list_config_after.csv
+${show_template_csv_before}                          ${WorkFlow_02_Folder}/show_template_values_csv_before
+${show_template_csv_after}                           ${WorkFlow_02_Folder}/show_template_values_csv_after
+
+
+*** Keywords ***
+sdwan setup
+    [Arguments]    ${restore_backup_path}=backup
+    execute delete task
+    execute restore task  restore_backup_path=${restore_backup_path}
+
+execute backup task
+    [Arguments]    ${backup_path}=backup
+    ${backup_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/backup.yml --extra-vars "backup_path=${backup_path}"
+    Log  ${backup_task_output}
+    ${backup_passed}  Is Playbook Success  backup  ${backup_task_output}
+
+execute delete task
+    ${delete_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/delete.yml
+    Log  ${delete_task_output}
+    ${delete_passed}  Is Playbook Success  delete  ${delete_task_output}
+
+execute restore task
+    [Arguments]    ${restore_backup_path}=backup
+    ${restore_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/restore.yml --extra-vars "backup_path=${restore_backup_path}"
+    Log  ${restore_task_output}
+    ${restore_passed}  Is Playbook Success  restore  ${restore_task_output}
+
+execute show template values task
+    [Arguments]    ${show_template_csv_path}=show_template_csv
+    ${show_temp_values_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/show-template_values.yml --extra-vars "show_template_csv=${show_template_csv_path}"
+    Log  ${show_temp_values_task_output}
+    ${show_temp_values_passed}  Is Playbook Success  show_template_values  ${show_temp_values_task_output}
+
+execute list configuration task
+    [Arguments]    ${list_config_csv_file_path}=list_config.csv
+    ${list_config_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/list_configuration.yml --extra-vars "list_config_csv=${list_config_csv_file_path}"
+    Log  ${list_config_task_output}
+    ${list_config_passed}  Is Playbook Success  list_configuration  ${list_config_task_output}
+
+execute detach edge task
+    ${detach_edge_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/detach_edge.yml
+    Log  ${detach_edge_task_output}
+    ${detach_edge_passed}  Is Playbook Success  detach_edge  ${detach_edge_task_output}
+
+execute attach edge task
+    ${attach_edge_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/attach_edge.yml
+    Log  ${attach_edge_task_output}
+    ${attach_edge_passed}  Is Playbook Success  attach_edge  ${attach_edge_task_output}
+
+cleanup directory
+    [Arguments]    ${directory}
+    Remove Directory  ${directory}  recursive=True
+    Create Directory  ${directory}
+
+*** Test Cases ***
+Workflow_01: Detach_Edge_Attach_Edge
+    [Documentation]  Executing show_template_values, detach_edge, show_template_values, attach_edge, show_template_values tasks
+    [Tags]  detach_attach
+
+    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_01_Folder}
+    execute show template values task  show_template_csv_path=${show_template_csv}
+    execute detach edge task
+    execute show template values task  show_template_csv_path=${show_template_csv_with_no_attachment}
+    compare show template values attach detach  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_with_no_attachment}  msg=${show_template_attach_detach_compare_fail_msg}
+    execute attach edge task
+    execute show template values task  show_template_csv_path=${show_template_csv_after_attachment}
+    csv folders should be equal  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_after_attachment}
+
+Workflow_02: Backup_Delete_Restore
+    [Documentation]  Executing list_config, show_template_values, backup, delete, restore, list_config, show_template_values  Tasks
+    [Tags]  backup_delete_restore
+
+    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_02_Folder}
+    execute list configuration task  list_config_csv_file_path=${list_config_csv_before}
+    execute show template values task  show_template_csv_path=${show_template_csv_before}
+    execute backup task  backup_path=${backup_path}
+    sdwan setup  restore_backup_path=${backup_path}
+    execute list configuration task  list_config_csv_file_path=${list_config_csv_after}
+    execute show template values task  show_template_csv_path=${show_template_csv_after}
+    csv folders should be equal  ${playbook_base_dir}/${show_template_csv_before}  ${playbook_base_dir}/${show_template_csv_after}
+    csv files should be equal  ${playbook_base_dir}/${list_config_csv_before}  ${playbook_base_dir}/${list_config_csv_after}  0

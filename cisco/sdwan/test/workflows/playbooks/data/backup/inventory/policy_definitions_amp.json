@@ -1,0 +1,19 @@
+[
+  {
+    "name": "BRANCH-DIA-AMP",
+    "definitionId": "9c6b4a4f-1334-4421-826e-ccc11c1ee801",
+    "type": "advancedMalwareProtection",
+    "description": "",
+    "owner": "admin",
+    "lastUpdated": 1632364917779,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "76e86e25-5f29-4abc-bc99-ed6540123931",
+        "property": "policyId"
+      }
+    ]
+  }
+]

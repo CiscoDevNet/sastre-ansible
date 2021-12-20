@@ -1,0 +1,323 @@
+  system
+   host-name               DC1-VEDGE2
+   gps-location latitude 37.33
+   gps-location longitude -121.88
+   system-ip               10.1.0.2
+   domain-id               1
+   site-id                 100
+   admin-tech-on-failure
+   no route-consistency-check
+   no vrrp-advt-with-phymac
+   sp-organization-name    "Cisco Sy1 - 19968"
+   organization-name       "Cisco Sy1 - 19968"
+   no track-transport
+   no track-default-gateway
+   vbond vbond.cisco.com port 12346
+   aaa
+    auth-order      local radius tacacs
+    usergroup basic
+     task system read write
+     task interface read write
+    !
+    usergroup netadmin
+    !
+    usergroup operator
+     task system read
+     task interface read
+     task policy read
+     task routing read
+     task security read
+    !
+    user admin
+     password $6$siwKBQ==$wT2lUa9BSreDPI6gB8sl4E6PAJoVXgMbgv/whJ8F1C6sWdRazdxorYYTLrL6syiG6qnLABTnrE96HJiKF6QRq1
+    !
+    ciscotacro-user true
+    ciscotacrw-user true
+   !
+   logging
+    disk
+     enable
+    !
+   !
+   ntp
+    parent
+     no enable
+     stratum 5
+    exit
+   !
+  !
+  bfd app-route poll-interval 5000
+  omp
+   no shutdown
+   ecmp-limit       8
+   graceful-restart
+   advertise connected
+   advertise static
+  !
+  snmp
+   no shutdown
+   view public
+    oid 1.3.6.1
+   !
+   community public
+    view          public
+    authorization read-only
+   !
+  !
+  security
+   ipsec
+    authentication-type sha1-hmac ah-sha1-hmac
+   !
+  !
+  banner
+   login "Cisco SD-WAN/Viptela dCloud Demo V2"
+  !
+  vpn 0
+   dns 198.18.1.1 secondary
+   dns 198.18.1.254 primary
+   host vbond.cisco.com ip 198.18.1.11 198.18.1.21
+   interface ge0/1
+    ip address 100.64.0.6/30
+    tunnel-interface
+     encapsulation ipsec
+     color mpls restrict
+     no allow-service bgp
+     allow-service dhcp
+     allow-service dns
+     allow-service icmp
+     no allow-service sshd
+     no allow-service netconf
+     allow-service ntp
+     no allow-service ospf
+     no allow-service stun
+     allow-service https
+    !
+    no shutdown
+    qos-map  WAN-QOS
+   !
+   interface ge0/2
+    ip address 100.64.2.30/30
+    tunnel-interface
+     encapsulation ipsec
+     color biz-internet restrict
+     no allow-service bgp
+     allow-service dhcp
+     allow-service dns
+     allow-service icmp
+     no allow-service sshd
+     no allow-service netconf
+     allow-service ntp
+     no allow-service ospf
+     no allow-service stun
+     allow-service https
+    !
+    no shutdown
+   !
+   ip route 0.0.0.0/0 100.64.0.5
+   ip route 0.0.0.0/0 100.64.2.29
+  !
+  vpn 10
+   service FW
+    address 10.1.10.200
+   exit
+   router
+    ospf
+     router-id 10.1.0.2
+     timers spf 200 1000 10000
+     redistribute omp
+     area 0
+      interface ge0/0
+      exit
+     exit
+    !
+   !
+   interface ge0/0
+    ip address 10.1.10.250/24
+    no shutdown
+   !
+   ip route 0.0.0.0/0 10.1.10.1
+   omp
+    advertise ospf external
+    advertise static
+   !
+  !
+  vpn 20
+   router
+    ospf
+     router-id 10.1.0.2
+     timers spf 200 1000 10000
+     redistribute omp
+     area 0
+      interface ge0/3
+      exit
+     exit
+    !
+   !
+   interface ge0/3
+    ip address 10.1.20.250/24
+    no shutdown
+   !
+   ip route 0.0.0.0/0 10.1.20.1
+   omp
+    advertise ospf external
+    advertise static
+    advertise network 0.0.0.0/0
+   !
+  !
+  vpn 512
+   interface eth0
+    ip address 198.18.3.101/24
+    no shutdown
+   !
+   ip route 0.0.0.0/0 198.18.3.1
+  !
+  policy
+   app-visibility
+   flow-visibility
+   cloud-qos
+   cloud-qos-service-side
+   lists
+    prefix-list ALL-BRANCH-NW
+     ip-prefix 10.3.0.0/16 le 32
+     ip-prefix 10.4.0.0/16 le 32
+     ip-prefix 10.5.0.0/16 le 32
+    !
+    prefix-list DC-VPN10-NW
+     ip-prefix 10.1.10.0/24 le 32
+     ip-prefix 10.2.10.0/24 le 32
+    !
+    prefix-list DC-VPN20-NW
+     ip-prefix 10.1.20.0/24 le 32
+     ip-prefix 10.2.20.0/24 le 32
+    !
+    prefix-list InfrastructureRoutes
+     ip-prefix 100.0.0.0/8 le 32
+     ip-prefix 172.0.0.0/8 le 32
+    !
+   !
+   route-policy denyAllBranches
+    sequence 10
+     match
+      address ALL-BRANCH-NW
+     !
+     action reject
+     !
+    !
+    default-action accept
+   !
+   route-policy denyInfraRoutes
+    sequence 10
+     match
+      address InfrastructureRoutes
+     !
+     action reject
+     !
+    !
+    default-action accept
+   !
+   route-policy denyVPN10
+    sequence 10
+     match
+      address DC-VPN10-NW
+     !
+     action reject
+     !
+    !
+    default-action accept
+   !
+   route-policy denyVPN20
+    sequence 10
+     match
+      address DC-VPN20-NW
+     !
+     action reject
+     !
+    !
+    default-action accept
+   !
+   class-map
+    class BEST-EFFORT queue 3
+    class BIZ-DATA queue 2
+    class VIDEO queue 1
+    class VOICE queue 0
+   !
+   access-list GuestWiFi
+    sequence 10
+     action accept
+      class BEST-EFFORT
+     !
+    !
+    default-action accept
+   !
+   access-list LAN-Classification
+    sequence 10
+     match
+      dscp 46
+     !
+     action accept
+      class VOICE
+     !
+    !
+    sequence 20
+     match
+      dscp 34
+     !
+     action accept
+      class VIDEO
+     !
+    !
+    sequence 30
+     match
+      dscp 26
+     !
+     action accept
+      class BIZ-DATA
+     !
+    !
+    sequence 40
+     action accept
+      class BEST-EFFORT
+     !
+    !
+    default-action accept
+   !
+   access-list VPN20-BizData
+    sequence 10
+     action accept
+      class BIZ-DATA
+     !
+    !
+    default-action accept
+   !
+   qos-scheduler besteffort_scheduler
+    class             BEST-EFFORT
+    bandwidth-percent 5
+    buffer-percent    5
+    drops             red-drop
+   !
+   qos-scheduler bizdata_scheduler
+    class             BIZ-DATA
+    bandwidth-percent 50
+    buffer-percent    50
+    drops             red-drop
+   !
+   qos-scheduler video_scheduler
+    class             VIDEO
+    bandwidth-percent 30
+    buffer-percent    30
+   !
+   qos-scheduler voice_scheduler
+    class             VOICE
+    bandwidth-percent 15
+    buffer-percent    15
+    scheduling        llq
+   !
+   qos-map WAN-QOS
+    qos-scheduler besteffort_scheduler
+    qos-scheduler bizdata_scheduler
+    qos-scheduler video_scheduler
+    qos-scheduler voice_scheduler
+   !
+  !
+ !
+!

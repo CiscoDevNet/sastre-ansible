@@ -1,0 +1,27 @@
+{
+  "listId": "6941e50b-3dff-4672-a0cd-42d5c11dc0e3",
+  "name": "YouTube",
+  "type": "app",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "app": "youtube"
+    },
+    {
+      "app": "youtube"
+    }
+  ],
+  "lastUpdated": 1632145629192,
+  "owner": "system",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+      "type": "appRoute"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

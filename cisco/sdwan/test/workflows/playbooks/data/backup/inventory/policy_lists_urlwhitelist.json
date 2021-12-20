@@ -1,0 +1,48 @@
+[
+  {
+    "listId": "d2df4d9b-4906-418e-a4f2-4c74ea7be924",
+    "name": "Cisco",
+    "type": "urlWhiteList",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "pattern": "www.cisco.com\ncisco.com"
+      }
+    ],
+    "lastUpdated": 1632364916973,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "1c7c5d88-0b22-4591-affe-1fb7e81cdf5a",
+    "name": "MalwareSite",
+    "type": "urlWhiteList",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "pattern": "definitelynotmalware.*"
+      }
+    ],
+    "lastUpdated": 1632364917064,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "f8522c36-d9a0-4359-9436-d8bbcf2ffd1b",
+        "type": "urlFiltering"
+      }
+    ],
+    "activatedId": [
+      "76e86e25-5f29-4abc-bc99-ed6540123931"
+    ],
+    "isActivatedByVsmart": false
+  }
+]

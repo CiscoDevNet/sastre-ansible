@@ -1,0 +1,29 @@
+{
+  "definitionId": "cfdc6fcc-e1d4-453a-a4f4-37599ac75618",
+  "name": "DenyGuestWiFi04",
+  "type": "vpnMembershipGroup",
+  "description": "Deny Guest WiFi VPN",
+  "definition": {
+    "sites": [
+      {
+        "siteList": "03c1f6b5-f7e6-4724-97ed-f50d23f6a997",
+        "vpnList": [
+          "76ffc3d4-f675-4b4b-8673-78c2d4506c85",
+          "528e5192-536f-434f-9dc9-35900805bf77"
+        ]
+      }
+    ]
+  },
+  "lastUpdated": 1632364921736,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "8e5911fd-5a72-44cb-b2ff-d606f1ddd92f",
+      "property": "policyId"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

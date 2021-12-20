@@ -1,0 +1,231 @@
+{
+  "templateMinVersion": "15.0.0",
+  "templateType": "vpn-vedge",
+  "deviceType": [
+    "vedge-cloud"
+  ],
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "vpn-id": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": 512
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "vpn_name"
+    },
+    "ecmp-hash-key": {
+      "layer4": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": "false",
+        "vipVariableName": "vpn_layer4"
+      }
+    },
+    "tcp-optimization": {
+      "vipObjectType": "node-only",
+      "vipType": "ignore",
+      "vipValue": "false",
+      "vipVariableName": "vpn_tcp_optimization"
+    },
+    "host": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "hostname"
+      ]
+    },
+    "service": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "svc-type"
+      ]
+    },
+    "ip": {
+      "route": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "prefix": {
+              "vipObjectType": "object",
+              "vipType": "constant",
+              "vipValue": "0.0.0.0/0",
+              "vipVariableName": "vpn_ipv4_ip_prefix"
+            },
+            "next-hop": {
+              "vipType": "constant",
+              "vipValue": [
+                {
+                  "address": {
+                    "vipObjectType": "object",
+                    "vipType": "variableName",
+                    "vipValue": "",
+                    "vipVariableName": "VPN512_GW"
+                  },
+                  "distance": {
+                    "vipObjectType": "object",
+                    "vipType": "ignore",
+                    "vipValue": 1,
+                    "vipVariableName": "vpn_next_hop_ip_distance_0"
+                  },
+                  "priority-order": [
+                    "address",
+                    "distance"
+                  ]
+                }
+              ],
+              "vipObjectType": "tree",
+              "vipPrimaryKey": [
+                "address"
+              ]
+            },
+            "priority-order": [
+              "prefix",
+              "next-hop"
+            ]
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "prefix"
+        ]
+      },
+      "gre-route": {},
+      "ipsec-route": {}
+    },
+    "ipv6": {},
+    "omp": {
+      "advertise": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      }
+    }
+  },
+  "gTemplateClass": "vedge",
+  "templateDefinition": {
+    "vpn-id": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": 512
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "vpn_name"
+    },
+    "ecmp-hash-key": {
+      "layer4": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": "false",
+        "vipVariableName": "vpn_layer4"
+      }
+    },
+    "tcp-optimization": {
+      "vipObjectType": "node-only",
+      "vipType": "ignore",
+      "vipValue": "false",
+      "vipVariableName": "vpn_tcp_optimization"
+    },
+    "host": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "hostname"
+      ]
+    },
+    "service": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "svc-type"
+      ]
+    },
+    "ip": {
+      "route": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "prefix": {
+              "vipObjectType": "object",
+              "vipType": "constant",
+              "vipValue": "0.0.0.0/0",
+              "vipVariableName": "vpn_ipv4_ip_prefix"
+            },
+            "next-hop": {
+              "vipType": "constant",
+              "vipValue": [
+                {
+                  "address": {
+                    "vipObjectType": "object",
+                    "vipType": "variableName",
+                    "vipValue": "",
+                    "vipVariableName": "VPN512_GW"
+                  },
+                  "distance": {
+                    "vipObjectType": "object",
+                    "vipType": "ignore",
+                    "vipValue": 1,
+                    "vipVariableName": "vpn_next_hop_ip_distance_0"
+                  },
+                  "priority-order": [
+                    "address",
+                    "distance"
+                  ]
+                }
+              ],
+              "vipObjectType": "tree",
+              "vipPrimaryKey": [
+                "address"
+              ]
+            },
+            "priority-order": [
+              "prefix",
+              "next-hop"
+            ]
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "prefix"
+        ]
+      },
+      "gre-route": {},
+      "ipsec-route": {}
+    },
+    "ipv6": {},
+    "omp": {
+      "advertise": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      }
+    }
+  },
+  "attachedMastersCount": 2,
+  "templateId": "b7ca325e-0c22-4900-a09d-a002913bc3ba",
+  "configType": "xml",
+  "createdOn": 1632364957691,
+  "@rid": 2532,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "VPN512-Template",
+  "createdBy": "admin",
+  "devicesAttached": 2,
+  "templateDescription": "Template for VPN 512",
+  "lastUpdatedOn": 1632364957691
+}

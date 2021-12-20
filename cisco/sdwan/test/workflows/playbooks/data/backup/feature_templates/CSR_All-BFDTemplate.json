@@ -1,0 +1,67 @@
+{
+  "templateMinVersion": "15.0.0",
+  "deviceType": [],
+  "templateType": "cisco_bfd",
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "app-route": {
+      "multiplier": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": 6,
+        "vipVariableName": "bfd_multiplier"
+      },
+      "poll-interval": {
+        "vipObjectType": "object",
+        "vipType": "constant",
+        "vipValue": 5000,
+        "vipVariableName": "bfd_poll_interval"
+      }
+    },
+    "color": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "color"
+      ]
+    }
+  },
+  "gTemplateClass": "cedge",
+  "templateDefinition": {
+    "app-route": {
+      "multiplier": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": 6,
+        "vipVariableName": "bfd_multiplier"
+      },
+      "poll-interval": {
+        "vipObjectType": "object",
+        "vipType": "constant",
+        "vipValue": 5000,
+        "vipVariableName": "bfd_poll_interval"
+      }
+    },
+    "color": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "color"
+      ]
+    }
+  },
+  "attachedMastersCount": 0,
+  "templateId": "5fb43c3d-5ea4-473d-a354-7ef181416d5f",
+  "configType": "xml",
+  "createdOn": 1632364940970,
+  "@rid": 2466,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "CSR_All-BFDTemplate",
+  "createdBy": "admin",
+  "devicesAttached": 0,
+  "templateDescription": "Basic BFD Template",
+  "lastUpdatedOn": 1632364940970
+}

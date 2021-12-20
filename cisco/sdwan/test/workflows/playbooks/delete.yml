@@ -1,0 +1,16 @@
+---
+###############################################################################
+- hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+
+    #Delete
+    - name: Delete
+      cisco.sdwan.delete:
+          regex: ".*"
+          dryrun: False
+          detach: True
+          tag: "all"
+

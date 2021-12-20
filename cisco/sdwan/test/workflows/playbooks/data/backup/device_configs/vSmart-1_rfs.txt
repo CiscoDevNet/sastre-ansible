@@ -1,0 +1,187 @@
+no config 
+config
+viptela-system:system 
+personality vsmart
+device-model vsmart
+vbond vbond.cisco.com port 12346
+chassis-number 10a98779-95f0-4383-871c-195d25bd9c74
+ztp-status success
+config-template-name "VSMART-device-template"
+pseudo-confirm-commit 300
+!
+  system
+   host-name             vSmart-1
+   system-ip             12.12.12.12
+   domain-id             1
+   site-id               10
+   admin-tech-on-failure
+   no vrrp-advt-with-phymac
+   sp-organization-name  "Cisco Sy1 - 19968"
+   organization-name     "Cisco Sy1 - 19968"
+   vbond vbond.cisco.com port 12346
+   aaa
+    auth-order      local radius tacacs
+    usergroup basic
+     task system read write
+     task interface read write
+    !
+    usergroup netadmin
+    !
+    usergroup operator
+     task system read
+     task interface read
+     task policy read
+     task routing read
+     task security read
+    !
+    user admin
+     password $6$siwKBQ==$wT2lUa9BSreDPI6gB8sl4E6PAJoVXgMbgv/whJ8F1C6sWdRazdxorYYTLrL6syiG6qnLABTnrE96HJiKF6QRq1
+    !
+    ciscotacro-user true
+    ciscotacrw-user true
+   !
+   logging
+    disk
+     enable
+    !
+   !
+   ntp
+    parent
+     no enable
+     stratum 5
+    exit
+   !
+  !
+  omp
+   no shutdown
+   send-path-limit   8
+   send-backup-paths
+   graceful-restart
+  !
+  vpn 0
+   name "Transport VPN"
+   dns 198.18.1.1 secondary
+   dns 198.18.1.254 primary
+   host vbond.cisco.com ip 198.18.1.11 198.18.1.21
+   interface eth0
+    description "Tunnel Interface"
+    ip address 198.18.1.12/24
+    tunnel-interface
+     allow-service dhcp
+     allow-service dns
+     allow-service icmp
+     allow-service sshd
+     allow-service netconf
+     no allow-service ntp
+     no allow-service stun
+    !
+    no shutdown
+   !
+   ip route 0.0.0.0/0 198.18.1.254
+  !
+  vpn 512
+  !
+  policy
+   data-policy _guestVPN_Drop1918
+    vpn-list guestVPN
+     sequence 1
+      match
+       destination-data-prefix-list RFC1918Plus
+      !
+      action drop
+      !
+     !
+     default-action accept
+    !
+   !
+   lists
+    vpn-list corpVPN
+     vpn 10
+    !
+    vpn-list guestVPN
+     vpn 40
+    !
+    vpn-list pciVPN
+     vpn 20
+    !
+    data-prefix-list RFC1918Plus
+     ip-prefix 10.0.0.0/8
+     ip-prefix 172.16.0.0/16
+     ip-prefix 192.168.0.0/16
+     ip-prefix 198.18.128.0/18
+    !
+    tloc-list DC-TLOCS
+     tloc 10.1.0.1 color mpls encap ipsec
+     tloc 10.1.0.1 color biz-internet encap ipsec
+     tloc 10.1.0.2 color mpls encap ipsec
+     tloc 10.1.0.2 color biz-internet encap ipsec
+    !
+    site-list AllBranches
+     site-id 300-499
+    !
+    site-list AllDC
+     site-id 100
+    !
+   !
+   control-policy Hub-n-SpokeALLVPN
+    sequence 1
+     match tloc
+      site-list AllDC
+     !
+     action accept
+     !
+    !
+    sequence 11
+     match tloc
+     !
+     action reject
+     !
+    !
+    sequence 21
+     match route
+      site-list AllBranches
+      vpn-list  corpVPN
+     !
+     action reject
+     !
+    !
+    sequence 31
+     match route
+      site-list AllBranches
+      vpn-list  pciVPN
+     !
+     action accept
+      set
+       tloc-list DC-TLOCS
+      !
+     !
+    !
+    default-action accept
+   !
+   vpn-membership vpnMembership_216070646
+    sequence 10
+     match
+      vpn-list corpVPN
+     !
+     action accept
+     !
+    !
+    sequence 20
+     match
+      vpn-list pciVPN
+     !
+     action accept
+     !
+    !
+    default-action reject
+   !
+  !
+  apply-policy
+   site-list AllBranches
+    control-policy Hub-n-SpokeALLVPN out
+    data-policy _guestVPN_Drop1918 from-service
+    vpn-membership vpnMembership_216070646
+   !
+  !
+ !
+!

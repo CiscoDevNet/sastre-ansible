@@ -1,0 +1,121 @@
+[
+  {
+    "listId": "d06eb8b9-25aa-4565-8f82-4a3d1547e8d8",
+    "name": "Browsing",
+    "type": "localApp",
+    "description": "Local App List for Browsing",
+    "entries": [
+      {
+        "app": "netflix"
+      }
+    ],
+    "lastUpdated": 1614810123624,
+    "owner": "system",
+    "readOnly": true,
+    "version": "1.0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "b131f1fc-be19-46fc-a213-50c3b73809be",
+    "name": "Web-Guest-Access",
+    "type": "localApp",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "appFamily": "webmail"
+      },
+      {
+        "appFamily": "web"
+      },
+      {
+        "appFamily": "mail"
+      },
+      {
+        "appFamily": "forum"
+      },
+      {
+        "appFamily": "audio-video"
+      },
+      {
+        "appFamily": "application-service"
+      }
+    ],
+    "lastUpdated": 1632364915009,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "011b7421-ea79-4fb1-a2fd-13c83200bebc",
+    "name": "DENY-FROM_GUEST",
+    "type": "localApp",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "appFamily": "database"
+      },
+      {
+        "appFamily": "file-server"
+      },
+      {
+        "appFamily": "game"
+      }
+    ],
+    "lastUpdated": 1632364915097,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "9be4c61e-92bb-49a4-8b0c-67cb16342c00",
+    "name": "Yahoo",
+    "type": "localApp",
+    "description": "Local App List for Yahoo",
+    "entries": [
+      {
+        "app": "yahoo"
+      },
+      {
+        "app": "yahoo-messenger-video"
+      }
+    ],
+    "lastUpdated": 1614810123944,
+    "owner": "system",
+    "readOnly": true,
+    "version": "1.0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "4d2f888a-6643-45d6-bb33-2822e3949df1",
+    "name": "ICMP",
+    "type": "localApp",
+    "description": "Local App List for ICMP",
+    "entries": [
+      {
+        "app": "icmp"
+      }
+    ],
+    "lastUpdated": 1614810124835,
+    "owner": "system",
+    "readOnly": true,
+    "version": "1.0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  }
+]

@@ -1,0 +1,99 @@
+{
+  "definitionId": "b5a125b1-3a13-4a62-a609-3b59f79b5a84",
+  "name": "Hub-n-SpokeALLVPN",
+  "type": "control",
+  "description": "Create a BFD topology as Hub-n-Spoke for all VPNs",
+  "sequences": [
+    {
+      "sequenceId": 1,
+      "sequenceName": "AllowDC-TLOCs",
+      "baseAction": "accept",
+      "sequenceType": "tloc",
+      "match": {
+        "entries": [
+          {
+            "field": "siteList",
+            "ref": "cd7d64b7-6f09-4e8b-a5f5-09a510910081"
+          }
+        ]
+      },
+      "actions": []
+    },
+    {
+      "sequenceId": 11,
+      "sequenceName": "DenyAllOtherTLOCs",
+      "baseAction": "reject",
+      "sequenceType": "tloc",
+      "match": {
+        "entries": []
+      },
+      "actions": []
+    },
+    {
+      "sequenceId": 21,
+      "sequenceName": "DenyCorpnetBranchRoutes",
+      "baseAction": "reject",
+      "sequenceType": "route",
+      "match": {
+        "entries": [
+          {
+            "field": "siteList",
+            "ref": "03c1f6b5-f7e6-4724-97ed-f50d23f6a997"
+          },
+          {
+            "field": "vpnList",
+            "ref": "76ffc3d4-f675-4b4b-8673-78c2d4506c85"
+          }
+        ]
+      },
+      "actions": []
+    },
+    {
+      "sequenceId": 31,
+      "sequenceName": "RoutesPCISetNHOP",
+      "baseAction": "accept",
+      "sequenceType": "route",
+      "match": {
+        "entries": [
+          {
+            "field": "siteList",
+            "ref": "03c1f6b5-f7e6-4724-97ed-f50d23f6a997"
+          },
+          {
+            "field": "vpnList",
+            "ref": "528e5192-536f-434f-9dc9-35900805bf77"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set",
+          "parameter": [
+            {
+              "field": "tlocList",
+              "ref": "4f5bc4b5-ac74-404f-9e50-8c09416fddad"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "defaultAction": {
+    "type": "accept"
+  },
+  "lastUpdated": 1632364917996,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "6bf398aa-b740-434f-90ad-3b4127cf5da0",
+      "property": "policyId"
+    }
+  ],
+  "activatedId": [
+    "6bf398aa-b740-434f-90ad-3b4127cf5da0"
+  ],
+  "isActivatedByVsmart": true
+}

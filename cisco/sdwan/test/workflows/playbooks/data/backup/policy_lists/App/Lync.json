@@ -1,0 +1,24 @@
+{
+  "listId": "f30746d2-4bb6-491e-8103-1c7e8de8bb2f",
+  "name": "Lync",
+  "type": "app",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "app": "ms-lync"
+    }
+  ],
+  "lastUpdated": 1632145628787,
+  "owner": "system",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+      "type": "appRoute"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

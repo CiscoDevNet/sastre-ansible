@@ -1,0 +1,42 @@
+{
+  "definitionId": "3e53e7e8-f20c-494b-9bf3-997578a6308f",
+  "name": "Branch2ACL",
+  "type": "data",
+  "description": "Drop traffic from BR2 to BR1",
+  "sequences": [
+    {
+      "sequenceId": 1,
+      "sequenceName": "Application Firewall",
+      "baseAction": "drop",
+      "sequenceType": "applicationFirewall",
+      "match": {
+        "entries": [
+          {
+            "field": "destinationDataPrefixList",
+            "ref": "f2015a1d-b46d-48dc-a454-cb1a007c5851"
+          },
+          {
+            "field": "sourceDataPrefixList",
+            "ref": "743fe2c3-7dd5-41bd-88d1-16863be6a771"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "count",
+          "parameter": "DropCount"
+        }
+      ]
+    }
+  ],
+  "defaultAction": {
+    "type": "accept"
+  },
+  "lastUpdated": 1632364923376,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

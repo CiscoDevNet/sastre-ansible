@@ -1,0 +1,81 @@
+{
+  "templateName": "Factory_Default_ISR_4331_V01",
+  "templateDescription": "Factory Default template for ISR4331 device",
+  "deviceType": "vedge-ISR-4331",
+  "configType": "template",
+  "factoryDefault": true,
+  "policyId": "",
+  "featureTemplateUidRange": [],
+  "connectionPreferenceRequired": true,
+  "connectionPreference": true,
+  "generalTemplates": [
+    {
+      "templateId": "9f6122ea-e8eb-4609-b1bc-1db4a6d1d8f6",
+      "templateType": "cedge_aaa"
+    },
+    {
+      "templateId": "0109001a-f382-4299-a4d8-7bec03f27ec7",
+      "templateType": "cisco_bfd"
+    },
+    {
+      "templateId": "a7ea51d2-20c4-40a4-bc75-db5c46c108f0",
+      "templateType": "cisco_omp"
+    },
+    {
+      "templateId": "fc316dc0-c815-42d2-964e-49c7c3721512",
+      "templateType": "cisco_security"
+    },
+    {
+      "templateId": "9af5907d-5713-4030-bc50-f04db2376021",
+      "templateType": "cisco_system",
+      "subTemplates": [
+        {
+          "templateId": "6dfd8ab8-2e96-486b-9162-ba45f8887aeb",
+          "templateType": "cisco_logging"
+        }
+      ]
+    },
+    {
+      "templateId": "afdebccc-616c-457d-a593-6fdd2e029f28",
+      "templateType": "cisco_vpn",
+      "subTemplates": [
+        {
+          "templateId": "05a61979-6aca-4ea9-95d7-cc0991eb7f4b",
+          "templateType": "cisco_vpn_interface"
+        },
+        {
+          "templateId": "14a6f962-8210-4a2e-a15e-a04de44e4e6d",
+          "templateType": "cisco_vpn_interface"
+        }
+      ]
+    },
+    {
+      "templateId": "6924ff04-f7a7-482a-87aa-21a186ea38ca",
+      "templateType": "cisco_vpn",
+      "subTemplates": [
+        {
+          "templateId": "f8af1d5a-0b97-4fb9-9a47-d8d569c6f771",
+          "templateType": "cisco_vpn_interface"
+        }
+      ]
+    },
+    {
+      "templateId": "76626c56-6800-45a1-95a0-fbb242c1c9c2",
+      "templateType": "cisco_vpn",
+      "subTemplates": [
+        {
+          "templateId": "7723ea42-ad77-4e10-bf53-844babe4da9a",
+          "templateType": "cisco_vpn_interface"
+        }
+      ]
+    },
+    {
+      "templateId": "bfcab33b-1c67-4179-9716-5ff753e29d3c",
+      "templateType": "cedge_global"
+    }
+  ],
+  "templateClass": "cedge",
+  "templateId": "f52767b8-db2c-42f1-8f5f-2f5d295dee25",
+  "deviceRole": "sdwan-edge",
+  "draftMode": false
+}

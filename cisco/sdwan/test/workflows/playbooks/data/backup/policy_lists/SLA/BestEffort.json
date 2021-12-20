@@ -1,0 +1,26 @@
+{
+  "listId": "dc3d2474-0690-4aae-b25b-ae471bc6efa4",
+  "name": "BestEffort",
+  "type": "sla",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "latency": "200",
+      "loss": null,
+      "jitter": null
+    }
+  ],
+  "lastUpdated": 1632364914665,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+      "type": "appRoute"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

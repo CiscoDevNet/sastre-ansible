@@ -1,0 +1,51 @@
+{
+  "listId": "902237c4-5552-443f-944d-e569deae43f6",
+  "name": "guestVPN",
+  "type": "vpn",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "vpn": "40"
+    }
+  ],
+  "lastUpdated": 1632364917593,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 7,
+  "references": [
+    {
+      "id": "b6a911f3-fad2-41b7-af4a-c5a75b3c39ff",
+      "type": ""
+    },
+    {
+      "id": "845a3a20-3e91-408e-b32b-68dc1b43f56c",
+      "type": ""
+    },
+    {
+      "id": "bd7ae705-c846-44fe-bf4c-5e97141423fa",
+      "type": ""
+    },
+    {
+      "id": "cb9a7bcd-c340-447a-afd9-834583ef5ebb",
+      "type": ""
+    },
+    {
+      "id": "8e5911fd-5a72-44cb-b2ff-d606f1ddd92f",
+      "type": ""
+    },
+    {
+      "id": "6bf398aa-b740-434f-90ad-3b4127cf5da0",
+      "type": ""
+    },
+    {
+      "id": "ea073085-3ee3-4a56-88fc-a050826ce3ad",
+      "type": "control"
+    }
+  ],
+  "activatedId": [
+    "6bf398aa-b740-434f-90ad-3b4127cf5da0"
+  ],
+  "isActivatedByVsmart": true
+}

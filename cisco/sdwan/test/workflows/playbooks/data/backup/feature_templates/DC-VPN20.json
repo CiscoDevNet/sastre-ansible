@@ -1,0 +1,363 @@
+{
+  "deviceType": [
+    "vedge-cloud"
+  ],
+  "templateType": "vpn-vedge",
+  "templateMinVersion": "15.0.0",
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "vpn-id": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": 20
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "vpn_name"
+    },
+    "ecmp-hash-key": {
+      "layer4": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": "false",
+        "vipVariableName": "vpn_layer4"
+      }
+    },
+    "tcp-optimization": {
+      "vipObjectType": "node-only",
+      "vipType": "ignore",
+      "vipValue": "false",
+      "vipVariableName": "vpn_tcp_optimization"
+    },
+    "host": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "hostname"
+      ]
+    },
+    "service": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "svc-type"
+      ]
+    },
+    "ip": {
+      "route": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "prefix": {
+              "vipObjectType": "object",
+              "vipType": "constant",
+              "vipValue": "0.0.0.0/0",
+              "vipVariableName": "vpn_ipv4_ip_prefix"
+            },
+            "next-hop": {
+              "vipType": "constant",
+              "vipValue": [
+                {
+                  "address": {
+                    "vipObjectType": "object",
+                    "vipType": "variableName",
+                    "vipValue": "",
+                    "vipVariableName": "VPN20_DEF_GW_DC"
+                  },
+                  "distance": {
+                    "vipObjectType": "object",
+                    "vipType": "ignore",
+                    "vipValue": 1,
+                    "vipVariableName": "vpn_next_hop_ip_distance_0"
+                  },
+                  "priority-order": [
+                    "address",
+                    "distance"
+                  ]
+                }
+              ],
+              "vipObjectType": "tree",
+              "vipPrimaryKey": [
+                "address"
+              ]
+            },
+            "priority-order": [
+              "prefix",
+              "next-hop"
+            ]
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "prefix"
+        ]
+      },
+      "gre-route": {},
+      "ipsec-route": {}
+    },
+    "ipv6": {},
+    "omp": {
+      "advertise": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "priority-order": [
+              "protocol"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "static",
+              "vipObjectType": "object"
+            }
+          },
+          {
+            "priority-order": [
+              "protocol",
+              "protocol-sub-type"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "ospf",
+              "vipObjectType": "object"
+            },
+            "protocol-sub-type": {
+              "vipType": "constant",
+              "vipValue": "external",
+              "vipObjectType": "object"
+            }
+          },
+          {
+            "priority-order": [
+              "protocol",
+              "prefix-list"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "network",
+              "vipObjectType": "object"
+            },
+            "prefix-list": {
+              "vipType": "constant",
+              "vipValue": [
+                {
+                  "prefix-entry": {
+                    "vipObjectType": "object",
+                    "vipType": "constant",
+                    "vipValue": "0.0.0.0/0",
+                    "vipVariableName": "vpn_omp_network_network_prefix"
+                  },
+                  "priority-order": [
+                    "prefix-entry"
+                  ]
+                }
+              ],
+              "vipObjectType": "tree",
+              "vipPrimaryKey": [
+                "prefix-entry"
+              ]
+            }
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      },
+      "ipv6-advertise": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      }
+    }
+  },
+  "gTemplateClass": "vedge",
+  "templateDefinition": {
+    "vpn-id": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": 20
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "vpn_name"
+    },
+    "ecmp-hash-key": {
+      "layer4": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": "false",
+        "vipVariableName": "vpn_layer4"
+      }
+    },
+    "tcp-optimization": {
+      "vipObjectType": "node-only",
+      "vipType": "ignore",
+      "vipValue": "false",
+      "vipVariableName": "vpn_tcp_optimization"
+    },
+    "host": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "hostname"
+      ]
+    },
+    "service": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "svc-type"
+      ]
+    },
+    "ip": {
+      "route": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "prefix": {
+              "vipObjectType": "object",
+              "vipType": "constant",
+              "vipValue": "0.0.0.0/0",
+              "vipVariableName": "vpn_ipv4_ip_prefix"
+            },
+            "next-hop": {
+              "vipType": "constant",
+              "vipValue": [
+                {
+                  "address": {
+                    "vipObjectType": "object",
+                    "vipType": "variableName",
+                    "vipValue": "",
+                    "vipVariableName": "VPN20_DEF_GW_DC"
+                  },
+                  "distance": {
+                    "vipObjectType": "object",
+                    "vipType": "ignore",
+                    "vipValue": 1,
+                    "vipVariableName": "vpn_next_hop_ip_distance_0"
+                  },
+                  "priority-order": [
+                    "address",
+                    "distance"
+                  ]
+                }
+              ],
+              "vipObjectType": "tree",
+              "vipPrimaryKey": [
+                "address"
+              ]
+            },
+            "priority-order": [
+              "prefix",
+              "next-hop"
+            ]
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "prefix"
+        ]
+      },
+      "gre-route": {},
+      "ipsec-route": {}
+    },
+    "ipv6": {},
+    "omp": {
+      "advertise": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "priority-order": [
+              "protocol"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "static",
+              "vipObjectType": "object"
+            }
+          },
+          {
+            "priority-order": [
+              "protocol",
+              "protocol-sub-type"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "ospf",
+              "vipObjectType": "object"
+            },
+            "protocol-sub-type": {
+              "vipType": "constant",
+              "vipValue": "external",
+              "vipObjectType": "object"
+            }
+          },
+          {
+            "priority-order": [
+              "protocol",
+              "prefix-list"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "network",
+              "vipObjectType": "object"
+            },
+            "prefix-list": {
+              "vipType": "constant",
+              "vipValue": [
+                {
+                  "prefix-entry": {
+                    "vipObjectType": "object",
+                    "vipType": "constant",
+                    "vipValue": "0.0.0.0/0",
+                    "vipVariableName": "vpn_omp_network_network_prefix"
+                  },
+                  "priority-order": [
+                    "prefix-entry"
+                  ]
+                }
+              ],
+              "vipObjectType": "tree",
+              "vipPrimaryKey": [
+                "prefix-entry"
+              ]
+            }
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      },
+      "ipv6-advertise": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      }
+    }
+  },
+  "templateId": "517aca57-7d9a-4536-996d-69bf25ab913c",
+  "attachedMastersCount": 1,
+  "configType": "xml",
+  "createdOn": 1632364950816,
+  "@rid": 2503,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "DC-VPN20",
+  "createdBy": "admin",
+  "devicesAttached": 2,
+  "templateDescription": "DC VPN20 VPN Template",
+  "lastUpdatedOn": 1632364950816
+}
