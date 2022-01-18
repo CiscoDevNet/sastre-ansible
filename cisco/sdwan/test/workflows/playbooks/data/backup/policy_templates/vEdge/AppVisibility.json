@@ -1,7 +1,0 @@
-{
-  "policyName": "AppVisibility",
-  "policyDescription": "Application Visibility Only",
-  "policyType": "cli",
-  "policyDefinition": "policy\n app-visibility\n flow-visibility\n!\n",
-  "policyDefinitionEdit": "policy\n app-visibility\n flow-visibility\n!\n"
-}

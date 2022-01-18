@@ -1,7 +1,0 @@
-{
-  "policyDefinition": "policy\ndata-policy cflowd-policy\n  vpn-list vpn_10-20\n    default-action accept\n  !\n!\ncflowd-template lab-cflowd-template\n  flow-inactive-timeout 10\n\n  flow-active-timeout 60\n\n  template-refresh 600\n  collector vpn 10 address 198.18.133.34 port 2055 transport transport_udp\n!\nlists\n  vpn-list vpn_10-20\n   vpn 10-20\n  !\n  site-list cflowd-sites\n   site-id 100-400\n  !\n  \n  apply-policy\nsite-list cflowd-sites\n  data-policy cflowd-policy all\n  cflowd-template lab-cflowd-template\n  ",
-  "policyType": "cli",
-  "policyName": "cflowd_policy",
-  "policyDescription": "cflowd",
-  "isPolicyActivated": false
-}

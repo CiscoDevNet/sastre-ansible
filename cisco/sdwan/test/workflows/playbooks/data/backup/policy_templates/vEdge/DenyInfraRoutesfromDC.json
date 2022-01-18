@@ -1,7 +1,0 @@
-{
-  "policyName": "DenyInfraRoutesfromDC",
-  "policyDescription": "Denying Infra Routes",
-  "policyType": "cli",
-  "policyDefinition": "policy\n app-visibility\n flow-visibility\n lists\n  prefix-list InfrastructureRoutes\n   ip-prefix 100.0.0.0/8 le 32\n   ip-prefix 172.0.0.0/8 le 32\n  !\n !\n route-policy denyInfraRoutes\n  sequence 10\n   match\n    address InfrastructureRoutes\n   !\n   action reject\n   !\n  !\n  default-action accept\n !\n!",
-  "policyDefinitionEdit": "policy\n app-visibility\n flow-visibility\n lists\n  prefix-list InfrastructureRoutes\n   ip-prefix 100.0.0.0/8 le 32\n   ip-prefix 172.0.0.0/8 le 32\n  !\n !\n route-policy denyInfraRoutes\n  sequence 10\n   match\n    address InfrastructureRoutes\n   !\n   action reject\n   !\n  !\n  default-action accept\n !\n!"
-}
