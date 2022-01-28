@@ -1,7 +1,27 @@
+import logging
+from logging.handlers import QueueHandler
+from queue import SimpleQueue, Empty
 from ansible.module_utils.basic import env_fallback
 from cisco_sdwan.tasks.common import TaskException, Table
 from cisco_sdwan.base.rest_api import Rest
 from cisco_sdwan.cmd import VMANAGE_PORT, REST_TIMEOUT, BASE_URL
+
+
+class MemoryLogHandler(QueueHandler):
+    def __init__(self):
+        super().__init__(SimpleQueue())
+
+    def message_iter(self):
+        try:
+            while True:
+                record = self.queue.get_nowait()
+                yield record.getMessage()
+        except Empty:
+            pass
+
+
+log_handler = MemoryLogHandler()
+logging.basicConfig(level=logging.INFO, handlers=[log_handler], format="[%(levelname)s] %(message)s")
 
 
 def common_arg_spec():
@@ -60,6 +80,11 @@ def run_task(task_cls, task_args, module_param_dict):
     if task.is_dryrun:
         result['stdout'] = result.get("stdout", "") + str(task.dryrun_report)
 
+    result["trace"] = list(log_handler.message_iter())
     result["msg"] = f"Task completed {task.outcome('successfully', 'with caveats: {tally}')}"
+
+    # Fail ansible task if critical or error messages are found
+    if task.log_count.critical or task.log_count.error:
+        raise TaskException(f'{result["msg"]}: {", ".join(result["trace"])}')
 
     return result
