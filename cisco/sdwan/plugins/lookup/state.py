@@ -7,7 +7,7 @@ from cisco_sdwan.tasks.implementation import TaskShow, ShowStateArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sdwan.plugins.module_utils.common_lookup import (run_task, get_plugin_inventory_args,
+from ansible_collections.cisco.sdwan.plugins.module_utils.common_lookup import (run_task, get_lookup_args,
                                                                                 validate_show_type_args,
                                                                                 validate_show_mandatory_args,
                                                                                 set_show_default_args,
@@ -92,12 +92,13 @@ class LookupModule(LookupBase):
             raise AnsibleOptionsError(f"Parameters are mutually exclusive: {mutual_exclusive_fields}")
         validate_show_mandatory_args(**kwargs)
         validate_show_type_args(**kwargs)
-        task_output = []
+
         try:
             task_args = ShowStateArgs(**set_show_default_args(**kwargs))
-            task_output = run_task(TaskShow, task_args, get_plugin_inventory_args(variables))
+            task_output = run_task(TaskShow, task_args, get_lookup_args(variables))
         except ValidationError as ex:
             raise AnsibleLookupError(f"Invalid show state parameter: {ex}") from None
         except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
             raise AnsibleLookupError(f"Show state error: {ex}") from None
+
         return task_output

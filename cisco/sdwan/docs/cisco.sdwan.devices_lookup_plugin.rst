@@ -19,7 +19,7 @@ Synopsis
 - This lookup returns list of SD-WAN devices from vManage with multiple filter options.
 - When more than one filter condition is defined match is an 'and' of all conditions.
 - When no filter is defined all devices are returned.
-- Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
+- Following parameters must be configured in ansible inventory file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
 
 
 
