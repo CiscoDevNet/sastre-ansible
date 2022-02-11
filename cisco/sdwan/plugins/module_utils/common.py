@@ -4,7 +4,7 @@ from queue import SimpleQueue, Empty
 from ansible.module_utils.basic import env_fallback
 from cisco_sdwan.tasks.common import TaskException, Table
 from cisco_sdwan.base.rest_api import Rest
-from cisco_sdwan.cmd import VMANAGE_PORT, REST_TIMEOUT, BASE_URL
+from cisco_sdwan.cmd import VMANAGE_PORT, REST_TIMEOUT
 
 
 class MemoryLogHandler(QueueHandler):
@@ -30,7 +30,6 @@ def common_arg_spec():
         user=dict(type="str", fallback=(env_fallback, ['VMANAGE_USER'])),
         password=dict(type="str", no_log=True, fallback=(env_fallback, ['VMANAGE_PASSWORD'])),
         tenant=dict(type="str"),
-        pid=dict(type="str", default="0", fallback=(env_fallback, ['CX_PID'])),
         port=dict(type="int", default=VMANAGE_PORT, fallback=(env_fallback, ['VMANAGE_PORT'])),
         timeout=dict(type="int", default=REST_TIMEOUT),
     )
@@ -50,8 +49,9 @@ def sdwan_api_args(module_param_dict):
     if missing_required:
         raise TaskException(f"Missing parameters: {', '.join(missing_required)}")
 
+    port_info = "" if module_param_dict['port'] == "443" else f":{module_param_dict['port']}"
     api_args = {
-        'base_url': BASE_URL.format(address=module_param_dict['address'], port=module_param_dict['port']),
+        'base_url': f'https://{module_param_dict["address"]}{port_info}',
         'username': module_param_dict['user'],
         'password': module_param_dict['password'],
         'timeout': module_param_dict['timeout']

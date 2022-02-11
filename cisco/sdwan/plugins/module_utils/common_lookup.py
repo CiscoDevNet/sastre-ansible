@@ -4,7 +4,7 @@ from cisco_sdwan.cmd import REST_TIMEOUT, VMANAGE_PORT
 from .common import sdwan_api_args
 
 
-def get_plugin_inventory_args(variables):
+def get_lookup_args(variables):
     return dict(
         address=variables.get('ansible_host'),
         user=variables.get('ansible_user'),

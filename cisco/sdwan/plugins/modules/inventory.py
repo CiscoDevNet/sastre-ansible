@@ -116,12 +116,14 @@ stdout_lines:
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
 from cisco_sdwan.base.rest_api import RestAPIException
-from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec
-from ansible_collections.cisco.sdwan.plugins.module_utils.common_inventory import get_inventory_devices, get_inventory_task_args
+from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_arg_spec, module_params
+from ansible_collections.cisco.sdwan.plugins.module_utils.common_inventory import get_matched_devices, InventoryArgs
+
 
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
+        regex_list=dict(type="list", elements="str"),
         regex=dict(type="str"),
         not_regex=dict(type="str"),
         reachable=dict(type="bool"),
@@ -131,13 +133,14 @@ def main():
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('regex', 'not_regex')],
+        mutually_exclusive=[('regex', 'not_regex', 'regex_list')],
         supports_check_mode=True
     )
 
     try:
-        task_args = get_inventory_task_args(module.params)
-        task_result = get_inventory_devices(module.params,task_args)
+        task_args = InventoryArgs(**module_params('regex_list', 'regex', 'not_regex', 'reachable', 'site', 'system_ip',
+                                                  'device_type', module_param_dict=module.params))
+        task_result = get_matched_devices(module.params, task_args)
 
         result = {
             "changed": False,
@@ -149,6 +152,7 @@ def main():
         module.fail_json(msg=f"Invalid inventory parameter: {ex}")
     except (RestAPIException, ConnectionError) as ex:
         module.fail_json(msg=f"inventory error: {ex}")
+
 
 if __name__ == "__main__":
     main()
