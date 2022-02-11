@@ -1,12 +1,12 @@
-:source: devices.py
+:source: state.py
 
 :orphan:
 
-.. _devices_module:
+.. _state_module:
 
 
-devices - Fetches list of SD-WAN devices from vManage
-+++++++++++++++++++++++++++++++++++++++++++++++++++++
+state - State commands. Faster and up-to-date synced state data.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,10 +16,7 @@ devices - Fetches list of SD-WAN devices from vManage
 
 Synopsis
 --------
-- This lookup returns list of SD-WAN devices from vManage with multiple filter options.
-- When more than one filter condition is defined match is an 'and' of all conditions.
-- When no filter is defined all devices are returned.
-- Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
+- This show_devices lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve state device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
 
 
 
@@ -37,12 +34,26 @@ Parameters
         </tr>
                     <tr>
                                                                 <td colspan="1">
-                    <b>device_type</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <b>cmd</b>
+                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Match on device type to include.  Supported values are &#x27;vmanage&#x27;, &#x27;vsmart&#x27;, &#x27;vbond&#x27;, &#x27;vedge&#x27;, &#x27;cedge&#x27;</div>
+                                                                        <div>Group of, or specific command to execute.  Group options are all, bfd, control, interface, omp, system.  Command options are bfd sessions, control connections, control local-properties, interface cedge, interface vedge, omp peers, system info.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>detail</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                                                        <div>Detailed output.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -52,7 +63,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression matching on the device name to not include.</div>
+                                                                        <div>Regular expression matching device name, type or model NOT to display.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -60,13 +71,13 @@ Parameters
                     <b>reachable</b>
                     <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
                                 <td>
-                                                                                                                                                                        <ul><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                                                                                                                                                                                 <li>yes</li>
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>When set to true, only include devices in reachable state.</div>
+                                                                        <div>Display only reachable devices</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -76,7 +87,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression matching on the device name to include.</div>
+                                                                        <div>Regular expression matching device name, type or model to display</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -86,7 +97,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Include devices matching this site id.</div>
+                                                                        <div>Select devices with site ID.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -96,7 +107,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Include devices matching this system ip.</div>
+                                                                        <div>Select device with system IP.</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -110,12 +121,13 @@ Examples
 .. code-block:: yaml+jinja
 
     
-        - name: Fetch devices for vedge device type
-          ansible.builtin.set_fact:
-            device_list: "{{ query('cisco.sdwan.devices',  device_type='vedge') }}"
-        - name: Fetch all devices
-          ansible.builtin.set_fact:
-            device_list: "{{ query('cisco.sdwan.devices') }}"
+        - name: Fetch all devices state data
+          debug:
+            msg: "{{ query('cisco.sdwan.state', cmd=['bfd','sessions'])}}"
+            
+        - name: Fetch devices state data with filter arguments
+          debug:
+            msg: "{{ query('cisco.sdwan.state', cmd=['bfd','sessions'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2')}}"
 
 
 
@@ -134,4 +146,4 @@ Author
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/devices.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/state.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
