@@ -22,6 +22,7 @@ Name | Description
 [cisco.sdwan.delete](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.delete_module.rst)|Delete configuration items on SD-WAN vManage
 [cisco.sdwan.detach_edge](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.detach_edge_module.rst)|Detach templates from WAN Edges
 [cisco.sdwan.detach_vsmart](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.detach_vsmart_module.rst)|Detach templates from vSmarts
+[cisco.sdwan.inventory](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.inventory_module.rst)|Returns list of SD-WAN devices from vManage
 [cisco.sdwan.list_certificate](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.list_certificate_module.rst)|List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file
 [cisco.sdwan.list_configuration](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.list_configuration_module.rst)|List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file
 [cisco.sdwan.list_transform](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.list_transform_module.rst)|List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file
@@ -41,10 +42,9 @@ Name | Description
 Name | Description
 --- | ---
 [cisco.sdwan.devices](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.devices_lookup_plugin.rst)|Fetches list of SD-WAN devices from vManage
-[cisco.sdwan.show_devices](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_devices_lookup_plugin.rst)|Show Device List
-[cisco.sdwan.show_realtime](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_realtime_lookup_plugin.rst)|Realtime commands. Slower, but up-to-date data. vManage collect data from devices in realtime
-[cisco.sdwan.show_state](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_state_lookup_plugin.rst)|State commands. Faster and up-to-date synced state data
-[cisco.sdwan.show_statistics](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_statistics_lookup_plugin.rst)|Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries
+[cisco.sdwan.realtime](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.realtime_lookup_plugin.rst)|Realtime commands. Slower, but up-to-date data. vManage collect data from devices in realtime
+[cisco.sdwan.state](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.state_lookup_plugin.rst)|State commands. Faster and up-to-date synced state data
+[cisco.sdwan.statistics](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.statistics_lookup_plugin.rst)|Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries
 
 ## Building the collection
 

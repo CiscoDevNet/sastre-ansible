@@ -1,12 +1,12 @@
-:source: show_state.py
+:source: state.py
 
 :orphan:
 
-.. _show_state_module:
+.. _state_module:
 
 
-show_state - State commands. Faster and up-to-date synced state data.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+state - State commands. Faster and up-to-date synced state data.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -123,11 +123,11 @@ Examples
     
         - name: Fetch all devices state data
           debug:
-            msg: "{{ query('cisco.sdwan.show_state', cmd=['bfd','sessions'])}}"
+            msg: "{{ query('cisco.sdwan.state', cmd=['bfd','sessions'])}}"
             
         - name: Fetch devices state data with filter arguments
           debug:
-            msg: "{{ query('cisco.sdwan.show_state', cmd=['bfd','sessions'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2')}}"
+            msg: "{{ query('cisco.sdwan.state', cmd=['bfd','sessions'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2')}}"
 
 
 
@@ -146,4 +146,4 @@ Author
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/show_state.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/state.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

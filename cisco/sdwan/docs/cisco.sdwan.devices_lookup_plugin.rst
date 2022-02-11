@@ -19,6 +19,7 @@ Synopsis
 - This lookup returns list of SD-WAN devices from vManage with multiple filter options.
 - When more than one filter condition is defined match is an 'and' of all conditions.
 - When no filter is defined all devices are returned.
+- Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
 
 
 
@@ -35,16 +36,6 @@ Parameters
                         <th width="100%">Comments</th>
         </tr>
                     <tr>
-                                                                <td colspan="1">
-                    <b>_terms</b>
-                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>base url to connect to SD-WAN vmanage</div>
-                                                                                </td>
-            </tr>
-                                <tr>
                                                                 <td colspan="1">
                     <b>device_type</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
@@ -108,16 +99,6 @@ Parameters
                                                                         <div>Include devices matching this system ip.</div>
                                                                                 </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>timeout_secs</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>REST API timeout value in seconds</div>
-                                                                                </td>
-            </tr>
                         </table>
     <br/>
 
@@ -131,10 +112,10 @@ Examples
     
         - name: Fetch devices for vedge device type
           ansible.builtin.set_fact:
-            device_list: "{{ query('cisco.sdwan.devices', 'https://198.18.1.10:8443', device_type='vedge') }}"
+            device_list: "{{ query('cisco.sdwan.devices',  device_type='vedge') }}"
         - name: Fetch all devices
           ansible.builtin.set_fact:
-            device_list: "{{ query('cisco.sdwan.devices', 'https://198.18.1.10:8443') }}"
+            device_list: "{{ query('cisco.sdwan.devices') }}"
 
 
 

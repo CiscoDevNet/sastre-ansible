@@ -1,12 +1,12 @@
-:source: show_realtime.py
+:source: statistics.py
 
 :orphan:
 
-.. _show_realtime_module:
+.. _statistics_module:
 
 
-show_realtime - Realtime commands. Slower, but up-to-date data. vManage collect data from devices in realtime.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+statistics - Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ show_realtime - Realtime commands. Slower, but up-to-date data. vManage collect 
 
 Synopsis
 --------
-- This show_devices lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve realtime device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
+- This show_devices lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve statistics device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
 
 
 
@@ -39,7 +39,18 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Group of, or specific command to execute.  Group options are all, app-route, bfd, control, dpi, interface, omp, software, system, tunnel. Command options are app-route sla-class, app-route stats, bfd sessions, control connections,  control local-properties, dpi summary, interface info, omp adv-routes,  omp peers, omp summary, software info, system status, tunnel stats.</div>
+                                                                        <div>Group of, or specific command to execute.  Group options are all, app-route, interface, system.  Command options are app-route stats, interface info, system status.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>days</b>
+                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
+                                    </td>
+                                                                <td>
+                                                                        <div>Query statistics from days ago (default is now).</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -54,6 +65,17 @@ Parameters
                                                                             </td>
                                                                 <td>
                                                                         <div>Detailed output.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>hours</b>
+                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
+                                    </td>
+                                                                <td>
+                                                                        <div>Query statistics from hours ago (default is now).</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -121,13 +143,13 @@ Examples
 .. code-block:: yaml+jinja
 
     
-        - name: Fetch all devices realtime data
+        - name: Fetch all devices state data
           debug:
-            msg: "{{ query('cisco.sdwan.show_realtime', cmd=['app-route','sla-class'])}}"
+            msg: "{{ query('cisco.sdwan.show_statistics', cmd=['app-route','stats'])}}"
             
-        - name: Fetch devices realtime data with filter arguments
+        - name: Fetch devices state data with filter arguments
           debug:
-            msg: "{{ query('cisco.sdwan.show_realtime', cmd=['app-route','sla-class'], site='100', detail=True, regex='.*', reachable=true, system_ip='10.1.0.2')}}"
+            msg: "{{ query('cisco.sdwan.show_statistics', cmd=['app-route','stats'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2', days=1, hours=2)}}"
 
 
 
@@ -146,4 +168,4 @@ Author
 
 
 .. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/show_realtime.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
+    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/statistics.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
