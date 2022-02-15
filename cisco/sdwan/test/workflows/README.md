@@ -26,7 +26,7 @@ These workflows are tested against following CXTA versions: **==21.9**.
 
 ## Running the workflows in CXTM UI
 * create a Project
-  * configure GIT 
+  * Configure GIT 
   * Configure VPN (if SDWAN dcloud instance is used)
 * At project level , configure following 4 variables in "Variables and Secrets" section
   * VMANAGE_IP
@@ -40,6 +40,7 @@ These workflows are tested against following CXTA versions: **==21.9**.
   * Select Runtime Image Type as "cxta"
   * Add this command in the "command" text box under Advanced Settings section
     * . ./cisco/sdwan/test/workflows/sastre_workflow.sh
+  * Enable all 4 above variables defined at project level under Advanced Settings section
   * ![Enable all 4 above variables defined at project level](./jobfile_variables.png) 
   * Click "Save and Run" to run the script
 
