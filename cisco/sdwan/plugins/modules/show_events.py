@@ -148,7 +148,8 @@ def main():
 
     try:
         task_args = ShowEventsArgs(
-            **module_params('max', 'days', 'hours', 'detail', 'simple', 'save_csv', 'save_json', module_param_dict=module.params)
+            **module_params('max', 'days', 'hours', 'detail', 'simple', 'save_csv', 'save_json',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)
 
