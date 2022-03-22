@@ -154,7 +154,7 @@ def main():
         not_regex=dict(type="str"),
         name_regex=dict(type="str", required=True)
     )
-    
+
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[('regex', 'not_regex')],
@@ -163,7 +163,8 @@ def main():
 
     try:
         task_args = TransformCopyArgs(
-            **module_params('output','workdir','no_rollover','tag','regex', 'not_regex', 'name_regex',  module_param_dict=module.params)
+            **module_params('output', 'workdir', 'no_rollover', 'tag', 'regex', 'not_regex', 'name_regex',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskTransform, task_args, module.params)
 

@@ -121,7 +121,7 @@ def main():
         from_file=dict(type="str"),
         from_json=dict(type="str")
     )
-    
+
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[('from_file', 'from_json')],
@@ -130,7 +130,8 @@ def main():
 
     try:
         task_args = TransformRecipeArgs(
-            **module_params('output', 'workdir', 'no_rollover','from_file','from_json', module_param_dict=module.params)
+            **module_params('output', 'workdir', 'no_rollover', 'from_file', 'from_json',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskTransform, task_args, module.params)
 
