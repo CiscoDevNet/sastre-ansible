@@ -194,8 +194,8 @@ def main():
 
     try:
         task_args = ShowRealtimeArgs(
-            **module_params('exclude', 'include', 'regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd',
-                            'detail', 'simple', module_param_dict=module.params)
+            **module_params('exclude', 'include', 'regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv',
+                            'save_json', 'cmd', 'detail', 'simple', module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)
 

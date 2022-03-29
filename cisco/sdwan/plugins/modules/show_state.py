@@ -183,7 +183,7 @@ def main():
         save_json=dict(type="str"),
         cmd=dict(type="list", elements="str", required=True),
         detail=dict(type="bool"),
-        simple = dict(type="bool")
+        simple=dict(type="bool")
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
@@ -193,8 +193,8 @@ def main():
 
     try:
         task_args = ShowStateArgs(
-            **module_params('exclude', 'include', 'regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd',
-                            'detail', 'simple', module_param_dict=module.params)
+            **module_params('exclude', 'include', 'regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv',
+                            'save_json', 'cmd', 'detail', 'simple', module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)
 
