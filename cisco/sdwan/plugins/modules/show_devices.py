@@ -11,6 +11,16 @@ description: This show devices module connects to SD-WAN vManage using HTTP REST
 notes: 
 - Tested against 20.4.1.1
 options: 
+  exclude:
+    description:
+    - Exclude table rows matching the regular expression
+    required: false
+    type: str
+  include:
+    description:
+    - Include table rows matching the regular expression, exclude all other rows
+    required: false
+    type: str
   regex:
     description:
     - Regular expression matching device name, type or model to display
@@ -85,6 +95,7 @@ EXAMPLES = """
 - name: Show devices data
   cisco.sdwan.show_devices:
     regex: ".*"
+    include: ".*"
     reachable: true
     site: "100"
     system_ip: 10.1.0.2
@@ -134,6 +145,8 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
+        exclude=dict(type="str"),
+        include=dict(type="str"),
         regex=dict(type="str"),
         not_regex=dict(type="str"),
         reachable=dict(type="bool"),
@@ -150,7 +163,7 @@ def main():
 
     try:
         task_args = ShowDevicesArgs(
-            **module_params('regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json',
+            **module_params('exclude', 'include', 'regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)

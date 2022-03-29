@@ -11,6 +11,16 @@ description: This show realtime module connects to SD-WAN vManage using HTTP RES
 notes: 
 - Tested against 20.4.1.1
 options: 
+  exclude:
+    description:
+    - Exclude table rows matching the regular expression
+    required: false
+    type: str
+  include:
+    description:
+    - Include table rows matching the regular expression, exclude all other rows
+    required: false
+    type: str
   regex:
     description:
     - Regular expression matching device name, type or model to display
@@ -105,6 +115,7 @@ options:
 EXAMPLES = """
 - name: Show realtime data
   cisco.sdwan.show_realtime:
+    include: ".*"
     regex: ".*"
     reachable: true
     site: "100"
@@ -121,6 +132,7 @@ EXAMPLES = """
     timeout: 300
 - name: Show realtime data
   cisco.sdwan.show_realtime:
+    exclude: ".*"
     not_regex: ".*"
     reachable: true
     site: "100"
@@ -161,6 +173,8 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
+        exclude=dict(type="str"),
+        include=dict(type="str"),
         regex=dict(type="str"),
         not_regex=dict(type="str"),
         reachable=dict(type="bool"),
@@ -180,7 +194,7 @@ def main():
 
     try:
         task_args = ShowRealtimeArgs(
-            **module_params('regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd',
+            **module_params('exclude', 'include', 'regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv', 'save_json', 'cmd',
                             'detail', 'simple', module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)

@@ -10,14 +10,14 @@ description: The list task can be used to show items from a target vManage,
 notes: 
 - Tested against 20.4.1.1
 options: 
-  regex:
+  exclude:
     description:
-    - Regular expression selecting items to list. Match on item names or IDs.
+    - Exclude table rows matching the regular expression
     required: false
     type: str
-  not_regex:
+  include:
     description:
-    - Regular expression selecting items NOT to list. Match on item names or IDs.
+    - Include table rows matching the regular expression, exclude all other rows
     required: false
     type: str
   workdir:
@@ -97,7 +97,7 @@ EXAMPLES = """
     tags:
         - template_feature
         - policy_vedge
-    regex: ".*"
+    include: ".*"
     workdir: backup_198.18.1.10_20210720 
     save_csv: list_config_csv
     save_json: list_config_json
@@ -106,7 +106,7 @@ EXAMPLES = """
     tags:
         - template_feature
         - policy_vedge
-    not_regex: ".*"
+    exclude: ".*"
     save_csv: list_config_csv
     save_json: list_config_json
     address: 198.18.1.10
@@ -140,8 +140,8 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
-        regex=dict(type="str"),
-        not_regex=dict(type="str"),
+        exclude=dict(type="str"),
+        include=dict(type="str"),
         workdir=dict(type="str"),
         save_csv=dict(type="str"),
         save_json=dict(type="str"),
@@ -149,13 +149,12 @@ def main():
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
 
     try:
         task_args = ListConfigArgs(
-            **module_params('regex', 'not_regex', 'workdir', 'save_csv', 'save_json', 'tags',
+            **module_params('exclude', 'include', 'workdir', 'save_csv', 'save_json', 'tags',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskList, task_args, module.params)

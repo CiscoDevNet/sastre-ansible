@@ -8,16 +8,20 @@ description:
 notes: 
 - Tested against 20.4.1.1
 options: 
-  regex:
+  templates:
     description:
-    - Regular expression matching device template names or IDs to inspect.
-      regex and not_regex parameters are mutually exclusive 
+    - Regular expression selecting device templates to inspect.
+      Match on template name or ID. 
     required: false
     type: str
-  not_regex:
+  exclude:
     description:
-    - Regular expression matching device template names or IDs NOT to inspect.
-      regex and not_regex parameters are mutually exclusive 
+    - Exclude table rows matching the regular expression
+    required: false
+    type: str
+  include:
+    description:
+    - Include table rows matching the regular expression, exclude all other rows
     required: false
     type: str
   workdir:
@@ -75,13 +79,16 @@ options:
 EXAMPLES = """
 - name: Show Template values from local backup directory
   cisco.sdwan.show_template_values:
-    regex: ".*"
+    templates: ".*"
+    exclude: ".*"
     workdir: backup_198.18.1.10_20210720
     save_csv: show_temp_csv
     save_json: show_temp_json
 - name: Show Template values from vManage
   cisco.sdwan.show_template_values:
-    not_regex: ".*"
+    templates: ".*"
+    exclude: ".*"
+    include: ".*"
     save_csv: show_temp_csv
     save_json: show_temp_json
     address: 198.18.1.10
@@ -115,21 +122,21 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
-        regex=dict(type="str"),
-        not_regex=dict(type="str"),
+        templates=dict(type="str"),
+        exclude=dict(type="str"),
+        include=dict(type="str"),
         workdir=dict(type="str"),
         save_csv=dict(type="str"),
         save_json=dict(type="str")
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
 
     try:
         task_args = ShowTemplateValuesArgs(
-            **module_params('regex', 'not_regex', 'workdir', 'save_csv', 'save_json', module_param_dict=module.params)
+            **module_params('templates', 'exclude', 'include', 'workdir', 'save_csv', 'save_json', module_param_dict=module.params)
         )
         task_result = run_task(TaskShowTemplate, task_args, module.params)
 

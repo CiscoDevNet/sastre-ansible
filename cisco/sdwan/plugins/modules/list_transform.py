@@ -20,6 +20,16 @@ options:
     - Regular expression selecting items NOT to list, match on original item names.
     required: false
     type: str
+  exclude:
+    description:
+    - Exclude table rows matching the regular expression
+    required: false
+    type: str
+  include:
+    description:
+    - Include table rows matching the regular expression, exclude all other rows
+    required: false
+    type: str
   workdir:
     description:
     - list will read from the specified directory instead of target vManage. Either workdir or vManage address/user/password is mandatory
@@ -108,6 +118,7 @@ EXAMPLES = """
         - template_feature
         - policy_vedge
     regex: ".*"
+    include: ".*"
     workdir: backup_198.18.1.10_20210720 
     name_regex: '{name}'
     save_csv: list_config_csv
@@ -118,6 +129,8 @@ EXAMPLES = """
         - template_feature
         - policy_vedge
     not_regex: ".*"
+    include: ".*"
+    exclude: ".*"
     save_csv: list_config_csv
     save_json: list_config_json
     name_regex: '{name}'
@@ -154,6 +167,8 @@ def main():
     argument_spec.update(
         regex=dict(type="str"),
         not_regex=dict(type="str"),
+        exclude=dict(type="str"),
+        include=dict(type="str"),
         workdir=dict(type="str"),
         save_csv=dict(type="str"),
         save_json=dict(type="str"),
@@ -168,7 +183,7 @@ def main():
 
     try:
         task_args = ListTransformArgs(
-            **module_params('regex', 'not_regex', 'workdir', 'save_csv', 'save_json', 'tags', 'name_regex',
+            **module_params('regex', 'not_regex', 'exclude', 'include', 'workdir', 'save_csv', 'save_json', 'tags', 'name_regex',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskList, task_args, module.params)
