@@ -183,8 +183,8 @@ def main():
 
     try:
         task_args = ListTransformArgs(
-            **module_params('regex', 'not_regex', 'exclude', 'include', 'workdir', 'save_csv', 'save_json', 'tags', 'name_regex',
-                            module_param_dict=module.params)
+            **module_params('regex', 'not_regex', 'exclude', 'include', 'workdir', 'save_csv', 'save_json', 'tags',
+                            'name_regex', module_param_dict=module.params)
         )
         task_result = run_task(TaskList, task_args, module.params)
 

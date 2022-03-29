@@ -136,7 +136,8 @@ def main():
 
     try:
         task_args = ShowTemplateValuesArgs(
-            **module_params('templates', 'exclude', 'include', 'workdir', 'save_csv', 'save_json', module_param_dict=module.params)
+            **module_params('templates', 'exclude', 'include', 'workdir', 'save_csv', 'save_json',
+                            module_param_dict=module.params)
         )
         task_result = run_task(TaskShowTemplate, task_args, module.params)
 
