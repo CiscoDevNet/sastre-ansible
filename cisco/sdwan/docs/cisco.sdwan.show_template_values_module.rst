@@ -45,12 +45,22 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>not_regex</b>
+                    <b>exclude</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression matching device template names or IDs NOT to inspect. regex and not_regex parameters are mutually exclusive</div>
+                                                                        <div>Exclude table rows matching the regular expression</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>include</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Include table rows matching the regular expression, exclude all other rows</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -76,16 +86,6 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>regex</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Regular expression matching device template names or IDs to inspect. regex and not_regex parameters are mutually exclusive</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>save_csv</b>
                     <br/><div style="font-size: small; color: red">str</div>                                                        </td>
                                 <td>
@@ -102,6 +102,16 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>Save teamplate value as json file</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>templates</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting device templates to inspect. Match on template name or ID.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -164,13 +174,16 @@ Examples
     
     - name: Show Template values from local backup directory
       cisco.sdwan.show_template_values:
-        regex: ".*"
+        templates: ".*"
+        exclude: ".*"
         workdir: backup_198.18.1.10_20210720
         save_csv: show_temp_csv
         save_json: show_temp_json
     - name: Show Template values from vManage
       cisco.sdwan.show_template_values:
-        not_regex: ".*"
+        templates: ".*"
+        exclude: ".*"
+        include: ".*"
         save_csv: show_temp_csv
         save_json: show_temp_json
         address: 198.18.1.10
@@ -182,9 +195,64 @@ Examples
 
 
 
+Return Values
+-------------
+Common return values are documented :ref:`here <common_return_values>`, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+                    <tr>
+                                <td colspan="1">
+                    <b>stdout</b>
+                    <br/><div style="font-size: small; color: red">str</div>
+                                    </td>
+                <td>always apart from low level errors</td>
+                <td>
+                                            <div>Status of Show Template Values</div>
+                                        <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Show Template values data in string format</div>
+                                    </td>
+            </tr>
+                                <tr>
+                                <td colspan="1">
+                    <b>stdout_lines</b>
+                    <br/><div style="font-size: small; color: red">list</div>
+                                    </td>
+                <td>always apart from low level errors</td>
+                <td>
+                                            <div>The value of stdout split into a list</div>
+                                        <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">show table view data</div>
+                                    </td>
+            </tr>
+                        </table>
+    <br/><br/>
+
 
 Status
 ------
+
+
+
+This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
+
+
+
+Maintenance
+-----------
+
+This module is flagged as **community** which means that it is maintained by the Ansible Community. See :ref:`Module Maintenance & Support <modules_support>` for more info.
+
+For a list of other modules that are also maintained by the Ansible Community, see :ref:`here <community_supported>`.
+
 
 
 

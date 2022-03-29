@@ -11,6 +11,16 @@ description: This show alarms module connects to SD-WAN vManage using HTTP REST 
 notes: 
 - Tested against 20.4.1.1
 options: 
+  exclude:
+    description:
+    - Exclude table rows matching the regular expression
+    required: false
+    type: str
+  include:
+    description:
+    - Include table rows matching the regular expression, exclude all other rows
+    required: false
+    type: str
   max:
     description: 
     - Maximum number of records to retrieve (default is now)
@@ -88,6 +98,7 @@ options:
 EXAMPLES = """
 - name: Show alarms data
   cisco.sdwan.show_alarms:
+    include: ".*"
     max: 1
     days: 1
     hours: 1
@@ -132,6 +143,8 @@ from ansible_collections.cisco.sdwan.plugins.module_utils.common import common_a
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
+        exclude=dict(type="str"),
+        include=dict(type="str"),
         max=dict(type="int"),
         days=dict(type="int"),
         hours=dict(type="int"),
@@ -148,7 +161,7 @@ def main():
 
     try:
         task_args = ShowAlarmsArgs(
-            **module_params('max', 'days', 'hours', 'detail', 'simple', 'save_csv', 'save_json',
+            **module_params('exclude', 'include', 'max', 'days', 'hours', 'detail', 'simple', 'save_csv', 'save_json',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskShow, task_args, module.params)

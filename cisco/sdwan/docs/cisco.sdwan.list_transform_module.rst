@@ -44,6 +44,26 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <b>exclude</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Exclude table rows matching the regular expression</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>include</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Include table rows matching the regular expression, exclude all other rows</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <b>name_regex</b>
                     <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
                                 <td>
@@ -200,6 +220,7 @@ Examples
             - template_feature
             - policy_vedge
         regex: ".*"
+        include: ".*"
         workdir: backup_198.18.1.10_20210720 
         name_regex: '{name}'
         save_csv: list_config_csv
@@ -210,6 +231,8 @@ Examples
             - template_feature
             - policy_vedge
         not_regex: ".*"
+        include: ".*"
+        exclude: ".*"
         save_csv: list_config_csv
         save_json: list_config_json
         name_regex: '{name}'
@@ -222,9 +245,64 @@ Examples
 
 
 
+Return Values
+-------------
+Common return values are documented :ref:`here <common_return_values>`, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+                    <tr>
+                                <td colspan="1">
+                    <b>stdout</b>
+                    <br/><div style="font-size: small; color: red">str</div>
+                                    </td>
+                <td>always apart from low level errors</td>
+                <td>
+                                            <div>Status of list</div>
+                                        <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Task List: configuration completed successfully.vManage address 198.18.1.10</div>
+                                    </td>
+            </tr>
+                                <tr>
+                                <td colspan="1">
+                    <b>stdout_lines</b>
+                    <br/><div style="font-size: small; color: red">list</div>
+                                    </td>
+                <td>always apart from low level errors</td>
+                <td>
+                                            <div>The value of stdout split into a list</div>
+                                        <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">show table view data</div>
+                                    </td>
+            </tr>
+                        </table>
+    <br/><br/>
+
 
 Status
 ------
+
+
+
+This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
+
+
+
+Maintenance
+-----------
+
+This module is flagged as **community** which means that it is maintained by the Ansible Community. See :ref:`Module Maintenance & Support <modules_support>` for more info.
+
+For a list of other modules that are also maintained by the Ansible Community, see :ref:`here <community_supported>`.
+
 
 
 
