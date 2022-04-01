@@ -10,6 +10,6 @@
     - name: List configuration
       cisco.sdwan.list_configuration:
         tags: "all"
-        regex: ".*"
+        include: ".*"
         #workdir: data #Either workdir or address is mandatory
         save_csv: "{{ list_config_csv |  default('list_config.csv') }}"
