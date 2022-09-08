@@ -53,6 +53,16 @@ Parameters
                                                                         <div>Maximum number of devices to include per vManage attach request.</div>
                                                                                 </td>
             </tr>
+            <tr>
+                                                                <td colspan="1">
+                    <b>config_groups</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting config-groups to deploy. Match on config-group name.</div>
+                                                                                </td>
+            </tr>
                                 <tr>
                                                                 <td colspan="1">
                     <b>devices</b>
@@ -142,6 +152,7 @@ Parameters
                                                                         <div>Regular expression selecting templates to attach. Match on template name.</div>
                                                                                 </td>
             </tr>
+            
                                 <tr>
                                                                 <td colspan="1">
                     <b>tenant</b>
@@ -210,6 +221,7 @@ Examples
         timeout: 300
         workdir: "/home/user/backups"
         templates: ".*"
+        config_groups: ".*"
         devices: ".*"
         reachable: True
         site: "1"
@@ -221,6 +233,7 @@ Examples
         timeout: 300
         workdir: "/home/user/backups"
         templates: ".*"
+        config_groups: ".*"
         devices: ".*"
         reachable: True
         site: "1"

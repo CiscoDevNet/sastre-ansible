@@ -17,6 +17,11 @@ options:
     - Regular expression selecting templates to detach. Match on template name.
     required: false
     type: str
+  config_groups:
+    description:
+    - Regular expression selecting config-groups to deploy. Match on config-group name.
+    required: false
+    type: str
   devices:
     description:
     - Regular expression selecting devices to detach. Match on device name.
@@ -93,6 +98,7 @@ EXAMPLES = """
     password:"admin"
     timeout: 300
     templates: ".*"
+    config_groups: ".*"
     devices: ".*"
     reachable: True
     site: "1"
@@ -103,6 +109,7 @@ EXAMPLES = """
   cisco.sdwan.detach_edge: 
     timeout: 300
     templates: ".*"
+    config_groups: ".*"
     devices: ".*"
     reachable: True
     site: "1"
@@ -142,6 +149,7 @@ def main():
     argument_spec.update(
         templates=dict(type="str"),
         devices=dict(type="str"),
+        config_groups=dict(type="str"),
         reachable=dict(type="bool"),
         site=dict(type="str"),
         system_ip=dict(type="str"),
@@ -155,7 +163,7 @@ def main():
 
     try:
         task_args = DetachEdgeArgs(
-            **module_params('templates', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
+            **module_params('templates', 'config_groups', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskDetach, task_args, module.params)

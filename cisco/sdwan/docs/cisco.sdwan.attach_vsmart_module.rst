@@ -32,6 +32,20 @@ Parameters
             <th>Choices/<font color="blue">Defaults</font></th>
                         <th width="100%">Comments</th>
         </tr>
+        <tr>
+                                                                <td colspan="1">
+                    <b>activate</b>
+                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                                                        <div>Activate centralized policy after vSmart template attach/deploy.</div>
+                                                                                </td>
+            </tr>
                     <tr>
                                                                 <td colspan="1">
                     <b>address</b>
@@ -51,6 +65,16 @@ Parameters
                                     </td>
                                                                 <td>
                                                                         <div>Maximum number of devices to include per vManage attach request.</div>
+                                                                                </td>
+            </tr>
+            <tr>
+                                                                <td colspan="1">
+                    <b>config_groups</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting config-groups to deploy. Match on config-group name.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -210,8 +234,10 @@ Examples
         timeout: 300
         workdir: "/home/user/backups"
         templates: ".*"
+        config_groups: ".*"
         devices: ".*"
         reachable: True
+        activate: True
         site: "1"
         system_ip: "12.12.12.12"
         dryrun: False
@@ -221,8 +247,10 @@ Examples
         timeout: 300
         workdir: "/home/user/backups"
         templates: ".*"
+        config_groups: ".*"
         devices: ".*"
         reachable: True
+        activate: True
         site: "1"
         system_ip: "12.12.12.12"
         dryrun: True

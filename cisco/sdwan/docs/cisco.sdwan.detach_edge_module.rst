@@ -53,6 +53,16 @@ Parameters
                                                                         <div>Maximum number of devices to include per vManage detach request.</div>
                                                                                 </td>
             </tr>
+            <tr>
+                                                                <td colspan="1">
+                    <b>config_groups</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Regular expression selecting config-groups to deploy. Match on config-group name.</div>
+                                                                                </td>
+            </tr>
                                 <tr>
                                                                 <td colspan="1">
                     <b>devices</b>
@@ -198,6 +208,7 @@ Examples
         password:"admin"
         timeout: 300
         templates: ".*"
+        config_groups: ".*"
         devices: ".*"
         reachable: True
         site: "1"
@@ -208,6 +219,7 @@ Examples
       cisco.sdwan.detach_edge: 
         timeout: 300
         templates: ".*"
+        config_groups: ".*"
         devices: ".*"
         reachable: True
         site: "1"

@@ -27,6 +27,11 @@ options:
     - Regular expression selecting templates to attach. Match on template name.
     required: false
     type: str
+  config_groups:
+    description:
+    - Regular expression selecting config-groups to deploy. Match on config-group name.
+    required: false
+    type: str
   devices:
     description:
     - Regular expression selecting devices to attach. Match on device name.
@@ -35,6 +40,12 @@ options:
   reachable:
     description:
     - Select reachable devices only.
+    required: false
+    type: bool
+    default: False
+  activate:
+    description:
+    - Activate centralized policy after vSmart template attach/deploy.
     required: false
     type: bool
     default: False
@@ -104,8 +115,10 @@ EXAMPLES = """
     timeout: 300
     workdir: "/home/user/backups"
     templates: ".*"
+    config_groups: ".*"
     devices: ".*"
     reachable: True
+    activate: True
     site: "1"
     system_ip: "12.12.12.12"
     dryrun: False
@@ -115,8 +128,10 @@ EXAMPLES = """
     timeout: 300
     workdir: "/home/user/backups"
     templates: ".*"
+    config_groups: ".*"
     devices: ".*"
     reachable: True
+    activate: True
     site: "1"
     system_ip: "12.12.12.12"
     dryrun: True
@@ -156,8 +171,10 @@ def main():
     argument_spec.update(
         workdir=dict(type="str"),
         templates=dict(type="str"),
+        config_groups=dict(type="str"),
         devices=dict(type="str"),
         reachable=dict(type="bool"),
+        activate=dict(type="bool"),
         site=dict(type="str"),
         system_ip=dict(type="str"),
         dryrun=dict(type="bool"),
@@ -171,7 +188,7 @@ def main():
     try:
         task_args = AttachVsmartArgs(
             workdir=module.params['workdir'] or default_workdir(module.params['address']),
-            **module_params('templates', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
+            **module_params('templates', 'config_groups', 'devices', 'reachable', 'activate', 'site', 'system_ip', 'dryrun', 'batch',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskAttach, task_args, module.params)

@@ -1,4 +1,4 @@
 ansible==2.9.27
 pydantic==1.9.0
-cisco-sdwan==1.18
+cisco-sdwan==1.19
 
