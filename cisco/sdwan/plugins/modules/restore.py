@@ -175,6 +175,7 @@ def main():
         regex=dict(type="str"),
         not_regex=dict(type="str"),
         workdir=dict(type="str"),
+        archive=dict(type="str"),
         dryrun=dict(type="bool"),
         attach=dict(type="bool"),
         update=dict(type="bool"),
@@ -183,14 +184,16 @@ def main():
 
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('regex', 'not_regex')],
+        mutually_exclusive=[('regex', 'not_regex'), ('workdir', 'archive')],
         supports_check_mode=True
     )
 
     try:
+        if not module.params['archive']:
+            module.params['workdir'] = module.params['workdir'] or default_workdir(module.params['address'])
+
         task_args = RestoreArgs(
-            workdir=module.params['workdir'] or default_workdir(module.params['address']),
-            **module_params('regex', 'not_regex', 'dryrun', 'attach', 'update', 'tag',
+            **module_params('workdir', 'archive', 'regex', 'not_regex', 'dryrun', 'attach', 'update', 'tag',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskRestore, task_args, module.params)

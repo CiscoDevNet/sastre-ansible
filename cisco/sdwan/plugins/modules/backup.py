@@ -173,18 +173,21 @@ def main():
         no_rollover=dict(type="bool"),
         save_running=dict(type="bool"),
         workdir=dict(type="str"),
+        archive=dict(type="str"),
         tags=dict(type="list", elements="str", required=True)
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('regex', 'not_regex')],
+        mutually_exclusive=[('regex', 'not_regex'), ('workdir', 'archive')],
         supports_check_mode=True
     )
 
     try:
+        if not module.params['archive']:
+            module.params['workdir'] = module.params['workdir'] or default_workdir(module.params['address'])
+
         task_args = BackupArgs(
-            workdir=module.params['workdir'] or default_workdir(module.params['address']),
-            **module_params('regex', 'not_regex', 'no_rollover', 'save_running', 'tags',
+            **module_params('workdir', 'archive', 'regex', 'not_regex', 'no_rollover', 'save_running', 'tags',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskBackup, task_args, module.params)
