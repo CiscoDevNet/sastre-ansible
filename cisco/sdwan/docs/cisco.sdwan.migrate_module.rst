@@ -179,13 +179,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-    - Tested against 20.4.1.1
-
-
 Examples
 --------
 
@@ -197,39 +190,15 @@ Examples
         scope: attached
         output: test_migrate
         workdir: backup_198.18.1.10_20210726
-        name: migrated_1_{name}
-        from: '18.4'
-        to: '20.1'
+        name: "migrated_1_{name}"
         no_rollover: false
     - name: Migrate from vManage to local output
       cisco.sdwan.migrate:
         scope: attached
         output: test_migrate
-        name: migrated_1_{name}
-        from: '18.4'
-        to: '20.1'
-        no_rollover: false
+        name: "migrated_1_{name}"
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
         timeout: 300
-
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/migrate.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

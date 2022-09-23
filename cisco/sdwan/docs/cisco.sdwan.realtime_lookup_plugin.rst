@@ -128,22 +128,3 @@ Examples
         - name: Fetch devices realtime data with filter arguments
           debug:
             msg: "{{ query('cisco.sdwan.realtime', cmd=['app-route','sla-class'], site='100', detail=True, regex='.*', reachable=true, system_ip='10.1.0.2')}}"
-
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/realtime.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

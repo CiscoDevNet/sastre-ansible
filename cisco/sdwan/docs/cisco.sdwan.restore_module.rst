@@ -187,18 +187,23 @@ Parameters
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">backup_&lt;address&gt;_&lt;yyyymmdd&gt;</div>
                                     </td>
                                                                 <td>
-                                                                        <div>Defines the location (in the local machine) where vManage data files are located. By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;. The workdir argument can be used to specify a different location. workdir is under a &#x27;data&#x27; directory. This &#x27;data&#x27; directory is relative to the directory where Ansible script is run.</div>
+                                                                        <div>Restore from directory. By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;. The workdir argument can be used to specify a different location. workdir is under a &#x27;data&#x27; directory. This &#x27;data&#x27; directory is relative to the directory where Ansible script is run.</div>
+                                                                                </td>
+            </tr>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>archive</b>
+                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                                <td>
+
+                                    </td>
+                                                                <td>
+                                                                        <div>Restore from zip archive. Location of the archive file is relative to the directory where Ansible script is run.</div>
                                                                                 </td>
             </tr>
                         </table>
     <br/>
-
-
-Notes
------
-
-.. note::
-    - Tested against 20.4.1.1
 
 
 Examples
@@ -213,9 +218,7 @@ Examples
         port: 8443
         user: "admin"
         password: "admin"
-        timeout: 300
-        workdir: "/home/user/backups"
-        regex: ".*"
+        workdir: "backup_test_1"
         dryrun: False
         attach: False
         update: False
@@ -226,8 +229,7 @@ Examples
         port: 8443
         user: "admin"
         password: "admin"
-        timeout: 300
-        workdir: "/home/user/backups"
+        archive: "backup_test_2.zip"
         regex: ".*"
         dryrun: False
         attach: False
@@ -235,9 +237,7 @@ Examples
         tag: "all"
     - name: Restore vManage configuration with some vManage config arguments saved in environment variables
       cisco.sdwan.restore:
-        timeout: 300
-        workdir: "/home/user/backups"
-        not_regex: ".*"
+        workdir: "backup_test_3"
         dryrun: False
         attach: False
         update: False
@@ -249,21 +249,3 @@ Examples
         password: "admin"
         tag: "all"
 
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/restore.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

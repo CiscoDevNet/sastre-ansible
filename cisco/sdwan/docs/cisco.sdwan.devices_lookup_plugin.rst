@@ -116,22 +116,3 @@ Examples
         - name: Fetch all devices
           ansible.builtin.set_fact:
             device_list: "{{ query('cisco.sdwan.devices') }}"
-
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/devices.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
