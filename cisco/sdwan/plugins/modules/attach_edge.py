@@ -27,6 +27,11 @@ options:
     - Regular expression selecting templates to attach. Match on template name.
     required: false
     type: str
+  config_groups:
+    description:
+    - Regular expression selecting config-groups to deploy. Match on config-group name.
+    required: false
+    type: str
   devices:
     description:
     - Regular expression selecting devices to attach. Match on device name.
@@ -104,6 +109,7 @@ EXAMPLES = """
     timeout: 300
     workdir: "/home/user/backups"
     templates: ".*"
+    config_groups: ".*"
     devices: ".*"
     reachable: True
     site: "1"
@@ -115,6 +121,7 @@ EXAMPLES = """
     timeout: 300
     workdir: "/home/user/backups"
     templates: ".*"
+    config_groups: ".*"
     devices: ".*"
     reachable: True
     site: "1"
@@ -156,6 +163,7 @@ def main():
     argument_spec.update(
         workdir=dict(type="str"),
         templates=dict(type="str"),
+        config_groups=dict(type="str"),
         devices=dict(type="str"),
         reachable=dict(type="bool"),
         site=dict(type="str"),
@@ -171,7 +179,7 @@ def main():
     try:
         task_args = AttachEdgeArgs(
             workdir=module.params['workdir'] or default_workdir(module.params['address']),
-            **module_params('templates', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
+            **module_params('templates', 'config_groups', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskAttach, task_args, module.params)
