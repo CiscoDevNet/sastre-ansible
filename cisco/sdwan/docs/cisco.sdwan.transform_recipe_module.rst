@@ -152,13 +152,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-    - Tested against 20.4.1.1
-
-
 Examples
 --------
 
@@ -168,23 +161,22 @@ Examples
     - name: Transform recipe
       cisco.sdwan.transform_recipe:
         output: transform_recipe
-        workdir: /home/user/backup
+        workdir: reference_backup
         no_rollover: false
         from_file: recipe.yml
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
-        timeout: 300
     - name: Transform recipe
       cisco.sdwan.transform_recipe:
-        output: transform_recipe
+        output: transformed_backup
         from_json: recipe.json
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
-        timeout: 300
+
 
 
 

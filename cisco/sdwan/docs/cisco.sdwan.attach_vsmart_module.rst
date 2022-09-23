@@ -212,13 +212,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-    - Tested against 20.4.1.1
-
-
 Examples
 --------
 
@@ -232,7 +225,7 @@ Examples
         user: "admin"
         password:"admin"
         timeout: 300
-        workdir: "/home/user/backups"
+        workdir: "backup_test_1"
         templates: ".*"
         config_groups: ".*"
         devices: ".*"
@@ -243,9 +236,8 @@ Examples
         dryrun: False
         batch: 99       
     - name: "Attach vManage configuration with some vManage config arguments saved in environment variables"
-      cisco.sdwan.attach_vsmart: 
-        timeout: 300
-        workdir: "/home/user/backups"
+      cisco.sdwan.attach_vsmart:
+        workdir: "backup_test_2"
         templates: ".*"
         config_groups: ".*"
         devices: ".*"
@@ -260,22 +252,3 @@ Examples
         address: "198.18.1.10"
         user: admin
         password: admin
-
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/attach_vsmart.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

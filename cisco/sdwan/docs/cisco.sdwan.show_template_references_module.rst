@@ -173,13 +173,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-    - Tested against 20.4.1.1
-
-
 Examples
 --------
 
@@ -188,24 +181,18 @@ Examples
     
     - name: Show Template references from local backup directory
       cisco.sdwan.show_template_references:
-        templates: ".*"
-        include: ".*"
         save_csv: show_temp_csv
         save_json: show_temp_json
         workdir: backup_198.18.1.10_20210720
         with_refs: True
     - name: Show Template references from vManage
       cisco.sdwan.show_template_references:
-        templates: ".*"
-        include: ".*"
         save_csv: show_temp_csv
-        save_json: show_temp_json
         with_refs: True
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
-
 
 
 
@@ -249,33 +236,3 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
             </tr>
                         </table>
     <br/><br/>
-
-
-Status
-------
-
-
-
-This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-
-Maintenance
------------
-
-This module is flagged as **community** which means that it is maintained by the Ansible Community. See :ref:`Module Maintenance & Support <modules_support>` for more info.
-
-For a list of other modules that are also maintained by the Ansible Community, see :ref:`here <community_supported>`.
-
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/show_template_references.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

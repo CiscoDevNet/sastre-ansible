@@ -150,22 +150,3 @@ Examples
         - name: Fetch devices state data with filter arguments
           debug:
             msg: "{{ query('cisco.sdwan.show_statistics', cmd=['app-route','stats'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2', days=1, hours=2)}}"
-
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/statistics.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

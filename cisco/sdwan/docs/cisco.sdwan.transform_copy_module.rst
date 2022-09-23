@@ -185,13 +185,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-    - Tested against 20.4.1.1
-
-
 Examples
 --------
 
@@ -201,42 +194,21 @@ Examples
     - name: Transform copy
       cisco.sdwan.transform_copy:
         output: transform_copy
-        workdir: /home/user/backup
+        workdir: reference_backup
         no_rollover: false
         tag: "template_device"
         regex: "cedge_1"
-        name_regex: '{name}'
+        name_regex: '{name}_v2'
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
-        timeout: 300
     - name: Transform copy
       cisco.sdwan.transform_copy:
         output: transform_copy
         tag: "template_device"
-        name_regex: '{name}'
+        name_regex: '{name}_v2'
         address: 198.18.1.10
         port: 8443
         user: admin
         password: admin
-        timeout: 300
-
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/transform_copy.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

@@ -168,13 +168,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-    - Tested against 20.4.1.1
-
-
 Examples
 --------
 
@@ -190,29 +183,9 @@ Examples
         password: admin
         verbose: "DEBUG"
         pid: "2"
-        timeout: 300
     - name: Report from local folder
       cisco.sdwan.report:
         workdir: backup_198.18.1.10_20210726
         file: todays_report.txt
         verbose: "DEBUG"
         pid: "2"
-
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/report_diff.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.

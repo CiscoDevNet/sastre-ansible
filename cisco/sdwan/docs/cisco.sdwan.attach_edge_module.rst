@@ -199,13 +199,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-    - Tested against 20.4.1.1
-
-
 Examples
 --------
 
@@ -219,7 +212,7 @@ Examples
         user: "admin"
         password:"admin"
         timeout: 300
-        workdir: "/home/user/backups"
+        workdir: "backup_test_1"
         templates: ".*"
         config_groups: ".*"
         devices: ".*"
@@ -231,7 +224,7 @@ Examples
     - name: "Attach vManage configuration with some vManage config arguments saved in environment variables"
       cisco.sdwan.attach_edge: 
         timeout: 300
-        workdir: "/home/user/backups"
+        workdir: "backup_test_2"
         templates: ".*"
         config_groups: ".*"
         devices: ".*"
@@ -246,21 +239,3 @@ Examples
         user: admin
         password: admin
 
-
-
-
-
-Status
-------
-
-
-
-
-Author
-~~~~~~
-
-- UNKNOWN
-
-
-.. hint::
-    If you notice any issues in this documentation you can `edit this document <https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/attach_edge.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr>`_ to improve it.
