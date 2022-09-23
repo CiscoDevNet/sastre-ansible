@@ -1,11 +1,9 @@
-# Cisco SDWAN Collection
+# Sastre-Ansible - Cisco-SDWAN Automation Toolset Ansible Collection
 
-The Ansible Cisco SDWAN collection includes all the Sastre Pro operations to assist with managing configuration elements from Cisco SD-WAN deployments.
-
-This collection has been tested against Cisco SDWAN vManage version 20.4.1.1.
+The Sastre-Ansible collection exposes Sastre or Sastre-Pro commands to Ansible Playbooks as a set of tasks and lookup plugins. Allowing users to build-up on Sastre functionality to create larger automation workflows.
 
 <!--start requires_ansible-->
-## Ansible version compatibility
+### Ansible version compatibility
 
 This collection has been tested against following Ansible versions: **==2.10.9**.
 
@@ -38,9 +36,9 @@ Name | Description
 [cisco.sdwan.show_events](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_events_module.rst)|Display vManage events
 [cisco.sdwan.show_template_references](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_template_references_module.rst)|Show template references about device templates on vManage or from a local backup. Display as table or export as csv/json file
 [cisco.sdwan.show_template_values](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.show_template_values_module.rst)|Show template values about device templates on vManage or from a local backup. Display as table or export as csv/json file
-[cisco.sdwan.transform_copy_module](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.transform_copy_module.rst)|Transform copy configuration items
-[cisco.sdwan.transform_recipe_module](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.transform_recipe_module.rst)|Transform using custom recipe
-[cisco.sdwan.transform_rename_module](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.transform_rename_module.rst)|Transform rename configuration items
+[cisco.sdwan.transform_copy](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.transform_copy_module.rst)|Transform copy configuration items
+[cisco.sdwan.transform_recipe](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.transform_recipe_module.rst)|Transform using custom recipe
+[cisco.sdwan.transform_rename](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.transform_rename_module.rst)|Transform rename configuration items
 <!--end collection content-->
 
 ### Lookup Plugins
@@ -51,36 +49,40 @@ Name | Description
 [cisco.sdwan.state](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.state_lookup_plugin.rst)|State commands. Faster and up-to-date synced state data
 [cisco.sdwan.statistics](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sdwan/docs/cisco.sdwan.statistics_lookup_plugin.rst)|Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries
 
-## Building the collection
 
-From the top directory:
+## Installation
 
-    % ls
-    CHANGELOG.md			LICENSE				cisco				requirements.txt
-    Jenkinsfile			README.md
-    % ansible-galaxy collection build cisco/sdwan
+### Building the collection
 
+Go to the top-level directory of this repo and run the collection build command:
+```
+% ls
+CHANGELOG.md		README.md			requirements.txt
+Jenkinsfile			cisco				LICENSE
 
-## Installing this collection
-
-You can install the Cisco SDWAN collection with the Ansible Galaxy CLI:
-
-    ansible-galaxy collection install cisco.sdwan
-
-You can also include it in a `requirements.yml` file and install it with `ansible-galaxy collection install -r requirements.yml`, using the format:
-
-```yaml
----
-collections:
-  - name: cisco.sdwan
+% ansible-galaxy collection build cisco/sdwan
+Created collection for cisco.sdwan at cisco-sdwan-1.0.14.tar.gz
 ```
 
-## Dependency
+- Note that it creates a tar.gz artifact, which can then be used to install to the ansible environment
 
-Install [Sastre-Pro](https://wwwin-github.cisco.com/AIDE/Sastre-Pro) using pip 
+### Installing the collection
 
+You can install the Sastre-Ansible collection with the Ansible Galaxy CLI:
+```
+% ansible-galaxy collection install -f cisco-sdwan-1.0.14.tar.gz
+Process install dependency map
+Starting collection install process
+Installing 'cisco.sdwan:1.0.14' to '~/.ansible/collections/ansible_collections/cisco/sdwan'
+```
 
-### Using modules from the Cisco SDWAN collection in your playbooks
+### Dependencies
+
+In addition to Ansible itself, [Sastre](https://github.com/CiscoDevNet/sastre) or [Sastre-Pro](https://wwwin-github.cisco.com/AIDE/Sastre-Pro) need to be installed in the Python environment being used by Ansible.
+
+Please refer to the corresponding README files for Sastre/Sastre-Pro install instructions.
+
+## Using Sastre-Ansible in your playbooks
 
 You can call modules by their Fully Qualified Collection Namespace (FQCN), such as `cisco.sdwan.backup`.
 The following example task saves vManage configuration to local backup:
@@ -101,5 +103,4 @@ The following example task saves vManage configuration to local backup:
     save_running: true
     regex: ".*"
     tags: "all"
-
 ```

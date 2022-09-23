@@ -179,8 +179,8 @@ def main():
     try:
         task_args = AttachEdgeArgs(
             workdir=module.params['workdir'] or default_workdir(module.params['address']),
-            **module_params('templates', 'config_groups', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
-                            module_param_dict=module.params)
+            **module_params('templates', 'config_groups', 'devices', 'reachable', 'site', 'system_ip', 'dryrun',
+                            'batch', module_param_dict=module.params)
         )
         task_result = run_task(TaskAttach, task_args, module.params)
 
