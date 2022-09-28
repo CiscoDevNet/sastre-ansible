@@ -1,0 +1,14 @@
+---
+#ansible-playbook list_configuration.yml --extra-vars "show_template_csv=show_template_csv_with_attachment"
+###############################################################################
+- hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+    - name: Show Template values
+      cisco.sastre.show_template_values:
+        include: ".*"
+        #workdir: backup_198.18.1.10_20211008
+        save_csv: "{{ show_template_csv | default('show_template_values_csv') }}"
+
