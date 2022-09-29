@@ -16,7 +16,7 @@ state - State commands. Faster and up-to-date synced state data.
 
 Synopsis
 --------
-- This show_devices lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve state device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
+- This state lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve state device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
 
 
 

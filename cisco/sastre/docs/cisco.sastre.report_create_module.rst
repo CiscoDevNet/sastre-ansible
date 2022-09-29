@@ -164,18 +164,14 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Report from vManage
-      cisco.sastre.report:
-        file: todays_report.txt
-        address: 198.18.1.10
-        port: 8443
-        user: admin
-        password: admin
-        verbose: "DEBUG"
-        pid: "2"
-    - name: Report from local folder
-      cisco.sastre.report:
-        workdir: backup_198.18.1.10_20210726
-        file: todays_report.txt
-        verbose: "DEBUG"
-        pid: "2"
+        - name: Report from vManage
+          cisco.sastre.report_create:
+            file: todays_report.txt
+            address: 198.18.1.10
+            port: 8443
+            user: admin
+            password: admin
+        - name: Report from local folder
+          cisco.sastre.report_create:
+            workdir: backup_198.18.1.10_20210726
+            file: todays_report.txt

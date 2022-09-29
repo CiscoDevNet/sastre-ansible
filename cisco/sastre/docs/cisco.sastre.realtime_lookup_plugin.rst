@@ -16,7 +16,7 @@ realtime - Realtime commands. Slower, but up-to-date data. vManage collect data 
 
 Synopsis
 --------
-- This show_devices lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve realtime device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
+- This realtime lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve realtime device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
 
 
 

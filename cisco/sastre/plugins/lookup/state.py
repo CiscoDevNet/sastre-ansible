@@ -18,7 +18,7 @@ lookup: state
 version_added: "1.0"
 short_description: State commands. Faster and up-to-date synced state data.
 description:
-    - This show_devices lookup returns list of SD-WAN devices from vManage, contains multiple arguments with 
+    - This state lookup returns list of SD-WAN devices from vManage, contains multiple arguments with 
       connection and filter details to retrieve state device data.
       Following parameters must be configured in ansible inventor file
       - ansible_host

@@ -71,7 +71,7 @@ options:
 
 EXAMPLES = """
 - name: List Certificate
-  cisco.sastre.list_certificate
+  cisco.sastre.list_certificate:
     include: ".*"
     workdir: backup_198.18.1.10_20210720 
     save_csv: list_config_csv

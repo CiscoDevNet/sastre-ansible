@@ -14,11 +14,11 @@ from ansible_collections.cisco.sastre.plugins.module_utils.common_lookup import 
                                                                                 is_mutually_exclusive)
 
 DOCUMENTATION = """
-lookup: show_statistics
+lookup: statistics
 version_added: "1.0"
 short_description: Statistics commands. Faster, but data is 30 min or more old.Allows historical data queries.
 description:
-    - This show_devices lookup returns list of SD-WAN devices from vManage, contains multiple arguments with 
+    - This statistics lookup returns list of SD-WAN devices from vManage, contains multiple arguments with 
       connection and filter details to retrieve statistics device data.
       Following parameters must be configured in ansible inventor file
       - ansible_host
@@ -74,13 +74,13 @@ options:
 """
 
 EXAMPLES = """
-    - name: Fetch all devices state data
+    - name: Fetch all devices statistics data
       debug:
-        msg: "{{ query('cisco.sastre.show_statistics', cmd=['app-route','stats'])}}"
+        msg: "{{ query('cisco.sastre.statistics', cmd=['app-route','stats'])}}"
         
-    - name: Fetch devices state data with filter arguments
+    - name: Fetch devices statistics data with filter arguments
       debug:
-        msg: "{{ query('cisco.sastre.show_statistics', cmd=['app-route','stats'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2', days=1, hours=2)}}"
+        msg: "{{ query('cisco.sastre.statistics', cmd=['app-route','stats'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2', days=1, hours=2)}}"
 """
 
 RETURN = """

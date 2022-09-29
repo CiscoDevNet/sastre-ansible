@@ -16,7 +16,7 @@ statistics - Statistics commands. Faster, but data is 30 min or more old.Allows 
 
 Synopsis
 --------
-- This show_devices lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve statistics device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
+- This statistics lookup returns list of SD-WAN devices from vManage, contains multiple arguments with connection and filter details to retrieve statistics device data. Following parameters must be configured in ansible inventor file - ansible_host - ansible_user - ansible_password - vmanage_port - tenant - timeout
 
 
 
@@ -145,8 +145,8 @@ Examples
     
         - name: Fetch all devices state data
           debug:
-            msg: "{{ query('cisco.sastre.show_statistics', cmd=['app-route','stats'])}}"
+            msg: "{{ query('cisco.sastre.statistics', cmd=['app-route','stats'])}}"
             
         - name: Fetch devices state data with filter arguments
           debug:
-            msg: "{{ query('cisco.sastre.show_statistics', cmd=['app-route','stats'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2', days=1, hours=2)}}"
+            msg: "{{ query('cisco.sastre.statistics', cmd=['app-route','stats'], detail=True, site='100', regex='.*', reachable=true, system_ip='10.1.0.2', days=1, hours=2)}}"
