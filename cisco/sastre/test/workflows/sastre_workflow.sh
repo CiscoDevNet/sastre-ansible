@@ -1,4 +1,4 @@
-pip install --upgrade git+https://github.com/CiscoDevNet/sastre.git
+pip install --upgrade git+https://wwwin-github.cisco.com/AIDE/Sastre-Pro.git
 cd cisco/sastre/
 value=`cat galaxy.yml`
 echo $value | grep -o "version: [0-9]*\.[0-9]*\.[0-9]*" | sed "s/version: //g" > version.txt

@@ -129,7 +129,7 @@ stdout_lines:
 """
 from ansible.module_utils.basic import AnsibleModule
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation import TaskList, ListConfigArgs
+
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
@@ -150,8 +150,8 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True
     )
-
     try:
+        from cisco_sdwan.tasks.implementation import TaskList, ListConfigArgs
         task_args = ListConfigArgs(
             **module_params('exclude', 'include', 'workdir', 'save_csv', 'save_json', 'tags',
                             module_param_dict=module.params)
@@ -163,12 +163,13 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
+    except ImportError as error:
+        module.fail_json(msg=f"{SASTRE_PRO_MSG}")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid list configuration parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"List configuration error: {ex}")
-    except ImportError as error:
-        module.fail_json(msg=f"{SASTRE_PRO_MSG}")
+
 
 
 if __name__ == "__main__":
