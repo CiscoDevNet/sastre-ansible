@@ -163,7 +163,7 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError as error:
+    except ImportError:
         module.fail_json(msg=f"{SASTRE_PRO_MSG}")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid list configuration parameter: {ex}")
