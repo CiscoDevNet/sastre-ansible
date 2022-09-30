@@ -7,6 +7,8 @@ from cisco_sdwan.base.rest_api import Rest
 from cisco_sdwan.cmd import VMANAGE_PORT, REST_TIMEOUT
 
 
+SASTRE_PRO_MSG="This feature is supported in Sastre-Pro Cisco licensed version"
+
 class MemoryLogHandler(QueueHandler):
     def __init__(self):
         super().__init__(SimpleQueue())

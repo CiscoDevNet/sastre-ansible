@@ -133,7 +133,7 @@ from cisco_sdwan.tasks.implementation import TaskList, ListConfigArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
+from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task, SASTRE_PRO_MSG
 
 
 def main():
@@ -167,6 +167,8 @@ def main():
         module.fail_json(msg=f"Invalid list configuration parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
         module.fail_json(msg=f"List configuration error: {ex}")
+    except ImportError as error:
+        module.fail_json(msg=f"{SASTRE_PRO_MSG}")
 
 
 if __name__ == "__main__":
