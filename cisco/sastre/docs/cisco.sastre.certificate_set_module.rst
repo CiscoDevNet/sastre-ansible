@@ -5,13 +5,13 @@
 .. _certificate_set_module:
 
 
-certificate_set - Set WAN edge certificate validity status.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+certificate_set -- Set WAN edge certificate validity status.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
    :local:
-   :depth: 2
+   :depth: 1
 
 
 Synopsis
@@ -35,7 +35,10 @@ Parameters
                     <tr>
                                                                 <td colspan="1">
                     <b>address</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -45,9 +48,12 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>dryrun</b>
-                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                            </div>
+                                    </td>
                                 <td>
-                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                                                                                                                                                                                 <li>yes</li>
                                                                                     </ul>
@@ -59,7 +65,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>not_regex</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -69,7 +78,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>password</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -79,7 +91,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>port</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">8443</div>
                                     </td>
@@ -90,7 +105,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>regex</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -100,9 +118,12 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>status</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
-                                                                                                                            <ul><b>Choices:</b>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li>invalid</li>
                                                                                                                                                                                                 <li>staging</li>
                                                                                                                                                                                                 <li>valid</li>
@@ -115,7 +136,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>tenant</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -125,7 +149,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>timeout</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">300</div>
                                     </td>
@@ -136,7 +163,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>user</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -145,6 +175,14 @@ Parameters
             </tr>
                         </table>
     <br/>
+
+
+Notes
+-----
+
+.. note::
+   - Tested against 20.4.1.1
+
 
 
 Examples

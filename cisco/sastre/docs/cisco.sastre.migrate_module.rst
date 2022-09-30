@@ -5,13 +5,13 @@
 .. _migrate_module:
 
 
-migrate - Migrate configuration items from a vManage release to another. Currently, only 18.4, 19.2 or 19.3 to 20.1 is supported. Minor revision numbers (e.g. 20.1.1) are not relevant for the template migration.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+migrate -- Migrate configuration items from a vManage release to another. Currently, only 18.4, 19.2 or 19.3 to 20.1 is supported. Minor revision numbers (e.g. 20.1.1) are not relevant for the template migration.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
    :local:
-   :depth: 2
+   :depth: 1
 
 
 Synopsis
@@ -35,7 +35,10 @@ Parameters
                     <tr>
                                                                 <td colspan="1">
                     <b>address</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -45,7 +48,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>from</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">18.4</div>
                                     </td>
@@ -56,9 +62,12 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>name</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">migrated_{name}</div>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"migrated_{name}"</div>
                                     </td>
                                                                 <td>
                                                                         <div>format used to name the migrated templates. Variable {name} is replaced with the original template name. Sections of the original template name can be selected using the {name &lt;regex&gt;} format. Where &lt;regex&gt; is a regular expression that must contain at least one capturing group. Capturing groups identify sections of the original name to keep.</div>
@@ -67,9 +76,12 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>no_rollover</b>
-                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                            </div>
+                                    </td>
                                 <td>
-                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                                                                                                                                                                                 <li>yes</li>
                                                                                     </ul>
@@ -81,7 +93,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>output</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -91,7 +106,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>password</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -101,7 +119,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>port</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">8443</div>
                                     </td>
@@ -112,9 +133,12 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>scope</b>
-                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
-                                                                                                                            <ul><b>Choices:</b>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li>all</li>
                                                                                                                                                                                                 <li>attached</li>
                                                                                     </ul>
@@ -126,7 +150,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>tenant</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -136,7 +163,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>timeout</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">300</div>
                                     </td>
@@ -147,7 +177,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>to</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">20.1</div>
                                     </td>
@@ -158,7 +191,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>user</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -168,7 +204,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>workdir</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -177,6 +216,14 @@ Parameters
             </tr>
                         </table>
     <br/>
+
+
+Notes
+-----
+
+.. note::
+   - Tested against 20.4.1.1
+
 
 
 Examples
@@ -190,13 +237,18 @@ Examples
         scope: attached
         output: test_migrate
         workdir: backup_198.18.1.10_20210726
-        name: "migrated_1_{name}"
+        name: migrated_1_{name}
+        from: '18.4'
+        to: '20.1'
         no_rollover: false
     - name: Migrate from vManage to local output
       cisco.sastre.migrate:
         scope: attached
         output: test_migrate
-        name: "migrated_1_{name}"
+        name: migrated_1_{name}
+        from: '18.4'
+        to: '20.1'
+        no_rollover: false
         address: 198.18.1.10
         port: 8443
         user: admin

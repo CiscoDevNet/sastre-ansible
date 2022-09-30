@@ -5,13 +5,13 @@
 .. _backup_module:
 
 
-backup - Save SD-WAN vManage configuration items to local backup
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+backup -- Save SD-WAN vManage configuration items to local backup
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
    :local:
-   :depth: 2
+   :depth: 1
 
 
 Synopsis
@@ -35,7 +35,10 @@ Parameters
                     <tr>
                                                                 <td colspan="1">
                     <b>address</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -44,10 +47,26 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>no_rollover</b>
-                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                    <b>archive</b>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
-                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Backup to zip archive. Location of the archive file is relative to the directory where Ansible script is run.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>no_rollover</b>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                            </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                                                                                                                                                                                 <li>yes</li>
                                                                                     </ul>
@@ -59,7 +78,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>not_regex</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -69,7 +91,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>password</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -79,7 +104,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>port</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">8443</div>
                                     </td>
@@ -90,7 +118,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>regex</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -100,9 +131,12 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>save_running</b>
-                    <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                            </div>
+                                    </td>
                                 <td>
-                                                                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                                                                                                                                                                                 <li>yes</li>
                                                                                     </ul>
@@ -114,9 +148,12 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>tags</b>
-                    <br/><div style="font-size: small; color: red">list</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
-                                                                                                                            <ul><b>Choices:</b>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li>template_feature</li>
                                                                                                                                                                                                 <li>policy_profile</li>
                                                                                                                                                                                                 <li>policy_definition</li>
@@ -137,7 +174,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>tenant</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -147,7 +187,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>timeout</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">300</div>
                                     </td>
@@ -158,7 +201,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>user</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -168,28 +214,26 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>workdir</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">backup_&lt;address&gt;_&lt;yyyymmdd&gt;</div>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"backup_\u003caddress\u003e_\u003cyyyymmdd\u003e"</div>
                                     </td>
                                                                 <td>
-                                                                        <div>Backup to directory. By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;. The workdir argument can be used to specify a different location. workdir is under a &#x27;data&#x27; directory. This &#x27;data&#x27; directory is relative to the directory where Ansible script is run.</div>
-                                                                                </td>
-            </tr>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>archive</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
-                                <td>
-
-                                    </td>
-                                                                <td>
-                                                                        <div>Backup to zip archive. Location of the archive file is relative to the directory where Ansible script is run.</div>
+                                                                        <div>Backup to directory.By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;. The workdir argument can be used to specify a different location. workdir is under a &#x27;data&#x27; directory. This &#x27;data&#x27; directory is relative to the directory where Ansible script is run.</div>
                                                                                 </td>
             </tr>
                         </table>
     <br/>
+
+
+Notes
+-----
+
+.. note::
+   - Tested against 20.4.1.1
 
 
 
@@ -208,6 +252,7 @@ Examples
         workdir: backup_test_1
         no_rollover: true
         save_running: true
+        regex: ".*"
         tags: 
           - template_device
           - template_feature
@@ -221,7 +266,7 @@ Examples
         save_running: true
         tags: "all"
     - name: "Backup vManage configuration with some vManage config arguments saved in environment variables"
-      cisco.sastre.backup:
+      cisco.sastre.backup: 
         workdir: backup_test_3
         regex: ".*"
         tags: "all"
@@ -231,4 +276,3 @@ Examples
         user: admin
         password: admin
         tags: "all"
-

@@ -5,13 +5,13 @@
 .. _report_create_module:
 
 
-report_create - Generate a report file containing the output from all list and show-template commands.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+report_create -- Generate a report file containing the output from all list and show-template commands.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
    :local:
-   :depth: 2
+   :depth: 1
 
 
 Synopsis
@@ -35,7 +35,10 @@ Parameters
                     <tr>
                                                                 <td colspan="1">
                     <b>address</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -45,7 +48,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>diff</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -55,7 +61,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>file</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -65,7 +74,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>password</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -75,7 +87,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>pid</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -85,7 +100,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>port</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">8443</div>
                                     </td>
@@ -96,7 +114,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>spec_file</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -106,7 +127,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>spec_json</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -116,7 +140,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>tenant</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -126,7 +153,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>timeout</b>
-                    <br/><div style="font-size: small; color: red">int</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">300</div>
                                     </td>
@@ -137,7 +167,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>user</b>
-                    <br/><div style="font-size: small; color: red">str</div>                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -147,7 +180,10 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <b>workdir</b>
-                    <br/><div style="font-size: small; color: red">str</div>                                                        </td>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
@@ -158,20 +194,28 @@ Parameters
     <br/>
 
 
+Notes
+-----
+
+.. note::
+   - Tested against 20.4.1.1
+
+
+
 Examples
 --------
 
 .. code-block:: yaml+jinja
 
     
-        - name: Report from vManage
-          cisco.sastre.report_create:
-            file: todays_report.txt
-            address: 198.18.1.10
-            port: 8443
-            user: admin
-            password: admin
-        - name: Report from local folder
-          cisco.sastre.report_create:
-            workdir: backup_198.18.1.10_20210726
-            file: todays_report.txt
+    - name: Report from vManage
+      cisco.sastre.report_create:
+        file: todays_report.txt
+        address: 198.18.1.10
+        port: 8443
+        user: admin
+        password: admin
+    - name: Report from local folder
+      cisco.sastre.report_create:
+        workdir: backup_198.18.1.10_20210726
+        file: todays_report.txt
