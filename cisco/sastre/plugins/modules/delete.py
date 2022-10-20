@@ -128,8 +128,7 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation import TaskDelete, DeleteArgs
-from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
+from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task, SASTRE_PRO_MSG
 
 
 def main():
@@ -148,6 +147,7 @@ def main():
     )
 
     try:
+        from cisco_sdwan.tasks.implementation import TaskDelete, DeleteArgs
         task_args = DeleteArgs(
             **module_params('regex', 'not_regex', 'dryrun', 'detach', 'tag', module_param_dict=module.params)
         )
@@ -158,6 +158,8 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
+    except ImportError:
+        module.fail_json(msg=SASTRE_PRO_MSG)
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid delete parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

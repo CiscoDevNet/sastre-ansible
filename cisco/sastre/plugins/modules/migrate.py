@@ -132,8 +132,8 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation import TaskMigrate, MigrateArgs
-from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
+
+from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task, SASTRE_PRO_MSG
 
 
 def main():
@@ -154,6 +154,7 @@ def main():
     )
 
     try:
+        from cisco_sdwan.tasks.implementation import TaskMigrate, MigrateArgs
         task_args = MigrateArgs(
             **module_params('scope', 'output', 'no_rollover', 'name', 'from_version', 'to_version', 'workdir',
                             module_param_dict=module.params)
@@ -164,7 +165,9 @@ def main():
             "changed": False
         }
         module.exit_json(**result, **task_result)
-
+        
+    except ImportError:
+        module.fail_json(msg=SASTRE_PRO_MSG)
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid Migrate parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

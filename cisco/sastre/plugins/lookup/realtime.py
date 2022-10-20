@@ -3,10 +3,10 @@ from ansible.errors import AnsibleLookupError, AnsibleOptionsError
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
 from pydantic import ValidationError
-from cisco_sdwan.tasks.implementation import TaskShow, ShowRealtimeArgs
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from ansible_collections.cisco.sastre.plugins.module_utils.common import SASTRE_PRO_MSG
 from ansible_collections.cisco.sastre.plugins.module_utils.common_lookup import (run_task, get_lookup_args,
                                                                                 validate_show_type_args,
                                                                                 validate_show_mandatory_args,
@@ -95,8 +95,11 @@ class LookupModule(LookupBase):
         validate_show_type_args(**kwargs)
 
         try:
+            from cisco_sdwan.tasks.implementation import TaskShow, ShowRealtimeArgs
             task_args = ShowRealtimeArgs(**set_show_default_args(**kwargs))
             task_output = run_task(TaskShow, task_args, get_lookup_args(variables))
+        except ImportError:
+             raise AnsibleLookupError(SASTRE_PRO_MSG) from None
         except ValidationError as ex:
             raise AnsibleLookupError(f"Invalid show realtime parameter: {ex}") from None
         except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

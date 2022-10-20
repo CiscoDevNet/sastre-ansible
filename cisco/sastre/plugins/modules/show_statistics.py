@@ -171,12 +171,11 @@ stdout_lines:
   sample: show table view data
 """
 from ansible.module_utils.basic import AnsibleModule
-from cisco_sdwan.tasks.implementation import TaskShow, ShowStatisticsArgs
 from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
+from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task, SASTRE_PRO_MSG
 
 
 def main():
@@ -204,6 +203,7 @@ def main():
     )
 
     try:
+        from cisco_sdwan.tasks.implementation import TaskShow, ShowStatisticsArgs
         task_args = ShowStatisticsArgs(
             **module_params('exclude', 'include', 'regex', 'not_regex', 'reachable', 'site', 'system_ip', 'save_csv',
                             'save_json', 'cmd', 'detail', 'simple', 'days', 'hours', module_param_dict=module.params)
@@ -215,6 +215,8 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
+    except ImportError:
+        module.fail_json(msg=SASTRE_PRO_MSG)
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid show statistics parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
