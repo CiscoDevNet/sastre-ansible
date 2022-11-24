@@ -1,0 +1,16 @@
+---
+#ansible-playbook backup.yml --extra-vars "backup_path=backup_123"
+###############################################################################
+- hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+    - name: Backup vManage configuration
+      cisco.sastre.backup:
+        workdir: "{{ backup_path  |  default('backup') }}"
+        regex: ".*"
+        tags: "all"
+        no_rollover: False
+        save_running: True
+
