@@ -1,4 +1,6 @@
 #! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 DOCUMENTATION = """
 module: detach_edge
 short_description: Detach templates from WAN Edges.
@@ -138,7 +140,7 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task, SASTRE_PRO_MSG
+from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
@@ -161,7 +163,8 @@ def main():
     try:
         from cisco_sdwan.tasks.implementation import TaskDetach, DetachEdgeArgs
         task_args = DetachEdgeArgs(
-            **module_params('templates', 'config_groups', 'devices', 'reachable', 'site', 'system_ip', 'dryrun', 'batch',
+            **module_params('templates', 'config_groups', 'devices', 'reachable', 'site', 'system_ip', 'dryrun',
+                            'batch',
                             module_param_dict=module.params)
         )
         task_result = run_task(TaskDetach, task_args, module.params)
@@ -172,7 +175,7 @@ def main():
         module.exit_json(**result, **task_result)
 
     except ImportError:
-        module.fail_json(msg=SASTRE_PRO_MSG)
+        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid detach edge parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

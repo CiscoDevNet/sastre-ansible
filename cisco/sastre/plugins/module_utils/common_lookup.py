@@ -1,6 +1,6 @@
 from ansible.errors import AnsibleOptionsError
 from cisco_sdwan.base.rest_api import Rest
-from cisco_sdwan.cmd import REST_TIMEOUT, VMANAGE_PORT
+from cisco_sdwan.__main__ import REST_TIMEOUT, VMANAGE_PORT
 from .common import sdwan_api_args
 
 

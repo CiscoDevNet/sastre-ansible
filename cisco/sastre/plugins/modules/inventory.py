@@ -1,4 +1,6 @@
 #! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 DOCUMENTATION = """
 module: inventory
 short_description: Inventory device List

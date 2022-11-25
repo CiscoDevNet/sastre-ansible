@@ -1,4 +1,6 @@
 #! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from cisco_sdwan.base.rest_api import RestAPIException
 from ansible.errors import AnsibleLookupError, AnsibleOptionsError
 from ansible.utils.display import Display

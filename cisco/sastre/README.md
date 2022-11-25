@@ -1,3 +1,3 @@
-# Ansible Collection - cisco.sdwan
+# Ansible Collection - cisco.sastre
 
 Documentation for the collection.

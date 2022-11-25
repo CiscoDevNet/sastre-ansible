@@ -4,10 +4,8 @@ from queue import SimpleQueue, Empty
 from ansible.module_utils.basic import env_fallback
 from cisco_sdwan.tasks.common import TaskException, Table
 from cisco_sdwan.base.rest_api import Rest
-from cisco_sdwan.cmd import VMANAGE_PORT, REST_TIMEOUT
+from cisco_sdwan.__main__ import VMANAGE_PORT, REST_TIMEOUT
 
-
-SASTRE_PRO_MSG="This feature is supported in Sastre-Pro Cisco licensed version"
 
 class MemoryLogHandler(QueueHandler):
     def __init__(self):
