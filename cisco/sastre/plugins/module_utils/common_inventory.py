@@ -3,7 +3,8 @@ from cisco_sdwan.base.rest_api import Rest
 from typing import NamedTuple, List, Optional
 from cisco_sdwan.base.models_vmanage import Device
 from cisco_sdwan.tasks.common import regex_search
-from cisco_sdwan.tasks.models import TaskArgs, validate_regex, validate_site_id, validate_ipv4
+from cisco_sdwan.tasks.models import TaskArgs
+from cisco_sdwan.tasks.validators import validate_regex, validate_site_id, validate_ipv4
 from pydantic import validator
 from .common import sdwan_api_args
 

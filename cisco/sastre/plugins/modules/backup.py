@@ -1,4 +1,6 @@
 #! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 DOCUMENTATION = """
 module: backup
 short_description: Save SD-WAN vManage configuration items to local backup
@@ -157,7 +159,7 @@ from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task, SASTRE_PRO_MSG
+from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
@@ -194,7 +196,7 @@ def main():
         module.exit_json(**result, **task_result)
 
     except ImportError:
-        module.fail_json(msg=SASTRE_PRO_MSG)
+        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid backup parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

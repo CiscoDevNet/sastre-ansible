@@ -1,4 +1,6 @@
 #! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from ansible.errors import AnsibleLookupError, AnsibleOptionsError
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
@@ -6,12 +8,10 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sastre.plugins.module_utils.common import SASTRE_PRO_MSG
-from ansible_collections.cisco.sastre.plugins.module_utils.common_lookup import (run_task, get_lookup_args,
-                                                                                validate_show_type_args,
-                                                                                validate_show_mandatory_args,
-                                                                                set_show_default_args,
-                                                                                is_mutually_exclusive)
+from ansible_collections.cisco.sastre.plugins.module_utils.common_lookup import (
+    run_task, get_lookup_args, validate_show_type_args, validate_show_mandatory_args, set_show_default_args,
+    is_mutually_exclusive
+)
 
 DOCUMENTATION = """
 lookup: state
@@ -98,7 +98,7 @@ class LookupModule(LookupBase):
             task_args = ShowStateArgs(**set_show_default_args(**kwargs))
             task_output = run_task(TaskShow, task_args, get_lookup_args(variables))
         except ImportError:
-             raise AnsibleLookupError(SASTRE_PRO_MSG) from None
+            raise AnsibleLookupError("This plugin requires Sastre-Pro Python package") from None
         except ValidationError as ex:
             raise AnsibleLookupError(f"Invalid show state parameter: {ex}") from None
         except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

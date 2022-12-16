@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 DOCUMENTATION = """
-module: transform_rename
-short_description: Transform rename configuration items
-description: The transform rename task can be used to rename confiuration items. A regular expression can be used to select item names to transform.
+module: device_bootstrap
+short_description: Transform copy configuration items
+description: The transform copy task can be used to copy confiuration items. A regular expression can be used to select item names to transform.
 notes: 
 - Tested against 20.4.1.1
 options: 
@@ -99,9 +99,9 @@ options:
 """
 
 EXAMPLES = """
-- name: Transform rename
-  cisco.sastre.transform_rename:
-    output: transform_rename
+- name: Transform copy
+  cisco.sastre.transform_copy:
+    output: transform_copy
     workdir: reference_backup
     no_rollover: false
     tag: "template_device"
@@ -111,9 +111,9 @@ EXAMPLES = """
     port: 8443
     user: admin
     password: admin
-- name: Transform rename
-  cisco.sastre.transform_rename:
-    output: transform_rename
+- name: Transform copy
+  cisco.sastre.transform_copy:
+    output: transform_copy
     tag: "template_device"
     name_regex: '{name}_v2'
     address: 198.18.1.10
@@ -124,61 +124,54 @@ EXAMPLES = """
 
 RETURN = """
 stdout:
-  description: Status of Transform rename
+  description: Status of Transform copy
   returned: always apart from low level errors
   type: str
-  sample: 'Task transform rename : set completed successfully.vManage address 198.18.1.10'
+  sample: 'Task transform copy : set completed successfully.vManage address 198.18.1.10'
 stdout_lines:
   description: The value of stdout split into a list
   returned: always apart from low level errors
   type: list
-  sample: ['Task transform rename: set completed successfully.vManage address 198.18.1.10']
+  sample: ['Task transform copy: set completed successfully.vManage address 198.18.1.10']
 """
-from pydantic import ValidationError
 from ansible.module_utils.basic import AnsibleModule
 from cisco_sdwan.tasks.common import TaskException
-from cisco_sdwan.base.rest_api import RestAPIException
+from cisco_sdwan.base.rest_api import RestAPIException, Rest
 from cisco_sdwan.base.models_base import ModelException
-from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
+from cisco_sdwan.base.models_vmanage import DeviceBootstrap
+from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, sdwan_api_args
 
 
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
-        output=dict(type="str", required=True),
-        workdir=dict(type="str"),
-        no_rollover=dict(type="bool"),
-        tag=dict(type="str", required=True),
-        regex=dict(type="str"),
-        not_regex=dict(type="str"),
-        name_regex=dict(type="str", required=True)
+        uuid=dict(type="str", required=True),
+        config_type=dict(type="str"),
+        include_default_root_certs=dict(type="bool"),
+        version=dict(type="str"),
     )
-
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('regex', 'not_regex')],
         supports_check_mode=True
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskTransform, TransformRenameArgs
-        task_args = TransformRenameArgs(
-            **module_params('output', 'workdir', 'no_rollover', 'tag', 'regex', 'not_regex', 'name_regex',
-                            module_param_dict=module.params)
-        )
-        task_result = run_task(TaskTransform, task_args, module.params)
+        with Rest(**sdwan_api_args(module_param_dict=module.params)) as api:
+            response = DeviceBootstrap.get(api, **module_params('uuid', 'config_type', 'include_default_root_certs',
+                                                                'version', module_param_dict=module.params))
 
-        result = {
-            "changed": False
-        }
-        module.exit_json(**result, **task_result)
+            result = {
+                "changed": True,
+                "uuid": response.uuid,
+                "otp": response.otp,
+                "vbond": response.vbond,
+                "organization": response.organization,
+                "bootstrap_config": response.bootstrap_config
+            }
+            module.exit_json(**result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
-    except ValidationError as ex:
-        module.fail_json(msg=f"Invalid transform rename parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"Transform rename error: {ex}")
+        module.fail_json(msg=f"Device bootstrap error: {ex}")
 
 
 if __name__ == "__main__":
