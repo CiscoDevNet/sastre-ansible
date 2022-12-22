@@ -15,7 +15,7 @@ options:
     type: str
   config_type:
     description: 
-    - config type to be used
+    - bootstrap configuration type to be used
     required: false
     type: str
     default: cloudinit
