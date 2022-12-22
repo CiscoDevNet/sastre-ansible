@@ -12,9 +12,10 @@ This collection has been tested against following Ansible versions: **==2.10.9**
 ### Modules
 Name | Description
 --- | ---
-[cisco.sastre.attach_edge](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.attach_edge_module.rst)|Attach templates to WAN Edges
+[cisco.sastre.attach_edge](cisco/sastre/docs/cisco.sastre.attach_edge_module.rst)|Attach templates to WAN Edges
 [cisco.sastre.attach_vsmart](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.attach_vsmart_module.rst)|Attach templates to Vsmarts
 [cisco.sastre.backup](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.backup_module.rst)|Save SD-WAN vManage configuration items to local backup
+[cisco.sastre.device_bootstrap_module](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.device_bootstrap_module.rst)|Performs device bootstrap
 [cisco.sastre.certificate_restore](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.certificate_restore_module.rst)|Restore WAN edge certificate validity status to from a backup
 [cisco.sastre.certificate_set](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.certificate_set_module.rst)|Set WAN edge certificate validity status
 [cisco.sastre.delete](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.delete_module.rst)|Delete configuration items on SD-WAN vManage
@@ -28,6 +29,7 @@ Name | Description
 [cisco.sastre.report_create](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.report_create_module.rst)|Generate a report file containing the output from all list and show-template commands
 [cisco.sastre.report_diff](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.report_diff_module.rst)|Generate a report file containing the output from all list and show-template commands
 [cisco.sastre.restore](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.restore_module.rst)|Restore configuration items from a local backup to SD-WAN vManage
+[cisco.sastre.settings_enterprise_ca_module](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.settings_enterprise_ca_module.rst)|Setting enterprise root certificate
 [cisco.sastre.show_devices](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.show_devices_module.rst)|Show Device List
 [cisco.sastre.show_realtime](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.show_realtime_module.rst)|Realtime commands. Slower, but up-to-date data. vManage collect data from devices in realtime
 [cisco.sastre.show_state](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/cisco/sastre/docs/cisco.sastre.show_state_module.rst)|State commands. Faster and up-to-date synced state data
