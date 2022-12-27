@@ -3,67 +3,35 @@
 
 DOCUMENTATION = """
 module: device_bootstrap
-short_description: Transform copy configuration items
-description: The transform copy task can be used to copy confiuration items. A regular expression can be used to select item names to transform.
+short_description: Performs device bootstrap
+description: Performs device bootstrap for a given uuid value
 notes: 
 - Tested against 20.4.1.1
 options: 
-  output:
+  uuid:
     description: 
-    - Directory to save transform result
+    - device uuid
     required: true
     type: str
-  workdir:
+  config_type:
     description: 
-    - transform will read from the specified directory instead of target vManage
+    - bootstrap configuration type to be used
     required: false
     type: str
-  no_rollover:
+    default: cloudinit
+  include_default_root_certs:
     description:
-    - By default, if output directory already exists it is 
-      renamed using a rolling naming scheme. "True" disables the automatic rollover. "False"
-      enables the automatic rollover
+    - By default, includes default root certificate. "True" includes the default root cert. "False"
+      does not include the default root cert
     required: false
     type: bool
-    default: False
-  tag:
+    default: True
+  version:
     description:
-    - Tag for selecting items to transform. Available tags are template_feature, policy_profile, policy_definition,
-      all, policy_list, policy_vedge, policy_voice, policy_vsmart, template_device, policy_security,
-      policy_customapp. Special tag "all" selects all items.
-    required: true
-    type: str
-    choices:
-    - "template_feature"
-    - "policy_profile"
-    - "policy_definition"
-    - "all"
-    - "policy_list"
-    - "policy_vedge"
-    - "policy_voice"
-    - "policy_vsmart"
-    - "template_device"
-    - "policy_security"
-    - "policy_customapp"
-  regex:
-    description:
-    - Regular expression selecting item names to transform
+    - version to be used
     required: false
     type: str
-  not_regex:
-    description:
-    - Regular expression selecting item names NOT to transform
-    required: false
-    type: str
-  name_regex:
-    description:
-    - name-regex used to transform an existing item name. Variable {name} is
-      replaced with the original template name. Sections of the original template
-      name can be selected using the {name <regex>} format. Where regex is a
-      regular expression that must contain at least one capturing group. Capturing
-      groups identify sections of the original name to keep.
-    required: true
-    type: str
+    default: v1
   address:
     description:
     - vManage IP address or can also be defined via VMANAGE_IP environment variable
@@ -99,23 +67,19 @@ options:
 """
 
 EXAMPLES = """
-- name: Transform copy
-  cisco.sastre.transform_copy:
-    output: transform_copy
-    workdir: reference_backup
-    no_rollover: false
-    tag: "template_device"
-    regex: "cedge_1"
-    name_regex: '{name}_v2'
+- name: Device bootstrap with only uuid
+  cisco.sastre.device_bootstrap:
+    uuid: "f21dbb35-30b3-47f4-93bb-d2b2fe092d35"
     address: 198.18.1.10
     port: 8443
     user: admin
     password: admin
-- name: Transform copy
-  cisco.sastre.transform_copy:
-    output: transform_copy
-    tag: "template_device"
-    name_regex: '{name}_v2'
+- name: Device bootstrap 
+  cisco.sastre.device_bootstrap:
+    uuid: "f21dbb35-30b3-47f4-93bb-d2b2fe092d35"
+    config_type: "cloudinit"
+    include_default_root_certs: true
+    version: "v1"
     address: 198.18.1.10
     port: 8443
     user: admin
@@ -124,15 +88,9 @@ EXAMPLES = """
 
 RETURN = """
 stdout:
-  description: Status of Transform copy
+  description: Status of device bootstrap
   returned: always apart from low level errors
   type: str
-  sample: 'Task transform copy : set completed successfully.vManage address 198.18.1.10'
-stdout_lines:
-  description: The value of stdout split into a list
-  returned: always apart from low level errors
-  type: list
-  sample: ['Task transform copy: set completed successfully.vManage address 198.18.1.10']
 """
 from ansible.module_utils.basic import AnsibleModule
 from cisco_sdwan.tasks.common import TaskException
