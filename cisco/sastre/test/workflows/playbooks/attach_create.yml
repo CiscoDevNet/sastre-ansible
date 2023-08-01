@@ -1,0 +1,13 @@
+---
+#ansible-playbook attach_vsmart.yml --extra-vars "attach_file=attach_file_123.yml"
+###############################################################################
+- hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+    - name: Attach create vManage configuration
+      cisco.sastre.attach_create:
+        templates: ".*"
+        devices: ".*"
+        save_attach_file: "{{ attach_file  |  default('attach_template.yml') }}"

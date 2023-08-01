@@ -1,5 +1,6 @@
 import os
 import json
+import yaml
 
 class sastre_ansible(object):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
@@ -29,14 +30,17 @@ class sastre_ansible(object):
                 return True
         raise AssertionError(msg or f'{task_name} task failed....')
 
-    def compare_show_template_values_attach_detach(self, csv_files_with_attachment, csv_files_with_out_attachment,
+    def compare_show_template_values_attach_detach(self, csv_files_with_attachment, csv_files_with_out_attachment, is_edge: bool,
                                                      msg=None):
         try:
-            print(f'path1: {csv_files_with_attachment}, path2: {csv_files_with_out_attachment}, msg: {msg}')
+            print(f'path1: {csv_files_with_attachment}, path2: {csv_files_with_out_attachment}, is_edge: {is_edge}, msg: {msg}')
             files_with_attachment = {str(filename) for filename in os.listdir(csv_files_with_attachment)}
             invalid_files = [str(filename) for filename in os.listdir(csv_files_with_out_attachment)
-                             if not str(filename).startswith("template_values_vsmart") and str(
-                    filename) in files_with_attachment]
+                             if not str(filename).startswith("template_values_vsmart") and 
+                             str(filename) in files_with_attachment
+                            ] if is_edge else [str(filename) for filename in os.listdir(csv_files_with_out_attachment)
+                             if  str(filename).startswith("template_values_vsmart") and 
+                             str(filename) in files_with_attachment]
             if len(invalid_files) > 0:
                 raise AssertionError(
                     msg or f'show template values no attachment task has invalid files : {invalid_files}')
@@ -99,6 +103,26 @@ class sastre_ansible(object):
                 if column_values1 != column_values2:
                     raise AssertionError(
                         msg or f'files are not equal {csv_file1}, {csv_file2}')
+        except FileNotFoundError as err:
+            raise AssertionError(err)
+        return True
+    
+    def compare_yml_files(self, yml_file1, yml_file2, compare_equal=True, msg=None):
+        try:
+            print(f'yml_file1: {yml_file1}, yml_file2: {yml_file2}, compare_equal: {compare_equal}, msg: {msg}')
+            with open(yml_file1, 'r') as file1:
+                data1 = yaml.load(file1, Loader=yaml.FullLoader)
+            with open(yml_file2, 'r') as file2:
+                data2 = yaml.load(file2, Loader=yaml.FullLoader)
+
+            if compare_equal:
+                if data1 != data2:
+                    raise AssertionError(
+                            msg or f'yaml files are not equal {yml_file1}, {yml_file2}')
+            else:
+                if data1 == data2:
+                    raise AssertionError(
+                            msg or f'yaml files are equal {yml_file1}, {yml_file2}')
         except FileNotFoundError as err:
             raise AssertionError(err)
         return True

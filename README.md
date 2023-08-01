@@ -14,6 +14,7 @@ Name | Description
 --- | ---
 [cisco.sastre.attach_edge](cisco/sastre/docs/cisco.sastre.attach_edge_module.rst)|Attach templates to WAN Edges
 [cisco.sastre.attach_vsmart](cisco/sastre/docs/cisco.sastre.attach_vsmart_module.rst)|Attach templates to Vsmarts
+[cisco.sastre.attach_create](cisco/sastre/docs/cisco.sastre.attach_create_module.rst)|Attach create templates and config-groups to YAML file
 [cisco.sastre.backup](cisco/sastre/docs/cisco.sastre.backup_module.rst)|Save SD-WAN vManage configuration items to local backup
 [cisco.sastre.device_bootstrap](cisco/sastre/docs/cisco.sastre.device_bootstrap_module.rst)|Performs device bootstrap
 [cisco.sastre.certificate_restore](cisco/sastre/docs/cisco.sastre.certificate_restore_module.rst)|Restore WAN edge certificate validity status to from a backup

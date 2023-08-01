@@ -16,7 +16,7 @@ attach_edge -- Attach templates to WAN Edges.
 
 Synopsis
 --------
-- This attach module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder. This module contains multiple arguments with connection and filter details to attach WAN Edges to templates. When multiple filters are defined, the result is an AND of all filters. Dry-run can be used to validate the expected outcome.The number of devices to include per attach request (to vManage) can be defined with the batch param.
+- This attach module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder or attach yml file. This module contains multiple arguments with connection and filter details to attach WAN Edges to templates. When multiple filters are defined, the result is an AND of all filters. Dry-run can be used to validate the expected outcome.The number of devices to include per attach request (to vManage) can be defined with the batch param.
 
 
 
@@ -43,6 +43,19 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>vManage IP address or can also be defined via VMANAGE_IP environment variable</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>attach_file</b>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>load edge device templates attach and config-groups attach from attach YAML file. This attach yml file can be generated using attach_create ansible module</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -283,6 +296,10 @@ Examples
         system_ip: "12.12.12.12"
         dryrun: True
         batch: 99    
+    - name: "Attach edge device templates and config groups from attach yml file"
+      cisco.sastre.attach_edge: 
+        attach_file: "/path/to/attach.yml"
+        batch: 99  
     - name: "Attach vManage configuration with all defaults"
       cisco.sastre.attach_edge: 
         address: "198.18.1.10"
