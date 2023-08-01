@@ -1,0 +1,25 @@
+{
+  "listId": "efb148be-5d3e-4eec-ad8f-6d80e0dfa9f2",
+  "name": "InfrastructureRoutes",
+  "type": "prefix",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "ipPrefix": "100.64.0.0/16",
+      "le": "32"
+    }
+  ],
+  "lastUpdated": 1632364913519,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "25804a55-c7d5-44cb-9f12-3b629229635a",
+      "type": "vedgeRoute"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

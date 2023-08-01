@@ -1,0 +1,35 @@
+[
+  {
+    "name": "AppRoutePolicy",
+    "definitionId": "40b8d81d-1785-4a7f-8c44-5ff63e305fca",
+    "type": "appRoute",
+    "description": "My App Route Policy",
+    "owner": "admin",
+    "lastUpdated": 1632364921974,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 0,
+    "references": []
+  },
+  {
+    "name": "AppRoutePolicyVPN10",
+    "definitionId": "1546c897-6736-4e78-adc6-fdb873f38549",
+    "type": "appRoute",
+    "description": "VPN 10 App Route Policy",
+    "owner": "admin",
+    "lastUpdated": 1632364922183,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "cb9a7bcd-c340-447a-afd9-834583ef5ebb",
+        "property": "policyId"
+      },
+      {
+        "id": "cb9a7bcd-c340-447a-afd9-834583ef5ebb",
+        "property": "policyId"
+      }
+    ]
+  }
+]

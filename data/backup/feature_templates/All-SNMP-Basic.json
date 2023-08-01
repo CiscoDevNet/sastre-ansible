@@ -1,0 +1,203 @@
+{
+  "deviceType": [
+    "vedge-cloud"
+  ],
+  "templateType": "snmp",
+  "templateMinVersion": "15.0.0",
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "shutdown": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": "false",
+      "vipVariableName": "snmp_shutdown"
+    },
+    "contact": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "snmp_contact"
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "snmp_device_name"
+    },
+    "location": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "snmp_device_location"
+    },
+    "view": {
+      "vipType": "constant",
+      "vipValue": [
+        {
+          "name": {
+            "vipObjectType": "object",
+            "vipType": "constant",
+            "vipValue": "public"
+          },
+          "oid": {
+            "vipType": "constant",
+            "vipValue": [
+              {
+                "id": {
+                  "vipObjectType": "object",
+                  "vipType": "constant",
+                  "vipValue": "1.3.6.1",
+                  "vipVariableName": "snmp_view_id_0"
+                },
+                "exclude": {
+                  "vipObjectType": "node-only",
+                  "vipType": "ignore",
+                  "vipValue": "false",
+                  "vipVariableName": "snmp_view_exclude_0"
+                },
+                "priority-order": [
+                  "id",
+                  "exclude"
+                ]
+              }
+            ],
+            "vipObjectType": "tree",
+            "vipPrimaryKey": [
+              "id"
+            ]
+          },
+          "priority-order": [
+            "name",
+            "oid"
+          ],
+          "viewMode": "edit"
+        }
+      ],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "name"
+      ]
+    },
+    "trap": {
+      "group": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "group-name"
+        ]
+      },
+      "target": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "vpn-id",
+          "ip",
+          "port"
+        ]
+      }
+    }
+  },
+  "gTemplateClass": "vedge",
+  "templateDefinition": {
+    "shutdown": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": "false",
+      "vipVariableName": "snmp_shutdown"
+    },
+    "contact": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "snmp_contact"
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "snmp_device_name"
+    },
+    "location": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "snmp_device_location"
+    },
+    "view": {
+      "vipType": "constant",
+      "vipValue": [
+        {
+          "name": {
+            "vipObjectType": "object",
+            "vipType": "constant",
+            "vipValue": "public"
+          },
+          "oid": {
+            "vipType": "constant",
+            "vipValue": [
+              {
+                "id": {
+                  "vipObjectType": "object",
+                  "vipType": "constant",
+                  "vipValue": "1.3.6.1",
+                  "vipVariableName": "snmp_view_id_0"
+                },
+                "exclude": {
+                  "vipObjectType": "node-only",
+                  "vipType": "ignore",
+                  "vipValue": "false",
+                  "vipVariableName": "snmp_view_exclude_0"
+                },
+                "priority-order": [
+                  "id",
+                  "exclude"
+                ]
+              }
+            ],
+            "vipObjectType": "tree",
+            "vipPrimaryKey": [
+              "id"
+            ]
+          },
+          "priority-order": [
+            "name",
+            "oid"
+          ],
+          "viewMode": "edit"
+        }
+      ],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "name"
+      ]
+    },
+    "trap": {
+      "group": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "group-name"
+        ]
+      },
+      "target": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "vpn-id",
+          "ip",
+          "port"
+        ]
+      }
+    }
+  },
+  "templateId": "209fef88-6eef-4df4-8d3f-141836698af6",
+  "attachedMastersCount": 1,
+  "configType": "xml",
+  "createdOn": 1632364931623,
+  "@rid": 2434,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "All-SNMP-Basic",
+  "createdBy": "admin",
+  "devicesAttached": 0,
+  "templateDescription": "Basic SNMP Teplate",
+  "lastUpdatedOn": 1632364931623
+}

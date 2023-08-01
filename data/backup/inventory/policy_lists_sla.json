@@ -1,0 +1,325 @@
+[
+  {
+    "listId": "c4558a35-6d60-4cb6-9278-13844a6dcba4",
+    "name": "Business-Critical",
+    "type": "sla",
+    "description": "Business Critical SLA",
+    "entries": [
+      {
+        "jitter": "100",
+        "latency": "250",
+        "loss": "1"
+      }
+    ],
+    "lastUpdated": 1614810124163,
+    "owner": "system",
+    "readOnly": false,
+    "version": "1.0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "93146f0b-5a2c-413e-a3c4-4216e879c5bd",
+    "name": "Voice-And-Video",
+    "type": "sla",
+    "description": "ACI Voice And Video SLA",
+    "entries": [
+      {
+        "jitter": "100",
+        "latency": "45",
+        "loss": "2"
+      }
+    ],
+    "lastUpdated": 1574615073704,
+    "owner": "system",
+    "readOnly": false,
+    "version": "1.0",
+    "infoTag": "aci",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "490481d5-d6cc-4858-b07d-fe01d123089f",
+    "name": "Transactional-Data",
+    "type": "sla",
+    "description": "ACI Transactional Data SLA",
+    "entries": [
+      {
+        "jitter": "100",
+        "latency": "50",
+        "loss": "5"
+      }
+    ],
+    "lastUpdated": 1574615072553,
+    "owner": "system",
+    "readOnly": false,
+    "version": "1.0",
+    "infoTag": "aci",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "4041f7fa-fcce-4807-8dba-e2e8460997a6",
+    "name": "Bulk-Data",
+    "type": "sla",
+    "description": "ACI Bulk Data SLA",
+    "entries": [
+      {
+        "jitter": "100",
+        "latency": "300",
+        "loss": "10"
+      }
+    ],
+    "lastUpdated": 1574615073325,
+    "owner": "system",
+    "readOnly": false,
+    "version": "1.0",
+    "infoTag": "aci",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "41d30e92-ba22-4782-b2a4-dc77cfa40be0",
+    "name": "Realtime",
+    "type": "sla",
+    "description": "Realtime SLA",
+    "entries": [
+      {
+        "jitter": "30",
+        "latency": "150",
+        "loss": "1"
+      }
+    ],
+    "lastUpdated": 1614810124578,
+    "owner": "system",
+    "readOnly": false,
+    "version": "1.0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "1b4b7924-f511-4527-adc5-33e81b131b6a",
+    "name": "VideoSLA",
+    "type": "sla",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "latency": "100",
+        "loss": null,
+        "jitter": null
+      }
+    ],
+    "lastUpdated": 1632364914398,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "76162883-ce6e-4588-a48d-6587da25eeff",
+    "name": "VoiceSLA",
+    "type": "sla",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "latency": "100",
+        "loss": null,
+        "jitter": null
+      }
+    ],
+    "lastUpdated": 1632364914493,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+        "type": "appRoute"
+      }
+    ],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "83f4ca51-087e-4a2a-b1cc-67bdf914e4c6",
+    "name": "CriticalData",
+    "type": "sla",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "latency": "110",
+        "loss": null,
+        "jitter": null
+      }
+    ],
+    "lastUpdated": 1632364914577,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+        "type": "appRoute"
+      }
+    ],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "dc3d2474-0690-4aae-b25b-ae471bc6efa4",
+    "name": "BestEffort",
+    "type": "sla",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "latency": "200",
+        "loss": null,
+        "jitter": null
+      }
+    ],
+    "lastUpdated": 1632364914665,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+        "type": "appRoute"
+      }
+    ],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "ee1a79ea-67f3-4566-ae7c-8b355ef83d9a",
+    "name": "VoiceVideoSLA",
+    "type": "sla",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "latency": "100",
+        "loss": null,
+        "jitter": null
+      }
+    ],
+    "lastUpdated": 1632364914756,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 2,
+    "references": [
+      {
+        "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+        "type": "appRoute"
+      },
+      {
+        "id": "40b8d81d-1785-4a7f-8c44-5ff63e305fca",
+        "type": "appRoute"
+      }
+    ],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "79aaf5d8-cb1b-4dc4-a0ad-a97839f9dc54",
+    "name": "WebSLA",
+    "type": "sla",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "latency": "150",
+        "loss": null,
+        "jitter": null
+      }
+    ],
+    "lastUpdated": 1632364914846,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "40b8d81d-1785-4a7f-8c44-5ff63e305fca",
+        "type": "appRoute"
+      }
+    ],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "73ead7f3-8d78-4787-b9d0-365d1ff544b7",
+    "name": "Default",
+    "type": "sla",
+    "description": "ACI Default SLA",
+    "entries": [
+      {
+        "jitter": "100",
+        "latency": "300",
+        "loss": "25"
+      }
+    ],
+    "lastUpdated": 1574615073530,
+    "owner": "system",
+    "readOnly": false,
+    "version": "1.0",
+    "infoTag": "aci",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "addf8b87-500b-407b-9d8f-41863fbb0372",
+    "name": "Business-Data",
+    "type": "sla",
+    "description": "Business Data SLA",
+    "entries": [
+      {
+        "jitter": "200",
+        "latency": "350",
+        "loss": "3"
+      }
+    ],
+    "lastUpdated": 1614810123470,
+    "owner": "system",
+    "readOnly": false,
+    "version": "1.0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  },
+  {
+    "listId": "e335165a-77e2-4bca-891e-ce66b3cc5282",
+    "name": "Best-Effort",
+    "type": "sla",
+    "description": "Best Effort SLA",
+    "entries": [
+      {
+        "jitter": "500",
+        "latency": "500",
+        "loss": "5"
+      }
+    ],
+    "lastUpdated": 1614810124716,
+    "owner": "system",
+    "readOnly": false,
+    "version": "1.0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  }
+]

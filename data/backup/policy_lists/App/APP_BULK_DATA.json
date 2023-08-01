@@ -1,0 +1,31 @@
+{
+  "listId": "69a42cd3-75bd-43b5-89d3-d745800184b7",
+  "name": "APP_BULK_DATA",
+  "type": "app",
+  "description": "Bulk Data Applications List",
+  "entries": [
+    {
+      "app": "ftp"
+    },
+    {
+      "app": "ftp-data"
+    },
+    {
+      "app": "cisco-jabber-im"
+    },
+    {
+      "app": "netblt"
+    },
+    {
+      "app": "rsync"
+    }
+  ],
+  "lastUpdated": 1614810124332,
+  "owner": "system",
+  "readOnly": true,
+  "version": "1.0",
+  "infoTag": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

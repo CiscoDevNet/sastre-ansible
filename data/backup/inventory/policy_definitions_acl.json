@@ -1,0 +1,53 @@
+[
+  {
+    "name": "VPN20-Data",
+    "definitionId": "790f35d1-d536-4112-8cad-0a46c4ffc3af",
+    "type": "acl",
+    "description": "Data Traffic for VPN 20",
+    "owner": "admin",
+    "lastUpdated": 1632364919960,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "3d0a74d5-ae6a-4785-954e-9cf45989f8ef",
+        "property": "policyId"
+      }
+    ]
+  },
+  {
+    "name": "GuestWifi",
+    "definitionId": "1d88fddf-af49-4fbb-b398-189e31321d2d",
+    "type": "acl",
+    "description": "GuestWifi QOS",
+    "owner": "admin",
+    "lastUpdated": 1632364920165,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "3d0a74d5-ae6a-4785-954e-9cf45989f8ef",
+        "property": "policyId"
+      }
+    ]
+  },
+  {
+    "name": "LAN-CLASSIFICATION",
+    "definitionId": "f53a2021-9630-49aa-8a58-58b8142bf472",
+    "type": "acl",
+    "description": "Classify LAN Traffic",
+    "owner": "admin",
+    "lastUpdated": 1632364920341,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "3d0a74d5-ae6a-4785-954e-9cf45989f8ef",
+        "property": "policyId"
+      }
+    ]
+  }
+]

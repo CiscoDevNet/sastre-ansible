@@ -1,0 +1,27 @@
+{
+  "listId": "7668607e-fdc2-4831-a016-c7ca7ad92c19",
+  "name": "DataPrefixBR3",
+  "type": "dataPrefix",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "ipPrefix": "10.5.0.0/16"
+    }
+  ],
+  "lastUpdated": 1632364915420,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "fd6f5e66-3ff6-4def-9861-1083a98b4af0",
+      "type": "zoneBasedFW"
+    }
+  ],
+  "activatedId": [
+    "76e86e25-5f29-4abc-bc99-ed6540123931"
+  ],
+  "isActivatedByVsmart": false
+}

@@ -1,0 +1,19 @@
+{
+  "listId": "c24577de-683d-4e71-b4f5-bdd7001f97af",
+  "name": "VIDEO_CONF",
+  "type": "app",
+  "description": "Video Conference Applications List",
+  "entries": [
+    {
+      "app": "rtp"
+    }
+  ],
+  "lastUpdated": 1614810124956,
+  "owner": "system",
+  "readOnly": true,
+  "version": "1.0",
+  "infoTag": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

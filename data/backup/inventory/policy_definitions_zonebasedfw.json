@@ -1,0 +1,19 @@
+[
+  {
+    "name": "BRANCH-DIA-GUEST",
+    "definitionId": "fd6f5e66-3ff6-4def-9861-1083a98b4af0",
+    "type": "zoneBasedFW",
+    "description": "Branch Guest DIA Policy",
+    "owner": "admin",
+    "lastUpdated": 1632364922540,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "76e86e25-5f29-4abc-bc99-ed6540123931",
+        "property": "policyId"
+      }
+    ]
+  }
+]

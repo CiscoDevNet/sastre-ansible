@@ -1,0 +1,211 @@
+{
+  "templateType": "cisco_vpn",
+  "templateMinVersion": "15.0.0",
+  "deviceType": [],
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "vpn-id": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": 40
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "vpn_name"
+    },
+    "ecmp-hash-key": {
+      "layer4": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": "false",
+        "vipVariableName": "vpn_layer4"
+      }
+    },
+    "host": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "hostname"
+      ]
+    },
+    "service": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "svc-type"
+      ]
+    },
+    "ip": {
+      "route": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "prefix": {
+              "vipObjectType": "object",
+              "vipType": "constant",
+              "vipValue": "0.0.0.0/0",
+              "vipVariableName": "vpn_ipv4_ip_prefix"
+            },
+            "vpn": {
+              "vipType": "constant",
+              "vipObjectType": "object",
+              "vipValue": 0
+            },
+            "priority-order": [
+              "prefix",
+              "vpn"
+            ]
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "prefix"
+        ]
+      },
+      "gre-route": {},
+      "ipsec-route": {}
+    },
+    "ipv6": {},
+    "omp": {
+      "advertise": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "priority-order": [
+              "protocol"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "connected",
+              "vipObjectType": "object"
+            }
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      },
+      "ipv6-advertise": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      }
+    }
+  },
+  "gTemplateClass": "cedge",
+  "templateDefinition": {
+    "vpn-id": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": 40
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "vpn_name"
+    },
+    "ecmp-hash-key": {
+      "layer4": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": "false",
+        "vipVariableName": "vpn_layer4"
+      }
+    },
+    "host": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "hostname"
+      ]
+    },
+    "service": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "svc-type"
+      ]
+    },
+    "ip": {
+      "route": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "prefix": {
+              "vipObjectType": "object",
+              "vipType": "constant",
+              "vipValue": "0.0.0.0/0",
+              "vipVariableName": "vpn_ipv4_ip_prefix"
+            },
+            "vpn": {
+              "vipType": "constant",
+              "vipObjectType": "object",
+              "vipValue": 0
+            },
+            "priority-order": [
+              "prefix",
+              "vpn"
+            ]
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "prefix"
+        ]
+      },
+      "gre-route": {},
+      "ipsec-route": {}
+    },
+    "ipv6": {},
+    "omp": {
+      "advertise": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "priority-order": [
+              "protocol"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "connected",
+              "vipObjectType": "object"
+            }
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      },
+      "ipv6-advertise": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      }
+    }
+  },
+  "templateId": "ee267465-87b6-422f-9577-547b6b2cbca5",
+  "attachedMastersCount": 0,
+  "configType": "xml",
+  "createdOn": 1632364945275,
+  "@rid": 2485,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "CSR_BR-VPN40-NoOSPF",
+  "createdBy": "admin",
+  "devicesAttached": 0,
+  "templateDescription": "Branch VPN 40 Template - No Routing",
+  "lastUpdatedOn": 1632364945275
+}

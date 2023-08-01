@@ -1,0 +1,47 @@
+{
+  "templateMinVersion": "15.0.0",
+  "templateType": "banner",
+  "deviceType": [
+    "vedge-cloud"
+  ],
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "login": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": "Cisco SD-WAN v3 Demo",
+      "vipVariableName": "banner_login"
+    },
+    "motd": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "banner_motd"
+    }
+  },
+  "gTemplateClass": "vedge",
+  "templateDefinition": {
+    "login": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": "Cisco SD-WAN v3 Demo",
+      "vipVariableName": "banner_login"
+    },
+    "motd": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "banner_motd"
+    }
+  },
+  "attachedMastersCount": 1,
+  "templateId": "fcfbebef-1706-4bb9-bf10-21e148d43b0a",
+  "configType": "xml",
+  "createdOn": 1632364931006,
+  "@rid": 2432,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "All-Banner-dCloud",
+  "createdBy": "admin",
+  "devicesAttached": 0,
+  "templateDescription": "Basic dCloud Banner",
+  "lastUpdatedOn": 1632364931006
+}

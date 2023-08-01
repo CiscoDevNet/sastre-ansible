@@ -1,0 +1,183 @@
+no config 
+config
+viptela-system:system 
+personality vedge
+device-model vedge-CSR-1000v
+vbond vbond.cisco.com port 12346
+chassis-number CSR-940ad679-a16a-48ea-9920-16278597d98e
+ztp-status success
+config-template-name "migrated_CSR_BranchType1Template-CSR"
+pseudo-confirm-commit 300
+!
+  system
+   personality           vedge
+   device-model          vedge-CSR-1000v
+   host-name             BR1-CEDGE1
+   gps-location latitude 41.87
+   gps-location longitude -121.88
+   system-ip             10.3.0.1
+   site-id               300
+   admin-tech-on-failure
+   sp-organization-name  "Cisco Sy1 - 19968"
+   organization-name     "Cisco Sy1 - 19968"
+   device-version        17.06.01a.0.298
+   no track-transport
+   no track-default-gateway
+   vbond vbond.cisco.com port 12346
+   logging
+    disk
+     enable
+    !
+   !
+  !
+  banner
+   login "Cisco SD-WAN v3 Demo"
+  !
+  bfd app-route poll-interval 5000
+  security
+   ipsec
+    authentication-type sha1-hmac ah-sha1-hmac
+   !
+  !
+  omp
+   no shutdown
+   ecmp-limit       8
+   graceful-restart
+  !
+  vpn 0
+   dns 198.18.1.1 secondary
+   dns 198.18.1.254 primary
+   host vbond.cisco.com ip 198.18.1.11 198.18.1.21
+   interface GigabitEthernet2
+    ip address 100.64.0.18/30
+    tunnel-interface
+     encapsulation ipsec
+     color mpls restrict
+     no allow-service bgp
+     no allow-service dhcp
+     allow-service dns
+     allow-service icmp
+     no allow-service sshd
+     no allow-service netconf
+     no allow-service ntp
+     no allow-service ospf
+     no allow-service ospfv3
+     no allow-service stun
+     allow-service https
+     no allow-service snmp
+    !
+    autonegotiate
+    no shutdown
+   !
+   interface GigabitEthernet3
+    ip address 100.64.0.29/30
+    tloc-extension GigabitEthernet2
+    autonegotiate
+    no shutdown
+   !
+   interface GigabitEthernet4
+    ip address 100.64.2.38/30
+    nat
+    !
+    tunnel-interface
+     encapsulation ipsec
+     color biz-internet
+     no allow-service bgp
+     no allow-service dhcp
+     allow-service dns
+     allow-service icmp
+     no allow-service sshd
+     no allow-service netconf
+     no allow-service ntp
+     no allow-service ospf
+     no allow-service ospfv3
+     no allow-service stun
+     allow-service https
+     no allow-service snmp
+    !
+    autonegotiate
+    no shutdown
+   !
+   ip route 0.0.0.0/0 100.64.0.17
+   ip route 0.0.0.0/0 100.64.2.37
+   ip route 0.0.0.0/0 100.64.4.1
+  !
+  vpn 10
+   interface GiabitEthernet5
+    ip address 10.3.10.2/24
+    no shutdown
+    arp-timeout 60
+   !
+   ip route 10.3.11.0/24 10.3.10.65
+   ip route 10.3.13.0/24 10.3.10.68
+   omp
+    advertise ospf external
+    advertise connected
+    advertise static
+   !
+  !
+  vpn 20
+   interface GigabitEthernet6
+    ip address 10.3.20.2/24
+    autonegotiate
+    no shutdown
+    arp-timeout   60
+   !
+   ip route 10.3.21.0/24 10.3.20.65
+   ip route 10.3.23.0/24 10.3.20.68
+   omp
+    advertise connected
+    advertise static
+   !
+  !
+  vpn 40
+   interface GigabitEthernet7
+    ip address 10.3.40.2/24
+    autonegotiate
+    no shutdown
+    arp-timeout   60
+   !
+   ip route 0.0.0.0/0 vpn 0
+   omp
+    advertise connected
+   !
+  !
+  vpn 512
+   interface GigabitEthernet1
+    ip address 198.18.3.104/24
+    autonegotiate
+    no shutdown
+   !
+   ip route 0.0.0.0/0 198.18.3.1
+  !
+  snmp
+   no shutdown
+   view public
+    oid 1.3.6.1
+   !
+  !
+  virtual-applications virtual-application 1
+   application-type utd
+   utd nat true
+  !
+  aaa
+   server-auth-order local
+   user admin
+    password  $6$wRoUVQ==$Ujj8J/h2llpidWIrhayO.FRiixbJ9LFqVmxIQTMCLFoIRKuQhb.JLPMzEKMybdXz5OYBwgtxQMQsFeI1BbNmJ.
+    secret    $9$3V6L3V6L2VUI2k$ysPnXOdg8RLj9KgMdmfHdSHkdaMmiHzGaUpcqH6pfTo
+    privilege 15
+   !
+  !
+  global
+  !
+ !
+!
+
+virtual-applications virtual-application 1
+application-type utd
+utd nat true
+utd service-gateway-ip 192.1.0.21/24
+utd service-ip 192.1.0.22/24
+!
+!
+!

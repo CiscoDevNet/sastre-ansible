@@ -1,0 +1,21 @@
+{
+  "deviceType": "vsmart",
+  "lastUpdatedBy": "admin",
+  "deviceRole": "sdwan-edge",
+  "templateClass": "vedge",
+  "templateConfiguration": " system\n host-name         {{Hostname}}\n gps-location latitude {{gps-latitude}}                                                    \n gps-location longitude {{gps-longitude}}\n system-ip         {{System-IP}}\n site-id           {{Site-ID}}\n organization-name \"Cisco Sy1 - 19968\"\n vbond vbond.cisco.com\n aaa\n  auth-order local radius tacacs\n  usergroup basic\n   task system read write\n   task interface read write\n  !\n  usergroup netadmin\n  !\n  usergroup operator\n   task system read\n   task interface read\n   task policy read\n   task routing read\n   task security read\n  !\n  user admin\n   password $6$YsNdljyTklJyRlUZ$u.vOqeMSUbzfc.aWBty9OIovNCxlUASviwfgXO2bTCJV5ddUoV7EG8Q3EA3Yl0aMv./GnJLPPbjC6uQPjtwVo.\n  !\n !\n logging\n  disk\n   enable\n  !\n !\n!\nomp\n no shutdown\n send-path-limit 8\n send-backup-paths\n graceful-restart\n!\n banner\n   login \"Cisco SD-WAN/Viptela dCloud Demo V2\"\n !\n!\nvpn 0\n dns 198.18.1.1 secondary\n dns 198.18.1.254 primary\n host vbond.cisco.com ip 198.18.1.11 198.18.1.21\n interface eth0\n  ip address {{Tunnel-IP-Address}}\n  ipv6 dhcp-client\n  tunnel-interface\n   allow-service dhcp\n   allow-service dns\n   allow-service icmp\n   allow-service sshd\n   allow-service netconf\n   no allow-service ntp\n   no allow-service stun\n  !\n  no shutdown\n !\n ip route 0.0.0.0/0 {{Default GW}}\n!\nvpn 512\n!",
+  "templateId": "4477a1d8-6550-410a-8f94-d41154233d87",
+  "configType": "file",
+  "createdOn": 1632364978400,
+  "templateConfigurationEdited": " system\n host-name         {{Hostname}}\n gps-location latitude {{gps-latitude}}                                                    \n gps-location longitude {{gps-longitude}}\n system-ip         {{System-IP}}\n site-id           {{Site-ID}}\n organization-name \"Cisco Sy1 - 19968\"\n vbond vbond.cisco.com\n aaa\n  auth-order local radius tacacs\n  usergroup basic\n   task system read write\n   task interface read write\n  !\n  usergroup netadmin\n  !\n  usergroup operator\n   task system read\n   task interface read\n   task policy read\n   task routing read\n   task security read\n  !\n  user admin\n   password $6$YsNdljyTklJyRlUZ$u.vOqeMSUbzfc.aWBty9OIovNCxlUASviwfgXO2bTCJV5ddUoV7EG8Q3EA3Yl0aMv./GnJLPPbjC6uQPjtwVo.\n  !\n !\n logging\n  disk\n   enable\n  !\n !\n!\nomp\n no shutdown\n send-path-limit 8\n send-backup-paths\n graceful-restart\n!\n banner\n   login \"Cisco SD-WAN/Viptela dCloud Demo V2\"\n !\n!\nvpn 0\n dns 198.18.1.1 secondary\n dns 198.18.1.254 primary\n host vbond.cisco.com ip 198.18.1.11 198.18.1.21\n interface eth0\n  ip address {{Tunnel-IP-Address}}\n  ipv6 dhcp-client\n  tunnel-interface\n   allow-service dhcp\n   allow-service dns\n   allow-service icmp\n   allow-service sshd\n   allow-service netconf\n   no allow-service ntp\n   no allow-service stun\n  !\n  no shutdown\n !\n ip route 0.0.0.0/0 {{Default GW}}\n!\nvpn 512\n!",
+  "@rid": 2608,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "vSmartConfigurationTemplate",
+  "createdBy": "admin",
+  "draftMode": false,
+  "templateDescription": "Config template for vSmarts",
+  "cliType": "intent",
+  "lastUpdatedOn": 1632364978400,
+  "templateAttached": 0
+}

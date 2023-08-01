@@ -1,0 +1,26 @@
+{
+  "listId": "76162883-ce6e-4588-a48d-6587da25eeff",
+  "name": "VoiceSLA",
+  "type": "sla",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "latency": "100",
+      "loss": null,
+      "jitter": null
+    }
+  ],
+  "lastUpdated": 1632364914493,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 1,
+  "references": [
+    {
+      "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+      "type": "appRoute"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

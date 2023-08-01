@@ -1,0 +1,21 @@
+{
+  "listId": "addf8b87-500b-407b-9d8f-41863fbb0372",
+  "name": "Business-Data",
+  "type": "sla",
+  "description": "Business Data SLA",
+  "entries": [
+    {
+      "jitter": "200",
+      "latency": "350",
+      "loss": "3"
+    }
+  ],
+  "lastUpdated": 1614810123470,
+  "owner": "system",
+  "readOnly": false,
+  "version": "1.0",
+  "infoTag": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}
