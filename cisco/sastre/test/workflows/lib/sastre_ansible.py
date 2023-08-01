@@ -126,3 +126,35 @@ class sastre_ansible(object):
         except FileNotFoundError as err:
             raise AssertionError(err)
         return True
+    def get_files_without_extension(self, base_directory, exclude_names=None, exclude_dirs=None):
+        file_names = set()
+        exclude_names = exclude_names or []
+        exclude_dirs = exclude_dirs or []
+        
+        for root, dirs, files in os.walk(base_directory, topdown=True):
+            # Exclude specific directory names
+            dirs[:] = [d for d in dirs if d not in exclude_dirs]
+            
+            for file in files:
+                file_name, file_extension = os.path.splitext(file)
+                
+                # Exclude specific file names
+                if file_name not in exclude_names and file_extension:
+                    file_names.add(file_name)
+        
+        return file_names
+
+    def is_transform_rename_success(self, backup, rename_dir, name_suffix=''):
+        try:
+            print(f'backup: {backup}, transform_rename_output_dir: {rename_dir}, name_suffix: {name_suffix}')
+            exclude_names = ['server_info']
+            exclude_dirs = ['inventory', 'certificates', 'device_configs']
+            file_names_workdir = self.get_files_without_extension(backup, exclude_names, exclude_dirs)
+            file_names_transform_rename = self.get_files_without_extension(rename_dir, exclude_names, exclude_dirs)
+            for filename in file_names_workdir:
+                filename_suffix = filename+name_suffix
+                if filename_suffix not in file_names_transform_rename:
+                    raise AssertionError(f'filename {filename_suffix} not found in transform_rename_output_dir: {rename_dir}')
+        except FileNotFoundError as err:
+            raise AssertionError(err)
+        return True

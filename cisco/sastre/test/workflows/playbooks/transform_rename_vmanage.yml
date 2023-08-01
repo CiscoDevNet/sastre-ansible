@@ -1,0 +1,16 @@
+---
+#ansible-playbook backup.yml --extra-vars '{"backup_path": backup, "rename_output_dir": ransform_rename, "name_suffix": v123}'
+###############################################################################
+- hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+    - name: Transform Rename workdir
+      cisco.sastre.transform_rename:
+        output: "{{ rename_output_dir  |  default('transform_rename') }}"
+        no_rollover: false
+        tag: "all"
+        regex: ".*"
+        name_regex: '{name (.*)}{{name_suffix}}'
+
