@@ -1,0 +1,19 @@
+{
+  "listId": "83fcceaf-8a14-4ea5-81a0-8590856f4948",
+  "name": "sql",
+  "type": "class",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "queue": "1"
+    }
+  ],
+  "lastUpdated": 1632364916810,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

@@ -1,0 +1,42 @@
+{
+  "definitionId": "db5e38d6-1b88-4a30-ad40-d23dbe09e4be",
+  "name": "Branch1ACL",
+  "type": "data",
+  "description": "Block BR1 to Talk to BR2",
+  "sequences": [
+    {
+      "sequenceId": 1,
+      "sequenceName": "Application Firewall",
+      "baseAction": "drop",
+      "sequenceType": "applicationFirewall",
+      "match": {
+        "entries": [
+          {
+            "field": "destinationDataPrefixList",
+            "ref": "743fe2c3-7dd5-41bd-88d1-16863be6a771"
+          },
+          {
+            "field": "sourceDataPrefixList",
+            "ref": "f2015a1d-b46d-48dc-a454-cb1a007c5851"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "count",
+          "parameter": "DropCount"
+        }
+      ]
+    }
+  ],
+  "defaultAction": {
+    "type": "accept"
+  },
+  "lastUpdated": 1632364923543,
+  "owner": "admin",
+  "infoTag": "",
+  "mode": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

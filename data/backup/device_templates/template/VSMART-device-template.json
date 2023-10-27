@@ -1,0 +1,51 @@
+{
+  "templateName": "VSMART-device-template",
+  "templateDescription": "vSmart device template",
+  "deviceType": "vsmart",
+  "configType": "template",
+  "factoryDefault": false,
+  "policyId": "",
+  "featureTemplateUidRange": [],
+  "generalTemplates": [
+    {
+      "templateId": "3b30e089-2e26-44f1-b5b2-ac44f3f4279e",
+      "templateType": "aaa"
+    },
+    {
+      "templateId": "45e9c465-991f-4378-a0d5-307ae35276dd",
+      "templateType": "omp-vsmart"
+    },
+    {
+      "templateId": "39294f50-297d-4f3e-ab02-f1aed8bbe8a9",
+      "templateType": "security-vsmart"
+    },
+    {
+      "templateId": "7d17aad3-7601-47ff-b237-1a9111eccc06",
+      "templateType": "system-vsmart",
+      "subTemplates": [
+        {
+          "templateId": "edf3d309-91d4-45be-98d9-cfd57a05a479",
+          "templateType": "logging"
+        }
+      ]
+    },
+    {
+      "templateId": "9eeaf2b3-a3ee-4ba2-9819-b22bb26791a0",
+      "templateType": "vpn-vsmart",
+      "subTemplates": [
+        {
+          "templateId": "026ff26d-bbe0-4c39-9c62-ed27471bb72f",
+          "templateType": "vpn-vsmart-interface"
+        }
+      ]
+    },
+    {
+      "templateId": "0b3414df-4388-4406-a55b-856a05499ce2",
+      "templateType": "vpn-vsmart"
+    }
+  ],
+  "templateId": "fb00d83a-5b2d-402f-b1d3-9f7f42a103a0",
+  "templateClass": "vedge",
+  "deviceRole": "sdwan-edge",
+  "draftMode": false
+}

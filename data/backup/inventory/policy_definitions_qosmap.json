@@ -1,0 +1,19 @@
+[
+  {
+    "name": "WAN-QOS",
+    "definitionId": "d0c893bb-8dc8-4c47-8d6b-23cfbf853cab",
+    "type": "qosMap",
+    "description": "Standard enterprise policy",
+    "owner": "admin",
+    "lastUpdated": 1632364923036,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "3d0a74d5-ae6a-4785-954e-9cf45989f8ef",
+        "property": "policyId"
+      }
+    ]
+  }
+]

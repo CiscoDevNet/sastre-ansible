@@ -1,0 +1,63 @@
+{
+  "policyDefinition": {
+    "assembly": [
+      {
+        "definitionId": "1546c897-6736-4e78-adc6-fdb873f38549",
+        "type": "appRoute",
+        "entries": [
+          {
+            "siteLists": [
+              "03c1f6b5-f7e6-4724-97ed-f50d23f6a997"
+            ],
+            "vpnLists": [
+              "76ffc3d4-f675-4b4b-8673-78c2d4506c85"
+            ]
+          },
+          {
+            "siteLists": [
+              "cd7d64b7-6f09-4e8b-a5f5-09a510910081"
+            ],
+            "vpnLists": [
+              "76ffc3d4-f675-4b4b-8673-78c2d4506c85"
+            ]
+          }
+        ]
+      },
+      {
+        "definitionId": "3a319a88-f4ea-4436-9c69-c29f43ab6388",
+        "type": "control",
+        "entries": [
+          {
+            "direction": "out",
+            "siteLists": [
+              "03c1f6b5-f7e6-4724-97ed-f50d23f6a997"
+            ]
+          }
+        ]
+      },
+      {
+        "definitionId": "59bc4d9f-6291-4b76-b5ff-c1247924be4b",
+        "type": "data",
+        "entries": [
+          {
+            "direction": "service",
+            "siteLists": [
+              "03c1f6b5-f7e6-4724-97ed-f50d23f6a997"
+            ],
+            "vpnLists": [
+              "902237c4-5552-443f-944d-e569deae43f6"
+            ]
+          }
+        ]
+      },
+      {
+        "definitionId": "de6d8e8d-95bd-4a37-bcff-7b515b5493c7",
+        "type": "vpnMembershipGroup"
+      }
+    ]
+  },
+  "policyType": "feature",
+  "policyName": "MultiTopologyPlusAppRoute",
+  "policyDescription": "App Aware Routing Policy based on SLA",
+  "isPolicyActivated": false
+}

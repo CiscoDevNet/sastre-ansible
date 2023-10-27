@@ -1,0 +1,251 @@
+{
+  "deviceType": [
+    "vedge-cloud"
+  ],
+  "templateType": "vpn-vedge",
+  "templateMinVersion": "15.0.0",
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "vpn-id": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": 10
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "vpn_name"
+    },
+    "ecmp-hash-key": {
+      "layer4": {
+        "vipObjectType": "object",
+        "vipType": "constant",
+        "vipValue": "false",
+        "vipVariableName": "vpn_layer4"
+      }
+    },
+    "tcp-optimization": {
+      "vipObjectType": "node-only",
+      "vipType": "ignore",
+      "vipValue": "false",
+      "vipVariableName": "vpn_tcp_optimization"
+    },
+    "host": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "hostname"
+      ]
+    },
+    "service": {
+      "vipType": "constant",
+      "vipValue": [
+        {
+          "svc-type": {
+            "vipObjectType": "object",
+            "vipType": "constant",
+            "vipValue": "FW"
+          },
+          "address": {
+            "vipObjectType": "list",
+            "vipType": "variableName",
+            "vipValue": "",
+            "vipVariableName": "FWServiceIP"
+          },
+          "priority-order": [
+            "svc-type",
+            "address"
+          ]
+        }
+      ],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "svc-type"
+      ]
+    },
+    "ip": {
+      "gre-route": {},
+      "ipsec-route": {}
+    },
+    "ipv6": {},
+    "omp": {
+      "advertise": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "priority-order": [
+              "protocol",
+              "prefix-list"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "network",
+              "vipObjectType": "object"
+            },
+            "prefix-list": {
+              "vipType": "constant",
+              "vipValue": [
+                {
+                  "prefix-entry": {
+                    "vipObjectType": "object",
+                    "vipType": "constant",
+                    "vipValue": "0.0.0.0/0",
+                    "vipVariableName": "vpn_omp_network_network_prefix"
+                  },
+                  "priority-order": [
+                    "prefix-entry"
+                  ]
+                }
+              ],
+              "vipObjectType": "tree",
+              "vipPrimaryKey": [
+                "prefix-entry"
+              ]
+            }
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      },
+      "ipv6-advertise": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      }
+    }
+  },
+  "gTemplateClass": "vedge",
+  "templateDefinition": {
+    "vpn-id": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": 10
+    },
+    "name": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "vpn_name"
+    },
+    "ecmp-hash-key": {
+      "layer4": {
+        "vipObjectType": "object",
+        "vipType": "constant",
+        "vipValue": "false",
+        "vipVariableName": "vpn_layer4"
+      }
+    },
+    "tcp-optimization": {
+      "vipObjectType": "node-only",
+      "vipType": "ignore",
+      "vipValue": "false",
+      "vipVariableName": "vpn_tcp_optimization"
+    },
+    "host": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "hostname"
+      ]
+    },
+    "service": {
+      "vipType": "constant",
+      "vipValue": [
+        {
+          "svc-type": {
+            "vipObjectType": "object",
+            "vipType": "constant",
+            "vipValue": "FW"
+          },
+          "address": {
+            "vipObjectType": "list",
+            "vipType": "variableName",
+            "vipValue": "",
+            "vipVariableName": "FWServiceIP"
+          },
+          "priority-order": [
+            "svc-type",
+            "address"
+          ]
+        }
+      ],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "svc-type"
+      ]
+    },
+    "ip": {
+      "gre-route": {},
+      "ipsec-route": {}
+    },
+    "ipv6": {},
+    "omp": {
+      "advertise": {
+        "vipType": "constant",
+        "vipValue": [
+          {
+            "priority-order": [
+              "protocol",
+              "prefix-list"
+            ],
+            "protocol": {
+              "vipType": "constant",
+              "vipValue": "network",
+              "vipObjectType": "object"
+            },
+            "prefix-list": {
+              "vipType": "constant",
+              "vipValue": [
+                {
+                  "prefix-entry": {
+                    "vipObjectType": "object",
+                    "vipType": "constant",
+                    "vipValue": "0.0.0.0/0",
+                    "vipVariableName": "vpn_omp_network_network_prefix"
+                  },
+                  "priority-order": [
+                    "prefix-entry"
+                  ]
+                }
+              ],
+              "vipObjectType": "tree",
+              "vipPrimaryKey": [
+                "prefix-entry"
+              ]
+            }
+          }
+        ],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      },
+      "ipv6-advertise": {
+        "vipType": "ignore",
+        "vipValue": [],
+        "vipObjectType": "tree",
+        "vipPrimaryKey": [
+          "protocol"
+        ]
+      }
+    }
+  },
+  "templateId": "c29a1ff8-1de9-408d-9843-f55ced79a621",
+  "attachedMastersCount": 0,
+  "configType": "xml",
+  "createdOn": 1632364955462,
+  "@rid": 2521,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "VPN10withService",
+  "createdBy": "admin",
+  "devicesAttached": 0,
+  "templateDescription": "ServiceFW",
+  "lastUpdatedOn": 1632364955462
+}

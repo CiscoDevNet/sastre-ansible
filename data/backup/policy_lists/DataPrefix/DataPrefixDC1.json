@@ -1,0 +1,19 @@
+{
+  "listId": "fb2d61dc-9fe2-4937-b563-eff426152967",
+  "name": "DataPrefixDC1",
+  "type": "dataPrefix",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "ipPrefix": "10.1.0.0/16"
+    }
+  ],
+  "lastUpdated": 1632364915679,
+  "owner": "admin",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 0,
+  "references": [],
+  "isActivatedByVsmart": false
+}

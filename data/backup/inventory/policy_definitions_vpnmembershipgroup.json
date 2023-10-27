@@ -1,0 +1,113 @@
+[
+  {
+    "name": "DenyGuestWiFi1",
+    "definitionId": "f0f8a30f-7394-494c-bca9-cc0ec8745bfc",
+    "type": "vpnMembershipGroup",
+    "description": "Deny Gest WiFi",
+    "owner": "admin",
+    "lastUpdated": 1632364920677,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 0,
+    "references": []
+  },
+  {
+    "name": "GuestWifi",
+    "definitionId": "8862d872-d84b-473a-9924-4055b08f2447",
+    "type": "vpnMembershipGroup",
+    "description": "Not Allow Guest WiFi",
+    "owner": "admin",
+    "lastUpdated": 1632364920847,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 0,
+    "references": []
+  },
+  {
+    "name": "DenyGuestWiFi02",
+    "definitionId": "c6fd4f3c-6b83-4be7-a325-1a07e86b5d87",
+    "type": "vpnMembershipGroup",
+    "description": "Deny Guest WiFi VPN",
+    "owner": "admin",
+    "lastUpdated": 1632364921015,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 2,
+    "references": [
+      {
+        "id": "845a3a20-3e91-408e-b32b-68dc1b43f56c",
+        "property": "policyId"
+      },
+      {
+        "id": "6bf398aa-b740-434f-90ad-3b4127cf5da0",
+        "property": "policyId"
+      }
+    ]
+  },
+  {
+    "name": "DenyGuestWiFi",
+    "definitionId": "ae871305-93ad-4daa-84ab-40f3bf29ea7d",
+    "type": "vpnMembershipGroup",
+    "description": "Deny Guest WiFi VPN",
+    "owner": "admin",
+    "lastUpdated": 1632364921216,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 0,
+    "references": []
+  },
+  {
+    "name": "DenyGuestWiFi03",
+    "definitionId": "de6d8e8d-95bd-4a37-bcff-7b515b5493c7",
+    "type": "vpnMembershipGroup",
+    "description": "Deny Guest WiFi VPN",
+    "owner": "admin",
+    "lastUpdated": 1632364921383,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 3,
+    "references": [
+      {
+        "id": "b6a911f3-fad2-41b7-af4a-c5a75b3c39ff",
+        "property": "policyId"
+      },
+      {
+        "id": "bd7ae705-c846-44fe-bf4c-5e97141423fa",
+        "property": "policyId"
+      },
+      {
+        "id": "cb9a7bcd-c340-447a-afd9-834583ef5ebb",
+        "property": "policyId"
+      }
+    ]
+  },
+  {
+    "name": "AllowCorpPCIonly",
+    "definitionId": "b6384ab3-92da-45ab-8b0a-728744eddfae",
+    "type": "vpnMembershipGroup",
+    "description": "Do not propagate GuestWifi Routes",
+    "owner": "admin",
+    "lastUpdated": 1632364921556,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 0,
+    "references": []
+  },
+  {
+    "name": "DenyGuestWiFi04",
+    "definitionId": "cfdc6fcc-e1d4-453a-a4f4-37599ac75618",
+    "type": "vpnMembershipGroup",
+    "description": "Deny Guest WiFi VPN",
+    "owner": "admin",
+    "lastUpdated": 1632364921736,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "8e5911fd-5a72-44cb-b2ff-d606f1ddd92f",
+        "property": "policyId"
+      }
+    ]
+  }
+]

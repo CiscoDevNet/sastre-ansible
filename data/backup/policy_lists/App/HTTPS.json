@@ -1,0 +1,31 @@
+{
+  "listId": "875c6dbf-1d68-4bad-8626-73d0c52c6bd8",
+  "name": "HTTPS",
+  "type": "app",
+  "description": "Desc Not Required",
+  "entries": [
+    {
+      "appFamily": "instant-messaging"
+    },
+    {
+      "appFamily": "webmail"
+    }
+  ],
+  "lastUpdated": 1632145626477,
+  "owner": "system",
+  "readOnly": false,
+  "version": "0",
+  "infoTag": "",
+  "referenceCount": 2,
+  "references": [
+    {
+      "id": "1546c897-6736-4e78-adc6-fdb873f38549",
+      "type": "appRoute"
+    },
+    {
+      "id": "40b8d81d-1785-4a7f-8c44-5ff63e305fca",
+      "type": "appRoute"
+    }
+  ],
+  "isActivatedByVsmart": false
+}

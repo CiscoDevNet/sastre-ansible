@@ -1,0 +1,49 @@
+{
+  "templateType": "banner",
+  "templateMinVersion": "15.0.0",
+  "deviceType": [
+    "vedge-cloud",
+    "vmanage",
+    "vsmart"
+  ],
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "login": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": "Cisco SD-WAN/Viptela dCloud Demo V2",
+      "vipVariableName": "banner_login"
+    },
+    "motd": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "banner_motd"
+    }
+  },
+  "gTemplateClass": "vedge",
+  "templateDefinition": {
+    "login": {
+      "vipObjectType": "object",
+      "vipType": "constant",
+      "vipValue": "Cisco SD-WAN/Viptela dCloud Demo V2",
+      "vipVariableName": "banner_login"
+    },
+    "motd": {
+      "vipObjectType": "object",
+      "vipType": "ignore",
+      "vipVariableName": "banner_motd"
+    }
+  },
+  "templateId": "755160d8-cdb9-4e97-b8fb-2d6e877bb840",
+  "attachedMastersCount": 1,
+  "configType": "xml",
+  "createdOn": 1632364959241,
+  "@rid": 2537,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "dCloud-Banner",
+  "createdBy": "admin",
+  "devicesAttached": 2,
+  "templateDescription": "dCloud Banner",
+  "lastUpdatedOn": 1632364959241
+}

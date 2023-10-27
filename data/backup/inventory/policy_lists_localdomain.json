@@ -1,0 +1,21 @@
+[
+  {
+    "listId": "2ac457fa-5797-4976-8b6c-b3bd0b9277f2",
+    "name": "DCLOUD",
+    "type": "localDomain",
+    "description": "Desc Not Required",
+    "entries": [
+      {
+        "nameServer": "dcloud.cisco.com"
+      }
+    ],
+    "lastUpdated": 1632364913269,
+    "owner": "admin",
+    "readOnly": false,
+    "version": "0",
+    "infoTag": "",
+    "referenceCount": 0,
+    "references": [],
+    "isActivatedByVsmart": false
+  }
+]

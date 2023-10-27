@@ -1,0 +1,19 @@
+[
+  {
+    "name": "denyInfraRoutes",
+    "definitionId": "25804a55-c7d5-44cb-9f12-3b629229635a",
+    "type": "vedgeRoute",
+    "description": "Deny Underlay Routing from entering VPN",
+    "owner": "admin",
+    "lastUpdated": 1632364919440,
+    "infoTag": "",
+    "mode": "",
+    "referenceCount": 1,
+    "references": [
+      {
+        "id": "3d0a74d5-ae6a-4785-954e-9cf45989f8ef",
+        "property": "policyId"
+      }
+    ]
+  }
+]

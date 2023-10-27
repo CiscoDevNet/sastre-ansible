@@ -1,0 +1,160 @@
+{
+  "header": {
+    "generatedOn": 1632365278959,
+    "columns": [
+      {
+        "property": "csv-status",
+        "title": "Status",
+        "toolTip": "Input status",
+        "hideable": false,
+        "dataType": "string",
+        "editable": false,
+        "isDisplay": true,
+        "isLeftPinned": true,
+        "minWidth": 30,
+        "width": 30,
+        "display": "icon",
+        "iconProperty": "csv-status",
+        "icon": [
+          {
+            "key": "complete",
+            "value": "images/template_complete.png"
+          },
+          {
+            "key": "in_complete",
+            "value": "images/template_in_complete.png"
+          }
+        ]
+      },
+      {
+        "property": "csv-deviceId",
+        "title": "Chassis Number",
+        "toolTip": "UUID: csv-deviceId",
+        "hideable": false,
+        "dataType": "string",
+        "editable": false,
+        "isDisplay": true,
+        "isLeftPinned": true,
+        "objectType": "object",
+        "templateType": "None",
+        "values": false,
+        "optional": false,
+        "width": 280
+      },
+      {
+        "property": "csv-deviceIP",
+        "title": "System IP",
+        "toolTip": "Device IP: csv-deviceIP",
+        "hideable": false,
+        "dataType": "string",
+        "editable": false,
+        "isDisplay": true,
+        "isLeftPinned": true,
+        "objectType": "object",
+        "templateType": "None",
+        "values": false,
+        "optional": false,
+        "width": 100
+      },
+      {
+        "property": "csv-host-name",
+        "title": "Hostname",
+        "toolTip": "Host name: csv-host-name",
+        "hideable": false,
+        "dataType": "string",
+        "editable": false,
+        "isDisplay": true,
+        "isLeftPinned": true,
+        "objectType": "object",
+        "templateType": "None",
+        "values": false,
+        "optional": false,
+        "width": 180
+      },
+      {
+        "property": "/0/eth0/interface/ip/address",
+        "title": "IPv4 Address(vpn_if_ip_address)",
+        "toolTip": "Assign IPv4 address: /0/eth0/interface/ip/address",
+        "hideable": false,
+        "dataType": "ipv4-prefix",
+        "editable": true,
+        "isDisplay": true,
+        "isLeftPinned": false,
+        "objectType": "object",
+        "templateType": "vpn-vsmart-interface",
+        "values": false,
+        "optional": false,
+        "width": 100
+      },
+      {
+        "property": "//system/host-name",
+        "title": "Hostname(system_host_name)",
+        "toolTip": "Set the hostname: //system/host-name",
+        "hideable": false,
+        "dataType": "string",
+        "editable": true,
+        "isDisplay": true,
+        "isLeftPinned": false,
+        "objectType": "object",
+        "templateType": "system-vsmart",
+        "values": false,
+        "optional": false,
+        "width": 100
+      },
+      {
+        "property": "//system/system-ip",
+        "title": "System IP(system_system_ip)",
+        "toolTip": "Set the system IP address: //system/system-ip",
+        "hideable": false,
+        "dataType": "string",
+        "editable": true,
+        "isDisplay": true,
+        "isLeftPinned": false,
+        "objectType": "object",
+        "templateType": "system-vsmart",
+        "values": false,
+        "optional": false,
+        "width": 100
+      },
+      {
+        "property": "//system/site-id",
+        "title": "Site ID(system_site_id)",
+        "toolTip": "Set the site ID: //system/site-id",
+        "hideable": false,
+        "dataType": "number",
+        "editable": true,
+        "isDisplay": true,
+        "isLeftPinned": false,
+        "objectType": "object",
+        "templateType": "system-vsmart",
+        "values": false,
+        "optional": false,
+        "width": 100
+      }
+    ],
+    "templateVariableCount": 4,
+    "fields": {}
+  },
+  "data": [
+    {
+      "csv-status": "complete",
+      "csv-deviceId": "10a98779-95f0-4383-871c-195d25bd9c74",
+      "csv-deviceIP": "12.12.12.12",
+      "csv-host-name": "vSmart-1",
+      "/0/eth0/interface/ip/address": "198.18.1.12/24",
+      "//system/host-name": "vSmart-1",
+      "//system/system-ip": "12.12.12.12",
+      "//system/site-id": "10"
+    },
+    {
+      "csv-status": "complete",
+      "csv-deviceId": "704bbc2f-aa9a-4068-84a2-fc31602ed553",
+      "csv-deviceIP": "22.22.22.22",
+      "csv-host-name": "vSmart-2",
+      "/0/eth0/interface/ip/address": "198.18.1.22/24",
+      "//system/host-name": "vSmart-2",
+      "//system/system-ip": "22.22.22.22",
+      "//system/site-id": "20"
+    }
+  ]
+}

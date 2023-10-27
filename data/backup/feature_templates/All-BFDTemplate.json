@@ -1,0 +1,69 @@
+{
+  "templateMinVersion": "15.0.0",
+  "templateType": "bfd-vedge",
+  "deviceType": [
+    "vedge-cloud"
+  ],
+  "lastUpdatedBy": "admin",
+  "editedTemplateDefinition": {
+    "app-route": {
+      "multiplier": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": 6,
+        "vipVariableName": "bfd_multiplier"
+      },
+      "poll-interval": {
+        "vipObjectType": "object",
+        "vipType": "constant",
+        "vipValue": 5000,
+        "vipVariableName": "bfd_poll_interval"
+      }
+    },
+    "color": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "color"
+      ]
+    }
+  },
+  "gTemplateClass": "vedge",
+  "templateDefinition": {
+    "app-route": {
+      "multiplier": {
+        "vipObjectType": "object",
+        "vipType": "ignore",
+        "vipValue": 6,
+        "vipVariableName": "bfd_multiplier"
+      },
+      "poll-interval": {
+        "vipObjectType": "object",
+        "vipType": "constant",
+        "vipValue": 5000,
+        "vipVariableName": "bfd_poll_interval"
+      }
+    },
+    "color": {
+      "vipType": "ignore",
+      "vipValue": [],
+      "vipObjectType": "tree",
+      "vipPrimaryKey": [
+        "color"
+      ]
+    }
+  },
+  "attachedMastersCount": 1,
+  "templateId": "ea0b6a47-55a7-439b-bf01-9e7d2564c872",
+  "configType": "xml",
+  "createdOn": 1632364930640,
+  "@rid": 2431,
+  "feature": "vmanage-default",
+  "factoryDefault": false,
+  "templateName": "All-BFDTemplate",
+  "createdBy": "admin",
+  "devicesAttached": 0,
+  "templateDescription": "Basic BFD Template",
+  "lastUpdatedOn": 1632364930640
+}
