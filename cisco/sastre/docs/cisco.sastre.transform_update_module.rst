@@ -1,12 +1,12 @@
-:source: attach_edge.py
+:source: transform_update.py
 
 :orphan:
 
-.. _attach_edge_module:
+.. _transform_update_module:
 
 
-attach_edge -- Attach templates to WAN Edges.
-+++++++++++++++++++++++++++++++++++++++++++++
+transform_update -- Transform using update recipe
++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ attach_edge -- Attach templates to WAN Edges.
 
 Synopsis
 --------
-- This attach module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder or attach yml file. This module contains multiple arguments with connection and filter details to attach WAN Edges to templates. When multiple filters are defined, the result is an AND of all filters. Dry-run can be used to validate the expected outcome.The number of devices to include per attach request (to vManage) can be defined with the batch param.
+- The transform update task can be used to rename confiuration items, update password and rename any configuration value items.
 
 
 
@@ -47,7 +47,7 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>attach_file</b>
+                    <b>from_file</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                             </div>
@@ -55,26 +55,12 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>load edge device templates attach and config-groups attach from attach YAML file. This attach yml file can be generated using attach_create ansible module</div>
+                                                                        <div>load update recipe from YAML file. This yaml file can be generated from transform_password module</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>batch</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">200</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>Maximum number of devices to include per vManage attach request.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>config_groups</b>
+                    <b>from_json</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                             </div>
@@ -82,25 +68,12 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Regular expression selecting config-groups to deploy. Match on config-group name.</div>
+                                                                        <div>load update recipe from JSON-formatted string</div>
                                                                                 </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>devices</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Regular expression selecting devices to attach. Match on device name.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>dryrun</b>
+                    <b>no_rollover</b>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
                                             </div>
@@ -112,7 +85,20 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                                                        <div>dry-run mode. Attach operations are listed but not is pushed to vManage.</div>
+                                                                        <div>By default, if output directory already exists it is renamed using a rolling naming scheme. &quot;True&quot; disables the automatic rollover. &quot;False&quot; enables the automatic rollover</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>output</b>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Directory to save transform result</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -140,62 +126,6 @@ Parameters
                                     </td>
                                                                 <td>
                                                                         <div>vManage port number or can also be defined via VMANAGE_PORT environment variable</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>reachable</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Select reachable devices only.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>site</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Select devices with site ID.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>system_ip</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Select device with system IP.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>templates</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Regular expression selecting templates to attach. Match on template name.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -246,10 +176,9 @@ Parameters
                                             </div>
                                     </td>
                                 <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"backup_\u003caddress\u003e_\u003cyyyymmdd\u003e"</div>
-                                    </td>
+                                                                                                                                                            </td>
                                                                 <td>
-                                                                        <div>Defines the location (in the local machine) where vManage data files are located. By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;. The workdir argument can be used to specify a different location. workdir is under a &#x27;data&#x27; directory. This &#x27;data&#x27; directory is relative to the directory where Ansible script is run.</div>
+                                                                        <div>transform will read from the specified directory instead of target vManage</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -270,38 +199,21 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: "Attach vManage configuration"
-      cisco.sastre.attach_edge:
-        address: "198.18.1.10"
+    - name: Transform update
+      cisco.sastre.transform_update:
+        output: transform_update_configs
+        workdir: transform_update
+        no_rollover: false
+        from_file: transform_update.yml
+        address: 198.18.1.10
         port: 8443
-        user: "admin"
-        password:"admin"
-        workdir: "backup_test_1"
-        templates: ".*"
-        config_groups: ".*"
-        devices: ".*"
-        reachable: True
-        site: "1"
-        system_ip: "12.12.12.12"
-        dryrun: False
-        batch: 99       
-    - name: "Attach vManage configuration with some vManage config arguments saved in environment variables"
-      cisco.sastre.attach_edge: 
-        workdir: "backup_test_2"
-        templates: ".*"
-        config_groups: ".*"
-        devices: ".*"
-        reachable: True
-        site: "1"
-        system_ip: "12.12.12.12"
-        dryrun: True
-        batch: 99    
-    - name: "Attach edge device templates and config groups from attach yml file"
-      cisco.sastre.attach_edge: 
-        attach_file: "/path/to/attach.yml"
-        batch: 99  
-    - name: "Attach vManage configuration with all defaults"
-      cisco.sastre.attach_edge: 
-        address: "198.18.1.10"
+        user: admin
+        password: admin
+    - name: Transform update from vmanage
+      cisco.sastre.transform_update:
+        output: transform_update_configs
+        from_file: transform_update.yml
+        address: 198.18.1.10
+        port: 8443
         user: admin
         password: admin

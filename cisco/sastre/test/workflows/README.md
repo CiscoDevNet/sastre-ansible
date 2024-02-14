@@ -25,6 +25,7 @@ These workflows are tested against following CXTA versions: **==21.9**.
   * Check **log.html** for test logs  
 
 ## Running the workflows in CXTM UI
+* Launch [CXTM](https://cxtm.cisco.com/)
 * create a Project
   * Configure GIT 
   * Configure VPN (if SDWAN dcloud instance is used)

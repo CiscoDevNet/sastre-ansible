@@ -1,12 +1,12 @@
-:source: attach_vsmart.py
+:source: attach_create.py
 
 :orphan:
 
-.. _attach_vsmart_module:
+.. _attach_create_module:
 
 
-attach_vsmart -- Attach templates to Vsmarts
-++++++++++++++++++++++++++++++++++++++++++++
+attach_create -- Attach create templates and config-groups to YAML file
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ attach_vsmart -- Attach templates to Vsmarts
 
 Synopsis
 --------
-- This attach module connects to SD-WAN vManage using HTTP REST to updated configuration data stored in local default backup or configured argument local backup folder or attach yml file. This module contains multiple arguments with connection and filter details to attach Vsmarts to templates. When multiple filters are defined, the result is an AND of all filters. Dry-run can be used to validate the expected outcome.The number of devices to include per attach request (to vManage) can be defined with the batch param.
+- This attach create module connects to SD-WAN vManage using HTTP REST to retrieve device templates, config-groups with devices attached or unattached and creates a YAML for use in attach_edge or attach_vsmart modules. This module contains multiple arguments with connection and filter details. When multiple filters are defined, the result is an AND of all filters. The number of devices to include per attach request (to vManage) can be defined with the batch param.
 
 
 
@@ -34,23 +34,6 @@ Parameters
         </tr>
                     <tr>
                                                                 <td colspan="1">
-                    <b>activate</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>Activate centralized policy after vSmart template attach/deploy.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>address</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -60,33 +43,6 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>vManage IP address or can also be defined via VMANAGE_IP environment variable</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>attach_file</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>load vsmart device templates attach and vsmart policy activate from attach YAML file This attach yml file can be generated using attach_create ansible module</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>batch</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">200</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>Maximum number of devices to include per vManage attach request.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -104,6 +60,24 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <b>device_types</b>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
+                                <td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>vsmart</li>
+                                                                                                                                                                                                <li>edge</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>all</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                                                        <div>Device types</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <b>devices</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -113,23 +87,6 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                                                         <div>Regular expression selecting devices to attach. Match on device name.</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>dryrun</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                                                        <div>dry-run mode. Attach operations are listed but not is pushed to vManage.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -174,6 +131,19 @@ Parameters
                                                                             </td>
                                                                 <td>
                                                                         <div>Select reachable devices only.</div>
+                                                                                </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>save_attach_file</b>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                            </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>Save attach file as yaml file This generated yml file can be used in attach_edge or attach_vsmart modules.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -255,20 +225,6 @@ Parameters
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
                                                                                 </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>workdir</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"backup_\u003caddress\u003e_\u003cyyyymmdd\u003e"</div>
-                                    </td>
-                                                                <td>
-                                                                        <div>Defines the location (in the local machine) where vManage data files are located. By default, it follows the format &quot;backup_&lt;address&gt;_&lt;yyyymmdd&gt;&quot;. The workdir argument can be used to specify a different location. workdir is under a &#x27;data&#x27; directory. This &#x27;data&#x27; directory is relative to the directory where Ansible script is run.</div>
-                                                                                </td>
-            </tr>
                         </table>
     <br/>
 
@@ -287,40 +243,30 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: "Attach vManage configuration"
-      cisco.sastre.attach_vsmart:
+    - name: "Attach Create"
+      cisco.sastre.attach_create:
         address: "198.18.1.10"
         port: 8443
         user: "admin"
         password:"admin"
-        workdir: "backup_test_1"
         templates: ".*"
         config_groups: ".*"
         devices: ".*"
         reachable: True
-        activate: True
         site: "1"
         system_ip: "12.12.12.12"
-        dryrun: False
-        batch: 99       
-    - name: "Attach vManage configuration with some vManage config arguments saved in environment variables"
-      cisco.sastre.attach_vsmart: 
-        workdir: "backup_test_2"
+        save_attach_file: sample.yml       
+    - name: "Attach create vManage configuration with some vManage config arguments saved in environment variables"
+      cisco.sastre.attach_create: 
         templates: ".*"
         config_groups: ".*"
         devices: ".*"
         reachable: True
-        activate: True
         site: "1"
         system_ip: "12.12.12.12"
-        dryrun: True
-        batch: 99    
-    - name: "Attach vsmart device templates and vsmart policy activate from attach yml file"
-      cisco.sastre.attach_vsmart: 
-        attach_file: "/path/to/attach.yml"
-        batch: 99 
-    - name: "Attach vManage configuration with all defaults"
-      cisco.sastre.attach_vsmart: 
+        save_attach_file: sample.yml
+    - name: "Attach create vManage configuration with all defaults"
+      cisco.sastre.attach_create: 
         address: "198.18.1.10"
         user: admin
         password: admin

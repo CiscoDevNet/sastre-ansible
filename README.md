@@ -14,6 +14,7 @@ Name | Description
 --- | ---
 [cisco.sastre.attach_edge](cisco/sastre/docs/cisco.sastre.attach_edge_module.rst)|Attach templates to WAN Edges
 [cisco.sastre.attach_vsmart](cisco/sastre/docs/cisco.sastre.attach_vsmart_module.rst)|Attach templates to Vsmarts
+[cisco.sastre.attach_create](cisco/sastre/docs/cisco.sastre.attach_create_module.rst)|Attach create templates and config-groups to YAML file
 [cisco.sastre.backup](cisco/sastre/docs/cisco.sastre.backup_module.rst)|Save SD-WAN vManage configuration items to local backup
 [cisco.sastre.device_bootstrap](cisco/sastre/docs/cisco.sastre.device_bootstrap_module.rst)|Performs device bootstrap
 [cisco.sastre.certificate_restore](cisco/sastre/docs/cisco.sastre.certificate_restore_module.rst)|Restore WAN edge certificate validity status to from a backup
@@ -21,6 +22,7 @@ Name | Description
 [cisco.sastre.delete](cisco/sastre/docs/cisco.sastre.delete_module.rst)|Delete configuration items on SD-WAN vManage
 [cisco.sastre.detach_edge](cisco/sastre/docs/cisco.sastre.detach_edge_module.rst)|Detach templates from WAN Edges
 [cisco.sastre.detach_vsmart](cisco/sastre/docs/cisco.sastre.detach_vsmart_module.rst)|Detach templates from vSmarts
+[cisco.sastre.encrypt](cisco/sastre/docs/cisco.sastre.encrypt_module.rst)|Encrypts password
 [cisco.sastre.inventory](cisco/sastre/docs/cisco.sastre.inventory_module.rst)|Returns list of SD-WAN devices from vManage
 [cisco.sastre.list_certificate](cisco/sastre/docs/cisco.sastre.list_certificate_module.rst)|List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file
 [cisco.sastre.list_configuration](cisco/sastre/docs/cisco.sastre.list_configuration_module.rst)|List configuration items or device certificate information from vManage or a local backup. Display as table or export as csv file
@@ -39,8 +41,11 @@ Name | Description
 [cisco.sastre.show_template_references](cisco/sastre/docs/cisco.sastre.show_template_references_module.rst)|Show template references about device templates on vManage or from a local backup. Display as table or export as csv/json file
 [cisco.sastre.show_template_values](cisco/sastre/docs/cisco.sastre.show_template_values_module.rst)|Show template values about device templates on vManage or from a local backup. Display as table or export as csv/json file
 [cisco.sastre.transform_copy](cisco/sastre/docs/cisco.sastre.transform_copy_module.rst)|Transform copy configuration items
+[cisco.sastre.transform_password](cisco/sastre/docs/cisco.sastre.transform_password_module.rst)|Transform retrieve encrypted passwords
 [cisco.sastre.transform_recipe](cisco/sastre/docs/cisco.sastre.transform_recipe_module.rst)|Transform using custom recipe
 [cisco.sastre.transform_rename](cisco/sastre/docs/cisco.sastre.transform_rename_module.rst)|Transform rename configuration items
+[cisco.sastre.transform_update](cisco/sastre/docs/cisco.sastre.transform_update_module.rst)|Transform using update recipe
+[cisco.sastre.transform_updatepwd](cisco/sastre/docs/cisco.sastre.transform_updatepwd_module.rst)|Transform update password configuration items
 <!--end collection content-->
 
 ### Lookup Plugins
