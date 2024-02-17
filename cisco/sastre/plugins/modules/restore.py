@@ -9,7 +9,7 @@ description: This restore module connects to SD-WAN vManage using HTTP REST to
              local backup folder. This module contains multiple arguments with 
              connection and filter details to restore all or specific configurtion data.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   workdir:
     description: 
@@ -165,6 +165,7 @@ from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskRestore, RestoreArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -188,7 +189,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskRestore, RestoreArgs
         if not module.params['archive']:
             module.params['workdir'] = module.params['workdir'] or default_workdir(module.params['address'])
 
@@ -203,8 +203,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid Restore parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

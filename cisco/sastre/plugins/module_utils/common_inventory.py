@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 from cisco_sdwan.base.rest_api import Rest
 from typing import NamedTuple, List, Optional
+from typing_extensions import Annotated
 from cisco_sdwan.base.models_vmanage import Device
 from cisco_sdwan.tasks.common import regex_search
 from cisco_sdwan.tasks.models import TaskArgs
 from cisco_sdwan.tasks.validators import validate_regex, validate_site_id, validate_ipv4
-from pydantic import validator
+from pydantic import field_validator, AfterValidator
 from .common import sdwan_api_args
 
 iter_fields = ('uuid', 'host-name', 'deviceId', 'site-id', 'reachability', 'device-type', 'device-model', 'version')
@@ -55,17 +56,18 @@ def get_matched_devices(module_param_dict, task_args):
         return [elem._asdict() for elem in device_info_iter(api, cedge_set, task_args)]
 
 
+RegEx = Annotated[str, AfterValidator(validate_regex)]
+
+
 class InventoryArgs(TaskArgs):
-    regex_list: Optional[List[str]] = None
-    regex: Optional[str] = None
-    not_regex: Optional[str] = None
+    regex_list: Optional[List[RegEx]] = None
+    regex: Optional[RegEx] = None
+    not_regex: Optional[RegEx] = None
     reachable: bool = False
     site: Optional[str] = None
     system_ip: Optional[str] = None
     device_type: Optional[str] = None
 
     # Validators
-    _validate_regex_list = validator('regex_list', allow_reuse=True, each_item=True)(validate_regex)
-    _validate_regex = validator('regex', 'not_regex', allow_reuse=True)(validate_regex)
-    _validate_site_id = validator('site', allow_reuse=True)(validate_site_id)
-    _validate_ipv4 = validator('system_ip', allow_reuse=True)(validate_ipv4)
+    _validate_site_id = field_validator('site')(validate_site_id)
+    _validate_ipv4 = field_validator('system_ip')(validate_ipv4)

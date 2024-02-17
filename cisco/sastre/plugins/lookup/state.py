@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskShow, ShowStateArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common_lookup import (
     run_task, get_lookup_args, validate_show_type_args, validate_show_mandatory_args, set_show_default_args,
     is_mutually_exclusive
@@ -88,17 +89,15 @@ class LookupModule(LookupBase):
     def run(self, terms, variables=None, **kwargs):
         self.set_options(var_options=variables, direct=kwargs)
         mutual_exclusive_fields = ('regex', 'not_regex')
-        if is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
+        if not is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
             raise AnsibleOptionsError(f"Parameters are mutually exclusive: {mutual_exclusive_fields}")
         validate_show_mandatory_args(**kwargs)
         validate_show_type_args(**kwargs)
 
         try:
-            from cisco_sdwan.tasks.implementation import TaskShow, ShowStateArgs
             task_args = ShowStateArgs(**set_show_default_args(**kwargs))
             task_output = run_task(TaskShow, task_args, get_lookup_args(variables))
-        except ImportError:
-            raise AnsibleLookupError("This plugin requires Sastre-Pro Python package") from None
+
         except ValidationError as ex:
             raise AnsibleLookupError(f"Invalid show state parameter: {ex}") from None
         except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

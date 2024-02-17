@@ -7,7 +7,7 @@ short_description: encrypts password
 description: This encrypt module connects to SD-WAN vManage using HTTP REST to 
              convert plain text password to encrypted password
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   pwd:
     description:
@@ -79,13 +79,14 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskEncrypt, EncryptArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
-        pwd=dict(type="str", required=True),
+        values=dict(type="list", elements="str", required=True)
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
@@ -93,9 +94,8 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskEncrypt, EncryptArgs
         task_args = EncryptArgs(
-            **module_params('pwd', module_param_dict=module.params)
+            **module_params('values', module_param_dict=module.params)
         )
         task_result = run_task(TaskEncrypt, task_args, module.params)
 
@@ -104,8 +104,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError as ex:
-        module.fail_json(msg=f"This module requires Sastre-Pro Python package: {ex}")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid encrypt parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

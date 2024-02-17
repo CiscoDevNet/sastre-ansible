@@ -100,12 +100,6 @@ execute attach edge var task
     Log  ${attach_edge_var_task_output}
     ${attach_edge_var_passed}  Is Playbook Success  attach_edge_var  ${attach_edge_var_task_output}
 
-execute attach create task
-    [Arguments]    ${template_yml_file_path}=attach_template.yml
-    ${attach_create_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/attach_create.yml --extra-vars "attach_file=${template_yml_file_path}"
-    Log  ${attach_create_task_output}
-    ${attach_create_passed}  Is Playbook Success  attach_create  ${attach_create_task_output}
-
 cleanup directory
     [Arguments]    ${directory}
     Remove Directory  ${directory}  recursive=True
@@ -151,39 +145,3 @@ Workflow_03: Detach_Vsmart_Attach_Vsmart
     execute attach vsmart task
     execute show template values task  show_template_csv_path=${WorkFlow_03_Folder}/${show_template_csv_after_attachment}
     csv folders should be equal  ${playbook_base_dir}/${WorkFlow_03_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_03_Folder}/${show_template_csv_after_attachment}
-
-Workflow_04: Attach_Create_Detach_Edge_Attach_Edge
-    [Documentation]  Executing attach_create, show_template_values, detach_edge, attach_create, show_template_values, attach_edge, show_template_values, attach_create tasks
-    [Tags]  detach_attach
-
-    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_04_Folder}
-    execute attach create task  template_yml_file_path=${WorkFlow_04_Folder}/${template_yml_file_path}
-    execute show template values task  show_template_csv_path=${WorkFlow_04_Folder}/${show_template_csv}
-    execute detach edge task
-    execute attach create task  template_yml_file_path=${WorkFlow_04_Folder}/${template_yml_file_path_with_no_attachments}
-    execute show template values task  show_template_csv_path=${WorkFlow_04_Folder}/${show_template_csv_with_no_attachment}
-    compare yml files  ${playbook_base_dir}/${WorkFlow_04_Folder}/${template_yml_file_path}  ${playbook_base_dir}/${WorkFlow_04_Folder}/${template_yml_file_path_with_no_attachments}  false
-    compare show template values attach detach  ${playbook_base_dir}/${WorkFlow_04_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_04_Folder}/${show_template_csv_with_no_attachment}  true  msg=${show_template_attach_detach_compare_fail_msg}
-    execute attach edge var task  template_yml_file_path=${WorkFlow_04_Folder}/${template_yml_file_path}
-    execute show template values task  show_template_csv_path=${WorkFlow_04_Folder}/${show_template_csv_after_attachment}
-    csv folders should be equal  ${playbook_base_dir}/${WorkFlow_04_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_04_Folder}/${show_template_csv_after_attachment}
-    execute attach create task  template_yml_file_path=${WorkFlow_04_Folder}/${template_yml_file_path_after}
-    compare yml files  ${playbook_base_dir}/${WorkFlow_04_Folder}/${template_yml_file_path}  ${playbook_base_dir}/${WorkFlow_04_Folder}/${template_yml_file_path_after}  true
-
-Workflow_05: Attach_Create_Detach_Vsmart_Attach_Vsmart
-    [Documentation]  Executing attach_create, show_template_values, detach_vsmart, show_template_values, attach_vsmart, show_template_values, attach_create tasks
-    [Tags]  detach_attach
-    
-    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_05_Folder}
-    execute attach create task  template_yml_file_path=${WorkFlow_05_Folder}/${template_yml_file_path}
-    execute show template values task  show_template_csv_path=${WorkFlow_05_Folder}/${show_template_csv}
-    execute detach vsmart task
-    execute attach create task  template_yml_file_path=${WorkFlow_05_Folder}/${template_yml_file_path_with_no_attachments}
-    execute show template values task  show_template_csv_path=${WorkFlow_05_Folder}/${show_template_csv_with_no_attachment}
-    compare yml files  ${playbook_base_dir}/${WorkFlow_05_Folder}/${template_yml_file_path}  ${playbook_base_dir}/${WorkFlow_05_Folder}/${template_yml_file_path_with_no_attachments}  false
-    compare show template values attach detach  ${playbook_base_dir}/${WorkFlow_05_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_05_Folder}/${show_template_csv_with_no_attachment}  false  msg=${show_template_attach_detach_compare_fail_msg}
-    execute attach vsmart var task  template_yml_file_path=${WorkFlow_05_Folder}/${template_yml_file_path}
-    execute show template values task  show_template_csv_path=${WorkFlow_05_Folder}/${show_template_csv_after_attachment}
-    csv folders should be equal  ${playbook_base_dir}/${WorkFlow_05_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_05_Folder}/${show_template_csv_after_attachment}
-    execute attach create task  template_yml_file_path=${WorkFlow_05_Folder}/${template_yml_file_path_after}
-    compare yml files  ${playbook_base_dir}/${WorkFlow_05_Folder}/${template_yml_file_path}  ${playbook_base_dir}/${WorkFlow_05_Folder}/${template_yml_file_path_after}  true

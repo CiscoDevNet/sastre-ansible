@@ -6,7 +6,7 @@ module: settings_enterprise_ca
 short_description: Setting enterprise root certificate
 description: Setting enterprise root certificate
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   root_cert:
     description: 

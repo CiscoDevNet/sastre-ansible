@@ -12,7 +12,7 @@ description: This attach module connects to SD-WAN vManage using HTTP REST to
              Dry-run can be used to validate the expected outcome.The number of devices to include 
              per attach request (to vManage) can be defined with the batch param.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   workdir:
     description: 
@@ -27,7 +27,6 @@ options:
   attach_file:
     description:
     - load edge device templates attach and config-groups attach from attach YAML file.
-      This attach yml file can be generated using attach_create ansible module
     required: false
     type: str
   templates:
@@ -164,6 +163,7 @@ from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskAttach, AttachEdgeArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -188,7 +188,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskAttach, AttachEdgeArgs
         if not module.params['attach_file']:
             module.params['workdir'] = module.params['workdir'] or default_workdir(module.params['address'])
         task_args = AttachEdgeArgs(
@@ -202,8 +201,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid attach edge parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

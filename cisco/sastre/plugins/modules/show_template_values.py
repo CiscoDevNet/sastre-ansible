@@ -8,7 +8,7 @@ description:
         - The Show template task can be used to show device templates from a target vManage or a backup directory. 
         - Criteria can contain regular expression with matching or not matching device or feature template names.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   templates:
     description:
@@ -110,6 +110,7 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskShowTemplate, ShowTemplateValuesArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -129,7 +130,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskShowTemplate, ShowTemplateValuesArgs
         task_args = ShowTemplateValuesArgs(
             **module_params('templates', 'exclude', 'include', 'workdir', 'save_csv', 'save_json',
                             module_param_dict=module.params)
@@ -141,8 +141,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid show template values parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
