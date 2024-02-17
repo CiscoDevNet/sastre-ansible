@@ -10,7 +10,7 @@ description: This inventory module connects to SD-WAN vManage using HTTP REST to
              When multiple filters are defined, the result is an AND of all filters.
              When no filter is defined all devices are returned.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   regex:
     description:

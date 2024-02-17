@@ -9,7 +9,7 @@ description: This report module generates report from local backup directory
              A log file is created under a logs directory. This logs directory
              is relative to directory where Ansible runs.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   file:
     description: 
@@ -107,6 +107,7 @@ from ansible.module_utils.basic import AnsibleModule
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskReport, ReportCreateArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -126,7 +127,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskReport, ReportCreateArgs
         task_args = ReportCreateArgs(
             **module_params('workdir', 'file', 'spec_file', 'spec_json', 'diff', module_param_dict=module.params)
         )
@@ -138,8 +138,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid report create parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

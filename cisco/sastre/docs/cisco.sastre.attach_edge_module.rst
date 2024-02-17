@@ -55,7 +55,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>load edge device templates attach and config-groups attach from attach YAML file. This attach yml file can be generated using attach_create ansible module</div>
+                                                                        <div>load edge device templates attach and config-groups attach from attach YAML file.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -260,7 +260,7 @@ Notes
 -----
 
 .. note::
-   - Tested against 20.4.1.1
+   - Tested against 20.10
 
 
 

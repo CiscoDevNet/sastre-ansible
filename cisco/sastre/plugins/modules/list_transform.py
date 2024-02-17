@@ -7,10 +7,10 @@ short_description: List configuration items or device certificate information fr
 description: The list task can be used to show items from a target vManage,
              or a backup directory. Matching criteria can contain item tag(s) 
              and regular expression.When multiple filters are defined, the result 
-             is an AND of all filters.A log file is created under a "logs" directory.
-             This "logs" directoryis relative to directory where Ansible runs.
+             is an AND of all filters. A log file is created under a "logs" directory.
+             This "logs" directory is relative to directory where Ansible runs.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   regex:
     description:
@@ -159,6 +159,7 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskList, ListTransformArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -182,7 +183,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskList, ListTransformArgs
         task_args = ListTransformArgs(
             **module_params('regex', 'not_regex', 'exclude', 'include', 'workdir', 'save_csv', 'save_json', 'tags',
                             'name_regex', module_param_dict=module.params)
@@ -194,8 +194,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid list transform parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

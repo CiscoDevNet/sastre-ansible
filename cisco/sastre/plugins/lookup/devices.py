@@ -80,7 +80,7 @@ class LookupModule(LookupBase):
     def run(self, terms, variables=None, **kwargs):
         self.set_options(var_options=variables, direct=kwargs)
         mutual_exclusive_fields = ('regex', 'not_regex', 'regex_list')
-        if is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
+        if not is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
             raise AnsibleOptionsError(f"Parameters are mutually exclusive: {mutual_exclusive_fields}")
 
         try:

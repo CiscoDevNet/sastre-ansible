@@ -1,11 +1,11 @@
-:source: transform_password.py
+:source: transform_build_recipe.py
 
 :orphan:
 
-.. _transform_password_module:
+.. _transform_build_recipe_module:
 
 
-transform_password -- Transform retrieve encrypted passwords
+transform_build_recipe -- Transform retrieve encrypted passwords
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -74,7 +74,7 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>save_pwd_file</b>
+                    <b>recipe_file</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                             </div>
@@ -146,7 +146,7 @@ Notes
 -----
 
 .. note::
-   - Tested against 20.4.1.1
+   - Tested against 20.10
 
 
 
@@ -156,17 +156,14 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Transform password
-      cisco.sastre.transform_password:
-        save_pwd_file: transform_password.yml
-        workdir: transform_password
-        address: 198.18.1.10
-        port: 8443
-        user: admin
-        password: admin
-    - name: Transform password from vmanage
-      cisco.sastre.transform_password:
-        save_pwd_file: transform_password.yml
+    - name: Transform build-recipe from local backup
+      cisco.sastre.transform_build_recipe:
+        recipe_file: transform_build_recipe.yml
+        workdir: transform_build_source_dir
+
+    - name: Transform build-recipe from vManage
+      cisco.sastre.transform_build_recipe:
+        recipe_file: transform_build_recipe.yml
         address: 198.18.1.10
         port: 8443
         user: admin

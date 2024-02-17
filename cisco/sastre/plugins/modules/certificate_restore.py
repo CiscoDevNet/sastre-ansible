@@ -7,7 +7,7 @@ short_description: Restore WAN edge certificate validity status to from a backup
 description: The certificate restore task can be used to restore WAN edge certificate validity status to the same 
              values as in the provided backup. A regular expression can be used to select one or more WAN edges.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   regex:
     description: 
@@ -105,6 +105,7 @@ from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskCertificate, CertificateRestoreArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -123,7 +124,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskCertificate, CertificateRestoreArgs
         task_args = CertificateRestoreArgs(
             workdir=module.params['workdir'] or default_workdir(module.params['address']),
             **module_params('regex', 'not_regex', 'dryrun', module_param_dict=module.params)
@@ -135,8 +135,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid certificate restore parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

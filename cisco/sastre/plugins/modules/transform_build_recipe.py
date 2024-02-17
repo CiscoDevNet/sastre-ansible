@@ -3,16 +3,16 @@
 
 DOCUMENTATION = """
 module: transform_password
-short_description: Transform retrieve encrypted passwords
-description: The transform password task can be used to get encrypted passwords from tags and
-             resources either from workdir or target vmanage and saves to yaml file.
+short_description: Retrieves encrypted fields from vManage configuration items and generates recipe file for transform_recipe task.
+description: The transform build-recipe task can be used to retrieve encrypted fields in vManage configuration
+             items either from workdir or target vManage. The retrieved encrypted fields are used to create a recipe 
+             file, which can be used by the transform recipe task to modify the encrypted values.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
-  save_pwd_file:
+  recipe_file:
     description:
-    - Save password file as yaml file
-      This generated yml file can be used in transform_update module.
+    - Save recipe file, to be used with transform_recipe task
     required: false
     type: str
   workdir:
@@ -55,17 +55,14 @@ options:
 """
 
 EXAMPLES = """
-- name: Transform password
+- name: Transform build-recipe from local backup
   cisco.sastre.transform_password:
-    save_pwd_file: transform_password.yml
+    recipe_file: transform_password.yml
     workdir: transform_password
-    address: 198.18.1.10
-    port: 8443
-    user: admin
-    password: admin
-- name: Transform password from vmanage
+    
+- name: Transform build-recipe from vManage
   cisco.sastre.transform_password:
-    save_pwd_file: transform_password.yml
+    recipe_file: transform_password.yml
     address: 198.18.1.10
     port: 8443
     user: admin
@@ -89,13 +86,14 @@ from ansible.module_utils.basic import AnsibleModule
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskTransform, TransformBuildRecipeArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
-        save_pwd_file=dict(type="str"),
+        recipe_file=dict(type="str"),
         workdir=dict(type="str")
     )
 
@@ -105,9 +103,8 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskTransform, TransformPasswordArgs
-        task_args = TransformPasswordArgs(
-            **module_params('save_pwd_file', 'workdir', module_param_dict=module.params)
+        task_args = TransformBuildRecipeArgs(
+            **module_params('recipe_file', 'workdir', module_param_dict=module.params)
         )
         task_result = run_task(TaskTransform, task_args, module.params)
 
@@ -116,12 +113,10 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
-        module.fail_json(msg=f"Invalid transform password parameter: {ex}")
+        module.fail_json(msg=f"Invalid transform build-recipe parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"Transform password error: {ex}")
+        module.fail_json(msg=f"Transform build-recipe error: {ex}")
 
 
 if __name__ == "__main__":

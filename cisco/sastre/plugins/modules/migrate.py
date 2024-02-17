@@ -9,7 +9,7 @@ short_description:  Migrate configuration items from a vManage release to anothe
 description: This migrate module migrates configuration items from vManage release
              to another from local specified directory or target vManage.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   scope:
     description:
@@ -134,6 +134,7 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskMigrate, MigrateArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -155,7 +156,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskMigrate, MigrateArgs
         task_args = MigrateArgs(
             **module_params('scope', 'output', 'no_rollover', 'name', 'from_version', 'to_version', 'workdir',
                             module_param_dict=module.params)
@@ -167,8 +167,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid Migrate parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
