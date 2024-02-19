@@ -16,9 +16,7 @@ encrypt -- encrypts password
 
 Synopsis
 --------
-- This encrypt module connects to SD-WAN vManage using HTTP REST to convert plain text password to encrypted password
-
-
+- The encrypt module can encrypt values using target vManage keys. Used to generate CRYPT_CLUSTER encrypted values, which can only be decrypted by the target vManage.
 
 
 Parameters

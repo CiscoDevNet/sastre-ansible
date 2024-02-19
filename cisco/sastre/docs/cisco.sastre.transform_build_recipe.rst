@@ -16,9 +16,7 @@ transform_build_recipe -- Transform retrieve encrypted passwords
 
 Synopsis
 --------
-- The transform password task can be used to get encrypted passwords from tags and resources either from workdir or target vmanage and saves to yaml file.
-
-
+- The transform build-recipe task can be used to encrypt values using target vManage keys. Used to generate CRYPT_CLUSTER encrypted values, which can only be decrypted by the target vManage.
 
 
 Parameters
