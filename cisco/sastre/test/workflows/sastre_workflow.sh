@@ -1,4 +1,4 @@
-pip install --upgrade git+https://wwwin-github.cisco.com/AIDE/Sastre-Pro.git
+pip install --upgrade git+https://github.com/CiscoDevNet/sastre.git
 cd cisco/sastre/
 value=`cat galaxy.yml`
 echo $value | grep -o "version: [0-9]*\.[0-9]*\.[0-9]*" | sed "s/version: //g" > version.txt
@@ -12,8 +12,8 @@ export VMANAGE_PASSWORD=$VMANAGE_PASSWORD
 cd ../../
 mkdir temp
 cd temp
-git clone https://wwwin-github.cisco.com/AIDE/Sastre-Ansible.git
-cd Sastre-Ansible
+git clone https://github.com/CiscoDevNet/sastre-ansible.git
+cd sastre-ansible
 git checkout test-data
 cp -r data ../../cisco/sastre/test/workflows/playbooks/
 cd ../../

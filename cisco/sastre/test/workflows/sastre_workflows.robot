@@ -14,8 +14,6 @@ ${playbook_base_dir}                                 ${CURDIR}/playbooks
 ${WorkFlow_01_Folder}                                WorkFlow_01
 ${WorkFlow_02_Folder}                                WorkFlow_02
 ${WorkFlow_03_Folder}                                WorkFlow_03
-${WorkFlow_04_Folder}                                WorkFlow_04
-${WorkFlow_05_Folder}                                WorkFlow_05
 
 ${backup_path}                                       ${WorkFlow_01_Folder}/backup
 ${list_config_csv_before}                            ${WorkFlow_01_Folder}/list_config_before.csv
@@ -29,8 +27,6 @@ ${show_template_csv}                                 show_template_values_csv
 ${show_template_attach_detach_compare_fail_msg}      show template values detach/attach file mismatch
 
 ${template_yml_file_path}                            attach_template_create.yml
-${template_yml_file_path_with_no_attachments}        attach_template_create_no_attachments.yml
-${template_yml_file_path_after}                      attach_template_create_after_attachment.yml
 
 
 *** Keywords ***
@@ -87,18 +83,6 @@ execute attach vsmart task
     ${attach_vsmart_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/attach_vsmart.yml
     Log  ${attach_vsmart_task_output}
     ${attach_vsmart_passed}  Is Playbook Success  attach_vsmart  ${attach_vsmart_task_output}
-
-execute attach vsmart var task
-    [Arguments]    ${template_yml_file_path}=attach_template.yml
-    ${attach_vsmart_var_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/attach_vsmart_var_file.yml --extra-vars "attach_file=${template_yml_file_path}"
-    Log  ${attach_vsmart_var_task_output}
-    ${attach_vsmart_var_passed}  Is Playbook Success  attach_vsmart_var  ${attach_vsmart_var_task_output}
-
-execute attach edge var task
-    [Arguments]    ${template_yml_file_path}=attach_template.yml
-    ${attach_edge_var_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/attach_edge_var_file.yml --extra-vars "attach_file=${template_yml_file_path}"
-    Log  ${attach_edge_var_task_output}
-    ${attach_edge_var_passed}  Is Playbook Success  attach_edge_var  ${attach_edge_var_task_output}
 
 cleanup directory
     [Arguments]    ${directory}
