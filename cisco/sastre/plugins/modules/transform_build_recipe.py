@@ -56,13 +56,13 @@ options:
 
 EXAMPLES = """
 - name: Transform build-recipe from local backup
-  cisco.sastre.transform_password:
-    recipe_file: transform_password.yml
-    workdir: transform_password
+  cisco.sastre.transform_build_recipe:
+    recipe_file: transform_build_recipe.yml
+    workdir: transform_build_recipe
     
 - name: Transform build-recipe from vManage
-  cisco.sastre.transform_password:
-    recipe_file: transform_password.yml
+  cisco.sastre.transform_build_recipe:
+    recipe_file: transform_build_recipe.yml
     address: 198.18.1.10
     port: 8443
     user: admin
@@ -71,15 +71,15 @@ EXAMPLES = """
 
 RETURN = """
 stdout:
-  description: Status of Transform password
+  description: Status of Transform build recipe
   returned: always apart from low level errors
   type: str
-  sample: 'Task transform password : set completed successfully.vManage address 198.18.1.10'
+  sample: 'Task transform build recipe: set completed successfully.vManage address 198.18.1.10'
 stdout_lines:
   description: The value of stdout split into a list
   returned: always apart from low level errors
   type: list
-  sample: ['Task transform password: set completed successfully.vManage address 198.18.1.10']
+  sample: ['Task transform build recipe: set completed successfully.vManage address 198.18.1.10']
 """
 from pydantic import ValidationError
 from ansible.module_utils.basic import AnsibleModule

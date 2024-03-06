@@ -3,17 +3,18 @@
 
 DOCUMENTATION = """
 module: encrypt
-short_description: encrypts password
+short_description: encrypts plain text value(s)
 description: This encrypt module connects to SD-WAN vManage using HTTP REST to 
-             convert plain text password to encrypted password
+             convert plain clear text value to encrypted value
 notes: 
 - Tested against 20.10
 options: 
-  pwd:
+  values:
     description:
-    - plain text password
-    required: True
-    type: str
+    - one or more clear text values to be encrypted by target vManage
+    required: true
+    type: list
+    elements: str
   address:
     description:
     - vManage IP address or can also be defined via VMANAGE_IP environment variable
@@ -49,21 +50,23 @@ options:
 """
 
 EXAMPLES = """
-- name: "encrypt password"
+- name: "encrypt values"
   cisco.sastre.encrypt:
     address: "198.18.1.10"
     port: 8443
     user: "admin"
     password:"admin"
-    pwd: "admin123"
-- name: "encrypt password with some vManage config arguments saved in environment variables"
+    values: 
+      - "admin123"
+      - "admin456"
+- name: "encrypt values with some vManage config arguments saved in environment variables"
   cisco.sastre.encrypt: 
-    pwd: "admin123"
+    values: "admin123"
 """
 
 RETURN = """
 stdout:
-  description: Status of encrypt password
+  description: Status of encrypt task
   returned: always apart from low level errors
   type: str
   sample: 'Successfully completed encrypt'

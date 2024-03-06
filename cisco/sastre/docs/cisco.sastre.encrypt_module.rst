@@ -5,8 +5,8 @@
 .. _encrypt_module:
 
 
-encrypt -- encrypts password
-++++++++++++++++++++++++++++
+encrypt -- encrypts plain text value(s)
++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,9 @@ encrypt -- encrypts password
 
 Synopsis
 --------
-- The encrypt module can encrypt values using target vManage keys. Used to generate CRYPT_CLUSTER encrypted values, which can only be decrypted by the target vManage.
+- This encrypt module connects to SD-WAN vManage using HTTP REST to convert plain clear text value to encrypted value
+
+
 
 
 Parameters
@@ -72,19 +74,6 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>pwd</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>plain text password</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>tenant</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -123,6 +112,19 @@ Parameters
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
                                                                                 </td>
             </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>values</b>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>one or more clear text values to be encrypted by target vManage</div>
+                                                                                </td>
+            </tr>
                         </table>
     <br/>
 
@@ -141,13 +143,15 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: "encrypt password"
+    - name: "encrypt values"
       cisco.sastre.encrypt:
         address: "198.18.1.10"
         port: 8443
         user: "admin"
         password:"admin"
-        pwd: "admin123"
-    - name: "encrypt password with some vManage config arguments saved in environment variables"
+        values: 
+          - "admin123"
+          - "admin456"
+    - name: "encrypt values with some vManage config arguments saved in environment variables"
       cisco.sastre.encrypt: 
-        pwd: "admin123"
+        values: "admin123"
