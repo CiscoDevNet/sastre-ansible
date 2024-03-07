@@ -2,10 +2,10 @@
 
 :orphan:
 
-.. _transform_password_module:
+.. _transform_build_recipe_module:
 
 
-transform_password -- Retrieves encrypted fields from vManage configuration items and generates recipe file for transform_recipe task.
+transform_build_recipe -- Retrieves encrypted fields from vManage configuration items and generates recipe file for transform_recipe task.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 

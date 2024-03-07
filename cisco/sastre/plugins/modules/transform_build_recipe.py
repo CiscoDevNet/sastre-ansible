@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 DOCUMENTATION = """
-module: transform_password
+module: transform_build_recipe
 short_description: Retrieves encrypted fields from vManage configuration items and generates recipe file for transform_recipe task.
 description: The transform build-recipe task can be used to retrieve encrypted fields in vManage configuration
              items either from workdir or target vManage. The retrieved encrypted fields are used to create a recipe 
