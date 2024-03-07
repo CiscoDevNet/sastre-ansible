@@ -5,8 +5,8 @@
 .. _transform_build_recipe_module:
 
 
-transform_build_recipe -- Transform retrieve encrypted passwords
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+transform_build_recipe -- Retrieves encrypted fields from vManage configuration items and generates recipe file for transform_recipe task.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,9 @@ transform_build_recipe -- Transform retrieve encrypted passwords
 
 Synopsis
 --------
-- The transform build-recipe task can be used to encrypt values using target vManage keys. Used to generate CRYPT_CLUSTER encrypted values, which can only be decrypted by the target vManage.
+- The transform build-recipe task can be used to retrieve encrypted fields in vManage configuration items either from workdir or target vManage. The retrieved encrypted fields are used to create a recipe file, which can be used by the transform recipe task to modify the encrypted values.
+
+
 
 
 Parameters
@@ -80,7 +82,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Save password file as yaml file This generated yml file can be used in transform_update module.</div>
+                                                                        <div>Save recipe file, to be used with transform_recipe task</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -157,8 +159,8 @@ Examples
     - name: Transform build-recipe from local backup
       cisco.sastre.transform_build_recipe:
         recipe_file: transform_build_recipe.yml
-        workdir: transform_build_source_dir
-
+        workdir: transform_build_recipe
+        
     - name: Transform build-recipe from vManage
       cisco.sastre.transform_build_recipe:
         recipe_file: transform_build_recipe.yml

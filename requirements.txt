@@ -1,5 +1,5 @@
 ansible-core>=2.16.3
-pydantic>=1.6
+pydantic>=2.6
 cisco-sdwan>=1.23
 
 
