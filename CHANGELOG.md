@@ -1,4 +1,4 @@
-Sastre-Ansible 1.0.18 [February x, 2024]
+Sastre-Ansible 1.0.19 [March 8, 2024]
 =========================================
 
 ### Improvements
