@@ -25,6 +25,7 @@ These workflows are tested against following CXTA versions: **==21.9**.
   * Check **log.html** for test logs  
 
 ## Running the workflows in CXTM UI
+* Launch [CXTM](https://cxtm.cisco.com/)
 * create a Project
   * Configure GIT 
   * Configure VPN (if SDWAN dcloud instance is used)
@@ -46,5 +47,5 @@ These workflows are tested against following CXTA versions: **==21.9**.
 
 ## Dependency
 
-* Install [Sastre-Pro](https://wwwin-github.cisco.com/AIDE/Sastre-Pro) using pip
-* Install [Sastre-Ansible](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible) refer [ReadMe](https://wwwin-github.cisco.com/AIDE/Sastre-Ansible/blob/master/README.md) for build and installation
+* Install [Sastre-Pro](https://github.com/CiscoDevNet/sastre) using pip
+* Install [Sastre-Ansible](https://github.com/CiscoDevNet/sastre-ansible) refer [ReadMe](https://github.com/CiscoDevNet/sastre-ansible/blob/master/README.md) for build and installation

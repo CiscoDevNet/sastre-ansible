@@ -6,7 +6,7 @@ module: device_bootstrap
 short_description: Performs device bootstrap
 description: Performs device bootstrap for a given uuid value
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   uuid:
     description: 
@@ -118,6 +118,10 @@ def main():
             response = DeviceBootstrap.get(api, **module_params('uuid', 'config_type', 'include_default_root_certs',
                                                                 'version', module_param_dict=module.params))
 
+            if response is None:
+                raise ValueError("Bootstrap request failed, verify that uuid provided is present on vManage and "
+                                 "device is at proper state for bootstrap.")
+
             result = {
                 "changed": True,
                 "uuid": response.uuid,
@@ -128,7 +132,7 @@ def main():
             }
             module.exit_json(**result)
 
-    except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
+    except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException, ValueError) as ex:
         module.fail_json(msg=f"Device bootstrap error: {ex}")
 
 

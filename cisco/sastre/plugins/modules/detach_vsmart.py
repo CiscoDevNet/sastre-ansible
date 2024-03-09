@@ -12,7 +12,7 @@ description: This detach module connects to SD-WAN vManage using HTTP REST to
              Dry-run can be used to validate the expected outcome.The number of devices to include 
              per detach request (to vManage) can be defined with the batch option.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   templates:
     description:
@@ -140,6 +140,7 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskDetach, DetachVsmartArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -161,7 +162,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskDetach, DetachVsmartArgs
         task_args = DetachVsmartArgs(
             **module_params('templates', 'config_groups', 'devices', 'reachable', 'site', 'system_ip', 'dryrun',
                             'batch',
@@ -174,8 +174,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid detach vsmart parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

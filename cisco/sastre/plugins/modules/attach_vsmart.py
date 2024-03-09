@@ -6,13 +6,13 @@ module: attach_vsmart
 short_description: Attach templates to Vsmarts
 description: This attach module connects to SD-WAN vManage using HTTP REST to 
              updated configuration data stored in local default backup or configured argument
-             local backup folder. This module contains multiple arguments with 
+             local backup folder or attach yml file. This module contains multiple arguments with 
              connection and filter details to attach Vsmarts to templates.
              When multiple filters are defined, the result is an AND of all filters. 
              Dry-run can be used to validate the expected outcome.The number of devices to include 
              per attach request (to vManage) can be defined with the batch param.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   workdir:
     description: 
@@ -24,6 +24,11 @@ options:
     required: false
     type: str
     default: "backup_<address>_<yyyymmdd>"
+  attach_file:
+    description:
+    - load vsmart device templates attach and vsmart policy activate from attach YAML file
+    required: false
+    type: str
   templates:
     description:
     - Regular expression selecting templates to attach. Match on template name.
@@ -136,6 +141,10 @@ EXAMPLES = """
     system_ip: "12.12.12.12"
     dryrun: True
     batch: 99    
+- name: "Attach vsmart device templates and vsmart policy activate from attach yml file"
+  cisco.sastre.attach_vsmart: 
+    attach_file: "/path/to/attach.yml"
+    batch: 99 
 - name: "Attach vManage configuration with all defaults"
   cisco.sastre.attach_vsmart: 
     address: "198.18.1.10"
@@ -162,6 +171,7 @@ from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.tasks.utils import default_workdir
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskAttach, AttachVsmartArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -169,6 +179,7 @@ def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
         workdir=dict(type="str"),
+        attach_file=dict(type="str"),
         templates=dict(type="str"),
         config_groups=dict(type="str"),
         devices=dict(type="str"),
@@ -181,14 +192,15 @@ def main():
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
+        mutually_exclusive=[('workdir', 'attach_file')],
         supports_check_mode=True
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskAttach, AttachVsmartArgs
+        if not module.params['attach_file']:
+            module.params['workdir'] = module.params['workdir'] or default_workdir(module.params['address'])
         task_args = AttachVsmartArgs(
-            workdir=module.params['workdir'] or default_workdir(module.params['address']),
-            **module_params('templates', 'config_groups', 'devices', 'reachable', 'activate', 'site', 'system_ip',
+            **module_params('workdir', 'attach_file', 'templates', 'config_groups', 'devices', 'reachable', 'activate', 'site', 'system_ip',
                             'dryrun', 'batch', module_param_dict=module.params)
         )
         task_result = run_task(TaskAttach, task_args, module.params)
@@ -198,8 +210,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid attach vsmart parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

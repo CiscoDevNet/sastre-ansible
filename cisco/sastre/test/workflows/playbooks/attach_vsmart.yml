@@ -1,0 +1,16 @@
+---
+#ansible-playbook attach_vsmart.yml --extra-vars "backup_path=backup_123"
+###############################################################################
+- hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+    - name: Attach vManage configuration
+      cisco.sastre.attach_vsmart:
+        workdir: "{{ backup_path  |  default('backup') }}"
+        templates: ".*"
+        devices: ".*"
+        #reachable: True
+        dryrun: False
+        batch: 50

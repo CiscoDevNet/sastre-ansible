@@ -1,12 +1,12 @@
-:source: settings_enterprise_ca.py
+:source: encrypt.py
 
 :orphan:
 
-.. _settings_enterprise_ca_module:
+.. _encrypt_module:
 
 
-settings_enterprise_ca -- Setting enterprise root certificate
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+encrypt -- encrypts plain text value(s)
++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,7 +16,7 @@ settings_enterprise_ca -- Setting enterprise root certificate
 
 Synopsis
 --------
-- Setting enterprise root certificate
+- This encrypt module connects to SD-WAN vManage using HTTP REST to convert plain clear text value to encrypted value
 
 
 
@@ -74,19 +74,6 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>root_cert</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Enterprise root certificate</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
                     <b>tenant</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -125,6 +112,19 @@ Parameters
                                                                         <div>username or can also be defined via VMANAGE_USER environment variable.</div>
                                                                                 </td>
             </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <b>values</b>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                                                        <div>one or more clear text values to be encrypted by target vManage</div>
+                                                                                </td>
+            </tr>
                         </table>
     <br/>
 
@@ -143,10 +143,15 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Setting enterprise root certificate
-      cisco.sastre.settings_enterprise_ca:
-        root_cert: "{{ lookup('file', 'myCA.pem') }}"
-        address: 198.18.1.10
+    - name: "encrypt values"
+      cisco.sastre.encrypt:
+        address: "198.18.1.10"
         port: 8443
-        user: admin
-        password: admin
+        user: "admin"
+        password:"admin"
+        values: 
+          - "admin123"
+          - "admin456"
+    - name: "encrypt values with some vManage config arguments saved in environment variables"
+      cisco.sastre.encrypt: 
+        values: "admin123"

@@ -68,11 +68,8 @@ def set_show_default_args(**kwargs):
 
 
 def is_mutually_exclusive(mutual_exclusive_fields, **kwargs):
-    if mutual_exclusive_fields is not None and len(mutual_exclusive_fields) > 1:
-        is_mutually_exlusive: bool = False
-        for arg in mutual_exclusive_fields:
-            if kwargs.get(arg) is None:
-                continue
-            elif is_mutually_exlusive:
-                return is_mutually_exlusive
-            is_mutually_exlusive = True
+    if mutual_exclusive_fields is None:
+        return True
+
+    return len([arg for arg in mutual_exclusive_fields if kwargs.get(arg) is not None]) <= 1
+

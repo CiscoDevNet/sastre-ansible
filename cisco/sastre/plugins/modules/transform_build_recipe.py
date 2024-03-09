@@ -2,38 +2,22 @@
 # -*- coding: utf-8 -*-
 
 DOCUMENTATION = """
-module: transform_recipe
-short_description: Transform using custom recipe
-description: The transform recipe task can be used for custom recipe. A regular expression can be used to select item names to transform.
+module: transform_build_recipe
+short_description: Retrieves encrypted fields from vManage configuration items and generates recipe file for transform_recipe task.
+description: The transform build-recipe task can be used to retrieve encrypted fields in vManage configuration
+             items either from workdir or target vManage. The retrieved encrypted fields are used to create a recipe 
+             file, which can be used by the transform recipe task to modify the encrypted values.
 notes: 
 - Tested against 20.10
 options: 
-  output:
-    description: 
-    - Directory to save transform result
-    required: true
+  recipe_file:
+    description:
+    - Save recipe file, to be used with transform_recipe task
+    required: false
     type: str
   workdir:
     description: 
-    - transform will read from the specified directory instead of target vManage
-    required: false
-    type: str
-  no_rollover:
-    description:
-    - By default, if output directory already exists it is 
-      renamed using a rolling naming scheme. "True" disables the automatic rollover. "False"
-      enables the automatic rollover
-    required: false
-    type: bool
-    default: False
-  from_file:
-    description: 
-    - load custom report specification from YAML file
-    required: false
-    type: str
-  from_json:
-    description: 
-    - load custom report specification from JSON-formatted string
+    - transform password will read from the specified directory instead of target vManage
     required: false
     type: str
   address:
@@ -71,16 +55,14 @@ options:
 """
 
 EXAMPLES = """
-- name: Transform recipe from local backup
-  cisco.sastre.transform_recipe:
-    output: transform_recipe
-    workdir: /home/user/backup
-    no_rollover: false
-    from_file: recipe.yml
-- name: Transform recipe from vManage
-  cisco.sastre.transform_recipe:
-    output: transform_recipe
-    from_json: recipe.json
+- name: Transform build-recipe from local backup
+  cisco.sastre.transform_build_recipe:
+    recipe_file: transform_build_recipe.yml
+    workdir: transform_build_recipe
+    
+- name: Transform build-recipe from vManage
+  cisco.sastre.transform_build_recipe:
+    recipe_file: transform_build_recipe.yml
     address: 198.18.1.10
     port: 8443
     user: admin
@@ -89,45 +71,40 @@ EXAMPLES = """
 
 RETURN = """
 stdout:
-  description: Status of Transform recipe
+  description: Status of Transform build recipe
   returned: always apart from low level errors
   type: str
-  sample: 'Task transform recipe : set completed successfully.vManage address 198.18.1.10'
+  sample: 'Task transform build recipe: set completed successfully.vManage address 198.18.1.10'
 stdout_lines:
   description: The value of stdout split into a list
   returned: always apart from low level errors
   type: list
-  sample: ['Task transform recipe: set completed successfully.vManage address 198.18.1.10']
+  sample: ['Task transform build recipe: set completed successfully.vManage address 198.18.1.10']
 """
 from pydantic import ValidationError
 from ansible.module_utils.basic import AnsibleModule
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
-from cisco_sdwan.tasks.implementation import TaskTransform, TransformRecipeArgs
+from cisco_sdwan.tasks.implementation import TaskTransform, TransformBuildRecipeArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
 def main():
     argument_spec = common_arg_spec()
     argument_spec.update(
-        output=dict(type="str", required=True),
-        workdir=dict(type="str"),
-        no_rollover=dict(type="bool"),
-        from_file=dict(type="str"),
-        from_json=dict(type="str")
+        recipe_file=dict(type="str"),
+        workdir=dict(type="str")
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[('from_file', 'from_json')],
         supports_check_mode=True
     )
 
     try:
-        task_args = TransformRecipeArgs(
-            **module_params('output', 'workdir', 'no_rollover', 'from_file', 'from_json',
-                            module_param_dict=module.params)
+        task_args = TransformBuildRecipeArgs(
+            **module_params('recipe_file', 'workdir', module_param_dict=module.params)
         )
         task_result = run_task(TaskTransform, task_args, module.params)
 
@@ -137,9 +114,9 @@ def main():
         module.exit_json(**result, **task_result)
 
     except ValidationError as ex:
-        module.fail_json(msg=f"Invalid transform recipe parameter: {ex}")
+        module.fail_json(msg=f"Invalid transform build-recipe parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:
-        module.fail_json(msg=f"Transform recipe error: {ex}")
+        module.fail_json(msg=f"Transform build-recipe error: {ex}")
 
 
 if __name__ == "__main__":

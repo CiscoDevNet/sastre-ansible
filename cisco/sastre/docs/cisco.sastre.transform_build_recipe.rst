@@ -1,12 +1,12 @@
-:source: show_template_values.py
+:source: transform_build_recipe.py
 
 :orphan:
 
-.. _show_template_values_module:
+.. _transform_build_recipe_module:
 
 
-show_template_values -- Show template values about device templates on vManage or from a local backup. Display as table or export as csv/json file.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+transform_build_recipe -- Retrieves encrypted fields from vManage configuration items and generates recipe file for transform_recipe task.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 .. contents::
@@ -16,8 +16,7 @@ show_template_values -- Show template values about device templates on vManage o
 
 Synopsis
 --------
-- The Show template task can be used to show device templates from a target vManage or a backup directory.
-- Criteria can contain regular expression with matching or not matching device or feature template names.
+- The transform build-recipe task can be used to retrieve encrypted fields in vManage configuration items either from workdir or target vManage. The retrieved encrypted fields are used to create a recipe file, which can be used by the transform recipe task to modify the encrypted values.
 
 
 
@@ -38,38 +37,12 @@ Parameters
                     <b>address</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                            </div>
+                         / <span style="color: red">required</span>                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>vManage IP address or can also be defined via VMANAGE_IP environment variable. Either workdir or address/user/password parameter is mandatory</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>exclude</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Exclude table rows matching the regular expression</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>include</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Include table rows matching the regular expression, exclude all other rows</div>
+                                                                        <div>vManage IP address or can also be defined via VMANAGE_IP environment variable</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -77,12 +50,12 @@ Parameters
                     <b>password</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                            </div>
+                         / <span style="color: red">required</span>                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>password or can also be defined via VMANAGE_PASSWORD environment variable. Either workdir or address/user/password parameter is mandatory</div>
+                                                                        <div>password or can also be defined via VMANAGE_PASSWORD environment variable.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -101,7 +74,7 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <b>save_csv</b>
+                    <b>recipe_file</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                             </div>
@@ -109,33 +82,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>Export tables as csv files under the specified directory</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>save_json</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Save teamplate value as json file</div>
-                                                                                </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <b>templates</b>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                                                        <div>Regular expression selecting device templates to inspect. Match on template name or ID.</div>
+                                                                        <div>Save recipe file, to be used with transform_recipe task</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -170,12 +117,12 @@ Parameters
                     <b>user</b>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                            </div>
+                         / <span style="color: red">required</span>                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>username or can also be defined via VMANAGE_USER environment variable. Either workdir or address/user/password parameter is mandatory</div>
+                                                                        <div>username or can also be defined via VMANAGE_USER environment variable.</div>
                                                                                 </td>
             </tr>
                                 <tr>
@@ -188,7 +135,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                                                        <div>show-template will read from the specified directory instead of target vManage. Either workdir or vManage address/user/password is mandatory</div>
+                                                                        <div>transform password will read from the specified directory instead of target vManage</div>
                                                                                 </td>
             </tr>
                         </table>
@@ -209,14 +156,14 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Show Template values from local backup directory
-      cisco.sastre.show_template_values:
-        workdir: backup_198.18.1.10_20210720
-        save_csv: show_temp_csv
-        save_json: show_temp_json
-    - name: Show Template values from vManage
-      cisco.sastre.show_template_values:
-        save_csv: show_temp_csv
+    - name: Transform build-recipe from local backup
+      cisco.sastre.transform_build_recipe:
+        recipe_file: transform_build_recipe.yml
+        workdir: transform_build_recipe
+        
+    - name: Transform build-recipe from vManage
+      cisco.sastre.transform_build_recipe:
+        recipe_file: transform_build_recipe.yml
         address: 198.18.1.10
         port: 8443
         user: admin

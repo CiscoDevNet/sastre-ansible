@@ -12,17 +12,21 @@ Test Setup  Run Keyword  sdwan setup
 ${playbook_base_dir}                                 ${CURDIR}/playbooks
 
 ${WorkFlow_01_Folder}                                WorkFlow_01
-${show_template_csv_after_attachment}                ${WorkFlow_01_Folder}/show_template_values_csv_after_attachment
-${show_template_csv_with_no_attachment}              ${WorkFlow_01_Folder}/show_template_values_csv_with_no_attachment
-${show_template_csv}                                 ${WorkFlow_01_Folder}/show_template_values_csv
+${WorkFlow_02_Folder}                                WorkFlow_02
+${WorkFlow_03_Folder}                                WorkFlow_03
+
+${backup_path}                                       ${WorkFlow_01_Folder}/backup
+${list_config_csv_before}                            ${WorkFlow_01_Folder}/list_config_before.csv
+${list_config_csv_after}                             ${WorkFlow_01_Folder}/list_config_after.csv
+${show_template_csv_before}                          ${WorkFlow_01_Folder}/show_template_values_csv_before
+${show_template_csv_after}                           ${WorkFlow_01_Folder}/show_template_values_csv_after
+
+${show_template_csv_after_attachment}                show_template_values_csv_after_attachment
+${show_template_csv_with_no_attachment}              show_template_values_csv_with_no_attachment
+${show_template_csv}                                 show_template_values_csv
 ${show_template_attach_detach_compare_fail_msg}      show template values detach/attach file mismatch
 
-${WorkFlow_02_Folder}                                WorkFlow_02
-${backup_path}                                       ${WorkFlow_02_Folder}/backup
-${list_config_csv_before}                            ${WorkFlow_02_Folder}/list_config_before.csv
-${list_config_csv_after}                             ${WorkFlow_02_Folder}/list_config_after.csv
-${show_template_csv_before}                          ${WorkFlow_02_Folder}/show_template_values_csv_before
-${show_template_csv_after}                           ${WorkFlow_02_Folder}/show_template_values_csv_after
+${template_yml_file_path}                            attach_template_create.yml
 
 
 *** Keywords ***
@@ -70,30 +74,27 @@ execute attach edge task
     Log  ${attach_edge_task_output}
     ${attach_edge_passed}  Is Playbook Success  attach_edge  ${attach_edge_task_output}
 
+execute detach vsmart task
+    ${detach_vsmart_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/detach_vsmart.yml
+    Log  ${detach_vsmart_task_output}
+    ${detach_vsmart_passed}  Is Playbook Success  detach_vsmart  ${detach_vsmart_task_output}
+
+execute attach vsmart task
+    ${attach_vsmart_task_output} =  Run  ANSIBLE_STDOUT_CALLBACK=json ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ${playbook_base_dir}/attach_vsmart.yml
+    Log  ${attach_vsmart_task_output}
+    ${attach_vsmart_passed}  Is Playbook Success  attach_vsmart  ${attach_vsmart_task_output}
+
 cleanup directory
     [Arguments]    ${directory}
     Remove Directory  ${directory}  recursive=True
     Create Directory  ${directory}
 
 *** Test Cases ***
-Workflow_01: Detach_Edge_Attach_Edge
-    [Documentation]  Executing show_template_values, detach_edge, show_template_values, attach_edge, show_template_values tasks
-    [Tags]  detach_attach
-
-    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_01_Folder}
-    execute show template values task  show_template_csv_path=${show_template_csv}
-    execute detach edge task
-    execute show template values task  show_template_csv_path=${show_template_csv_with_no_attachment}
-    compare show template values attach detach  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_with_no_attachment}  msg=${show_template_attach_detach_compare_fail_msg}
-    execute attach edge task
-    execute show template values task  show_template_csv_path=${show_template_csv_after_attachment}
-    csv folders should be equal  ${playbook_base_dir}/${show_template_csv}  ${playbook_base_dir}/${show_template_csv_after_attachment}
-
-Workflow_02: Backup_Delete_Restore
+Workflow_01: Backup_Delete_Restore
     [Documentation]  Executing list_config, show_template_values, backup, delete, restore, list_config, show_template_values  Tasks
     [Tags]  backup_delete_restore
 
-    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_02_Folder}
+    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_01_Folder}
     execute list configuration task  list_config_csv_file_path=${list_config_csv_before}
     execute show template values task  show_template_csv_path=${show_template_csv_before}
     execute backup task  backup_path=${backup_path}
@@ -102,3 +103,29 @@ Workflow_02: Backup_Delete_Restore
     execute show template values task  show_template_csv_path=${show_template_csv_after}
     csv folders should be equal  ${playbook_base_dir}/${show_template_csv_before}  ${playbook_base_dir}/${show_template_csv_after}
     csv files should be equal  ${playbook_base_dir}/${list_config_csv_before}  ${playbook_base_dir}/${list_config_csv_after}  0
+
+Workflow_02: Detach_Edge_Attach_Edge
+    [Documentation]  Executing show_template_values, detach_edge, show_template_values, attach_edge, show_template_values tasks
+    [Tags]  detach_attach
+
+    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_02_Folder}
+    execute show template values task  show_template_csv_path=${WorkFlow_02_Folder}/${show_template_csv}
+    execute detach edge task
+    execute show template values task  show_template_csv_path=${WorkFlow_02_Folder}/${show_template_csv_with_no_attachment}
+    compare show template values attach detach  ${playbook_base_dir}/${WorkFlow_02_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_02_Folder}/${show_template_csv_with_no_attachment}  true  msg=${show_template_attach_detach_compare_fail_msg}
+    execute attach edge task
+    execute show template values task  show_template_csv_path=${WorkFlow_02_Folder}/${show_template_csv_after_attachment}
+    csv folders should be equal  ${playbook_base_dir}/${WorkFlow_02_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_02_Folder}/${show_template_csv_after_attachment}
+
+Workflow_03: Detach_Vsmart_Attach_Vsmart
+    [Documentation]  Executing show_template_values, detach_vsmart, show_template_values, attach_vsmart, show_template_values tasks
+    [Tags]  detach_attach
+
+    cleanup directory  directory=${playbook_base_dir}/${WorkFlow_03_Folder}
+    execute show template values task  show_template_csv_path=${WorkFlow_03_Folder}/${show_template_csv}
+    execute detach vsmart task
+    execute show template values task  show_template_csv_path=${WorkFlow_03_Folder}/${show_template_csv_with_no_attachment}
+    compare show template values attach detach  ${playbook_base_dir}/${WorkFlow_03_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_03_Folder}/${show_template_csv_with_no_attachment}  false  msg=${show_template_attach_detach_compare_fail_msg}
+    execute attach vsmart task
+    execute show template values task  show_template_csv_path=${WorkFlow_03_Folder}/${show_template_csv_after_attachment}
+    csv folders should be equal  ${playbook_base_dir}/${WorkFlow_03_Folder}/${show_template_csv}  ${playbook_base_dir}/${WorkFlow_03_Folder}/${show_template_csv_after_attachment}

@@ -11,7 +11,7 @@ description: This show alarms module connects to SD-WAN vManage using HTTP REST 
              format or can be exported as csv/json files.
              When multiple filters are defined, the result is an AND of all filters.
 notes: 
-- Tested against 20.4.1.1
+- Tested against 20.10
 options: 
   exclude:
     description:
@@ -136,6 +136,7 @@ from pydantic import ValidationError
 from cisco_sdwan.tasks.common import TaskException
 from cisco_sdwan.base.rest_api import RestAPIException
 from cisco_sdwan.base.models_base import ModelException
+from cisco_sdwan.tasks.implementation import TaskShow, ShowAlarmsArgs
 from ansible_collections.cisco.sastre.plugins.module_utils.common import common_arg_spec, module_params, run_task
 
 
@@ -159,7 +160,6 @@ def main():
     )
 
     try:
-        from cisco_sdwan.tasks.implementation import TaskShow, ShowAlarmsArgs
         task_args = ShowAlarmsArgs(
             **module_params('exclude', 'include', 'max', 'days', 'hours', 'detail', 'simple', 'save_csv', 'save_json',
                             module_param_dict=module.params)
@@ -171,8 +171,6 @@ def main():
         }
         module.exit_json(**result, **task_result)
 
-    except ImportError:
-        module.fail_json(msg="This module requires Sastre-Pro Python package")
     except ValidationError as ex:
         module.fail_json(msg=f"Invalid show alarms parameter: {ex}")
     except (RestAPIException, ConnectionError, FileNotFoundError, ModelException, TaskException) as ex:

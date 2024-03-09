@@ -241,7 +241,7 @@ Notes
 -----
 
 .. note::
-   - Tested against 20.4.1.1
+   - Tested against 20.10
 
 
 
